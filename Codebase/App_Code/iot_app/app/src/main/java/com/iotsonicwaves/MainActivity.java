@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package co.aurasphere.bluepair;
+package com.iotsonicwaves;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -43,10 +43,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import co.aurasphere.bluepair.bluetooth.BluetoothController;
-import co.aurasphere.bluepair.view.DeviceRecyclerViewAdapter;
-import co.aurasphere.bluepair.view.ListInteractionListener;
-import co.aurasphere.bluepair.view.RecyclerViewProgressEmptySupport;
+import com.iotsonicwaves.bluetooth.BluetoothController;
+import com.iotsonicwaves.view.DeviceRecyclerViewAdapter;
+import com.iotsonicwaves.view.ListInteractionListener;
+import com.iotsonicwaves.view.RecyclerViewProgressEmptySupport;
 
 /**
  * Main Activity of this application.

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package co.aurasphere.bluepair.view;
+package com.iotsonicwaves.view;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
