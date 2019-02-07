@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package co.aurasphere.bluepair.bluetooth;
+package com.iotsonicwaves.bluetooth;
 
 import android.Manifest;
 import android.app.Activity;

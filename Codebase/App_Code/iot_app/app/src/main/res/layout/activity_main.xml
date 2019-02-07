@@ -30,7 +30,7 @@ SOFTWARE.
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="co.aurasphere.bluepair.MainActivity">
+    tools:context="com.iotsonicwaves.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -46,16 +46,16 @@ SOFTWARE.
 
     </android.support.design.widget.AppBarLayout>
 
-    <co.aurasphere.bluepair.view.RecyclerViewProgressEmptySupport
+    <com.iotsonicwaves.view.RecyclerViewProgressEmptySupport
         android:id="@+id/list"
-        android:name="co.aurasphere.bluepair.DeviceFragment"
+        android:name="com.iotsonicwaves.DeviceFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="co.aurasphere.bluepair.DeviceFragment"
+        tools:context="com.iotsonicwaves.DeviceFragment"
         tools:listitem="@layout/list_device_item" />
 
     <TextView

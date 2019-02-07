@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package co.aurasphere.bluepair.view;
+package com.iotsonicwaves.view;
 
 import android.bluetooth.BluetoothDevice;
 import android.support.v7.widget.RecyclerView;
@@ -34,9 +34,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.aurasphere.bluepair.R;
-import co.aurasphere.bluepair.bluetooth.BluetoothController;
-import co.aurasphere.bluepair.bluetooth.BluetoothDiscoveryDeviceListener;
+import com.iotsonicwaves.R;
+import com.iotsonicwaves.bluetooth.BluetoothController;
+import com.iotsonicwaves.bluetooth.BluetoothDiscoveryDeviceListener;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link BluetoothDevice} and makes a call to the
