@@ -3,12 +3,12 @@
 #include "ble/BLE.h"
 #include "ble/Gap.h"
 #include "ble/services/HeartRateService.h"
+#include "bluetooth.h"
 
-const static char DEVICE_NAME[] = "WOW";
-
-static EventQueue eventQueue(/* event count */ 16 * EVENTS_EVENT_SIZE);
-static uint8_t hrmCounter = 100;
-static HeartRateService *hrServicePtr;
+char DEVICE_NAME[] = "SONICONE";
+EventQueue eventQueue(/* event count */ 16 * EVENTS_EVENT_SIZE);
+uint8_t hrmCounter = 100;
+HeartRateService *hrServicePtr;
 
 
 void onBleInitError(BLE &ble, ble_error_t error)
