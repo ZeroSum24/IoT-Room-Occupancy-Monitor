@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -16,8 +17,52 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.workinghours.zerosum24.mainiot.R;
+
+public class InitRecyclerView {
+
+    private RecyclerView foundDeviceContainer;
+
+    public InitRecyclerView(Device[] devicesList, RecyclerView deviceContainer, final Context appContext) {
+
+        foundDeviceContainer = deviceContainer;
+
+        DevicesRecyclerAdapter mAdapter = new DevicesRecyclerAdapter(devicesList);
+        mAdapter.setHasStableIds(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(appContext);
+        foundDeviceContainer.setLayoutManager(mLayoutManager);
+        foundDeviceContainer.setItemAnimator(new DefaultItemAnimator());
+        foundDeviceContainer.addItemDecoration(
+                new MyDividerItemDecoration(appContext, R.drawable.res_divider,
+                        LinearLayoutManager.VERTICAL, 10));
+
+        foundDeviceContainer.setAdapter(mAdapter);
+
+        foundDeviceContainer.addOnItemTouchListener(new RecyclerTouchListener(appContext,
+        foundDeviceContainer, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+                Toast.makeText(appContext,
+                    "Normal Click", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+                Toast.makeText(appContext,
+                    "You have made a long click", Toast.LENGTH_SHORT).show();
+            }
+
+            }));
+        }
+
+    public RecyclerView getFoundDeviceContainer() {
+        return foundDeviceContainer;
+    }
+}
 
 /**
  * Class is used to create a custom Completed Songs Adapter to display them correctly in the
@@ -56,7 +101,7 @@ class DevicesRecyclerAdapter extends RecyclerView.Adapter<DevicesRecyclerAdapter
 
         Device current = devicesList[position];
 
-        holder.blueToothImage.setImage(current.connectionStatusToImageID());
+        holder.blueToothImage.setImageResource(current.connectionStatusToImageID());
         holder.deviceName.setText(current.getName());
     }
 

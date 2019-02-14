@@ -5,10 +5,10 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".Activities.DevicesActivity">
 
     <TextView
-        android:id="@+id/activityTitle"
+        android:id="@+id/findActivityTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -40,7 +40,7 @@
     </android.support.design.widget.BottomNavigationView>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/findDevicesRecycler"
         android:layout_width="358dp"
         android:layout_height="454dp"
         android:layout_marginStart="8dp"
@@ -51,7 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activityTitle"
+        app:layout_constraintTop_toBottomOf="@+id/findActivityTitle"
         app:layout_constraintVertical_bias="0.118">
 
         <include layout="@layout/device_layout"/>
@@ -71,12 +71,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.943"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/findDevicesRecycler"
         app:layout_constraintVertical_bias="0.0"
         android:src="@drawable/ic_bluetooth_white_24dp" />
 
     <Button
-        android:id="@+id/gatherDataButton"
+        android:id="@+id/findGatherDataButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -88,7 +88,7 @@
         app:layout_constraintEnd_toStartOf="@+id/findBluetoothButton"
         app:layout_constraintHorizontal_bias="0.711"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/findDevicesRecycler"
         app:layout_constraintVertical_bias="0.296" />
 
     <ProgressBar
@@ -97,9 +97,9 @@
         android:layout_width="94dp"
         android:layout_height="115dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerView"
-        app:layout_constraintStart_toStartOf="@+id/recyclerView"
-        app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+        app:layout_constraintBottom_toBottomOf="@+id/findDevicesRecycler"
+        app:layout_constraintEnd_toEndOf="@+id/findDevicesRecycler"
+        app:layout_constraintStart_toStartOf="@+id/findDevicesRecycler"
+        app:layout_constraintTop_toTopOf="@+id/findDevicesRecycler" />
 
 </android.support.constraint.ConstraintLayout>

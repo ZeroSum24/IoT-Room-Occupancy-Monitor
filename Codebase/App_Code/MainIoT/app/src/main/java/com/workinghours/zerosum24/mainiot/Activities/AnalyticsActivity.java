@@ -1,4 +1,4 @@
-package com.workinghours.zerosum24.mainiot;
+package com.workinghours.zerosum24.mainiot.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.workinghours.zerosum24.mainiot.R;
 
 public class AnalyticsActivity extends AppCompatActivity {
 
