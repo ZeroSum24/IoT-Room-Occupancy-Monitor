@@ -1,16 +1,22 @@
-package com.workinghours.zerosum24.mainiot;
+package com.workinghours.zerosum24.mainiot.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+
+import com.workinghours.zerosum24.mainiot.R;
+import com.workinghours.zerosum24.mainiot.Support.Device;
+import com.workinghours.zerosum24.mainiot.Support.InitRecyclerView;
 
 public class DevicesActivity extends AppCompatActivity {
+
+    private Device[] devicesList;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -41,6 +47,25 @@ public class DevicesActivity extends AppCompatActivity {
 
         // set up the gather data button
         gatherDataButton();
+
+        this.devicesList = tempPopulateDevices();
+
+        RecyclerView devicesContainer = findViewById(R.id.findDevicesRecycler);
+        InitRecyclerView initRecyclerView = new InitRecyclerView(devicesList, devicesContainer, this );
+        devicesContainer = initRecyclerView.getFoundDeviceContainer();
+    }
+
+    /**
+     * TODO make this a non-temp class and fill with the bluetooth code
+     **/
+    private Device[] tempPopulateDevices() {
+
+        Device device1 = new Device("Device1", "29:89:89:90","Connected");
+
+        Device[] devicesList = new Device[1];
+        devicesList[0] = device1;
+
+        return devicesList;
     }
 
     private void gatherDataButton() {
@@ -53,4 +78,6 @@ public class DevicesActivity extends AppCompatActivity {
         });
     }
 
+
 }
+

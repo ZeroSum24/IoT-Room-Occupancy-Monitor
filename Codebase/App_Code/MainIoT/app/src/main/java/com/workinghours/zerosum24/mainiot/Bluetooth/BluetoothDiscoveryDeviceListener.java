@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.workinghours.zerosum24.mainiot.bluetooth;
+package com.workinghours.zerosum24.mainiot.Bluetooth;
 
 import android.bluetooth.BluetoothDevice;
 
