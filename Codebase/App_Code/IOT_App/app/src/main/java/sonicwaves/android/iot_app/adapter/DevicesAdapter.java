@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import sonicwaves.android.iot_app.GatherDataActivity;
 import sonicwaves.android.iot_app.R;
 import sonicwaves.android.iot_app.ScannerActivity;
 import sonicwaves.android.iot_app.viewmodels.DevicesLiveData;
@@ -68,6 +70,13 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHold
 			mDevices = devices;
 			result.dispatchUpdatesTo(this);
 		});
+	}
+
+	public DevicesAdapter(@NonNull final GatherDataActivity activity,
+						  @NonNull final List<DiscoveredBluetoothDevice> mDevices) {
+		mContext = activity;
+		setHasStableIds(true);
+		this.mDevices = mDevices;
 	}
 
 	@NonNull
@@ -121,15 +130,16 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHold
 					mOnItemClickListener.onItemClick(mDevices.get(getAdapterPosition()));
 				}
 
-				// update the value which is checked
-				view.findViewById(R.id.checkBox).setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						mDevices.get(getAdapterPosition()).setChecked();
-					}
-				});
-
 			});
+
+            // update the device when it is checked
+            view.findViewById(R.id.checkBox).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mDevices.get(getAdapterPosition()).setChecked();
+                    Log.e("Devices Adapter", "mDevices address: " + mDevices.get(getAdapterPosition()).getAddress() + "checked: " + mDevices.get(getAdapterPosition()).getChecked());
+                }
+            });
 		}
 	}
 

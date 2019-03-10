@@ -21,8 +21,8 @@
   -->
 
 <resources>
-	<string name="app_name">nRF Blinky</string>
-	<string name="feature_name">BLINKY</string>
+	<string name="app_name">SonicWaves@IOT</string>
+	<string name="feature_name">IOT</string>
 
 	<string name="title">@string/app_name</string>
 
