@@ -270,7 +270,16 @@ public class ScannerActivity extends AppCompatActivity {
     }
 
     private List<DiscoveredBluetoothDevice> calculateSelectedDevices() {
-        mDevices = adapter.getDevices();
+
+		ApplicationData app = (ApplicationData) getApplicationContext();
+
+		// update devices from application settings if set
+		if (app.getDevices() != null) {
+			mDevices = app.getDevices();
+		} else {
+			mDevices = adapter.getDevices();
+		}
+
         List<DiscoveredBluetoothDevice> selectedDevices = new ArrayList<>();
 
         Log.e(TAG, "mdevicesSize: " + String.valueOf(mDevices.size()));
