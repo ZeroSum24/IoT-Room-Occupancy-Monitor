@@ -14,14 +14,15 @@
 		app:showAsAction="ifRoom">
 
 		<menu>
-			<item android:id="@+id/filter_uuid"
-				android:checkable="true"
-				android:checked="true"
-				android:title="@string/menu_filter_uuid"/>
 
 			<item android:id="@+id/filter_nearby"
 				android:checkable="true"
 				android:title="@string/menu_filter_nearby"/>
+
+			<item android:id="@+id/filter_sonicwaves"
+				android:checkable="true"
+				android:checked="true"
+				android:title="@string/menu_filter_sonicwaves"/>
 		</menu>
 	</item>
 </menu>
