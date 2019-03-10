@@ -28,13 +28,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -42,7 +39,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,16 +46,15 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import sonicwaves.android.iot_app.adapter.DevicesAdapter;
+import sonicwaves.android.iot_app.adapter.GatherDataDevicesAdapter;
+import sonicwaves.android.iot_app.adapter.ScannerDevicesAdapter;
 import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
 import sonicwaves.android.iot_app.utils.Utils;
-import sonicwaves.android.iot_app.viewmodels.ScannerStateLiveData;
 import sonicwaves.android.iot_app.viewmodels.ScannerViewModel;
 
-public class GatherDataActivity extends AppCompatActivity implements DevicesAdapter.OnItemClickListener {
+public class GatherDataActivity extends AppCompatActivity implements GatherDataDevicesAdapter.OnItemClickListener {
 	private static final int REQUEST_ACCESS_COARSE_LOCATION = 1022; // random number
 
-	private ScannerViewModel mScannerViewModel;
     private List<DiscoveredBluetoothDevice> mDevices;
 
     @BindView(R.id.state_scanning) View mScanningView;
@@ -80,7 +75,7 @@ public class GatherDataActivity extends AppCompatActivity implements DevicesAdap
 
 		final Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		getSupportActionBar().setTitle(R.string.app_name);
+		getSupportActionBar().setTitle(R.string.gatherDataActivity);
 
         // Get data from the Scanner Activity
         ApplicationData app = (ApplicationData) getApplicationContext();
@@ -91,7 +86,7 @@ public class GatherDataActivity extends AppCompatActivity implements DevicesAdap
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 		((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-		final DevicesAdapter adapter = new DevicesAdapter(this, mDevices);
+		final GatherDataDevicesAdapter adapter = new GatherDataDevicesAdapter(this, mDevices);
 		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);
 
@@ -104,18 +99,6 @@ public class GatherDataActivity extends AppCompatActivity implements DevicesAdap
 		final Intent controlBlinkIntent = new Intent(this, BlinkyActivity.class);
 		controlBlinkIntent.putExtra(BlinkyActivity.EXTRA_DEVICE, device);
 		startActivity(controlBlinkIntent);
-	}
-
-	@Override
-	public void onRequestPermissionsResult(final int requestCode,
-										   @NonNull final String[] permissions,
-										   @NonNull final int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		switch (requestCode) {
-			case REQUEST_ACCESS_COARSE_LOCATION:
-				mScannerViewModel.refresh();
-				break;
-		}
 	}
 
 	@OnClick(R.id.action_enable_location)
@@ -148,7 +131,8 @@ public class GatherDataActivity extends AppCompatActivity implements DevicesAdap
 
 	private void initGatherDataButton() {
 
-		gatherDataButton.setText("Download");
+		gatherDataButton.setText(R.string.gatherDataConnect);
+		gatherDataButton.setVisibility(View.VISIBLE);
 
         gatherDataButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

@@ -41,6 +41,14 @@
 		android:layout_centerVertical="true"
 		android:scaleType="center" />
 
+	<ImageButton
+		android:id="@+id/cancelButton"
+		android:layout_width="36dp"
+		android:layout_height="36dp"
+		android:layout_centerVertical="true"
+		android:visibility="invisible"
+		app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
 	<TextView
 		android:id="@+id/device_name"
 		android:layout_width="229dp"
@@ -71,19 +79,9 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentRight="true"
-		android:layout_marginRight="32dp"
 		android:layout_centerVertical="true"
+		android:layout_marginRight="24dp"
 		android:src="@drawable/ic_signal_bar"
 		tools:src="@drawable/ic_signal_3_bar" />
-
-	<ImageButton
-		android:id="@+id/cancelButton"
-		android:layout_width="42dp"
-		android:layout_height="30dp"
-		android:layout_alignEnd="@+id/rssi"
-		android:layout_centerVertical="true"
-		android:layout_marginEnd="-43dp"
-		android:visibility="gone"
-		app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
 </RelativeLayout>
