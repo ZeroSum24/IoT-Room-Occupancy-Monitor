@@ -23,9 +23,9 @@
 
 <resources>
 	<!-- Base theme colors -->
-	<color name="colorPrimary">@color/nordicBlue</color>
-	<color name="colorPrimaryDark">@color/nordicBlueDark</color>
-	<color name="colorAccent">@color/nordicLake</color>
+	<color name="colorPrimary">#1190CB</color>
+	<color name="colorPrimaryDark">#7DCCFF</color>
+	<color name="colorAccent">@color/nordicBlue</color>
 	<color name="colorBackground">@color/lightGray</color>
 	<color name="colorSignalStrength">@color/nordicDarkGray</color>
 	<color name="colorDeviceIcon">@color/nordicBlue</color>
@@ -58,4 +58,6 @@
 	<color name="white">#FFFFFFFF</color>
 	<color name="black">#FF000000</color>
 	<color name="lightGray">#FFF5F5F5</color>
+
+	<color name="ic_launcher_background">#FFFFFF</color>
 </resources>

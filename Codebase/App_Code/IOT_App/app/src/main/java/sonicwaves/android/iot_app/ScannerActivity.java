@@ -64,7 +64,7 @@ public class ScannerActivity extends AppCompatActivity {
 
 	private ScannerViewModel mScannerViewModel;
     private ScannerDevicesAdapter adapter;
-    public List<DiscoveredBluetoothDevice> mDevices;
+    public List<DiscoveredBluetoothDevice> mDevices = new ArrayList<>();
 
     @BindView(R.id.state_scanning) View mScanningView;
 	@BindView(R.id.no_devices)View mEmptyView;
@@ -276,7 +276,7 @@ public class ScannerActivity extends AppCompatActivity {
 		// update devices from application settings if set
 		if (app.getDevices() != null) {
 			mDevices = app.getDevices();
-		} else {
+		} else if (adapter.getDevices() != null){
 			mDevices = adapter.getDevices();
 		}
 
@@ -286,6 +286,7 @@ public class ScannerActivity extends AppCompatActivity {
 
         for (int i=0;i<mDevices.size(); i++) {
 
+            Log.e(TAG, "checked" + mDevices.get(i).getChecked().toString());
             if (mDevices.get(i).getChecked()) {
                 selectedDevices.add(mDevices.get(i));
             }
