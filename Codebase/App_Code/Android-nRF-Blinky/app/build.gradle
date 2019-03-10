@@ -55,4 +55,9 @@ dependencies {
     // To add BLE Library as a module, replace the above dependency with the following
     // and uncomment 2 lines in settings.gradle file.
     // implementation project(":ble")
+    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-firestore:18.0.1'
 }
+//Add to the bottom of the file
+apply plugin: 'com.google.gms.google-services'
