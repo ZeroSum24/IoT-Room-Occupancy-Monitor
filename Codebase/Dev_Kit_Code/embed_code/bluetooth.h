@@ -1,12 +1,18 @@
+#ifndef BLUETOOTH_H
+#define BLUETOOTH_H
+
 extern char DEVICE_NAME[];
-extern EventQueue eventQueue;
-extern uint8_t hrmCounter;
-extern HeartRateService *hrServicePtr;
 
-void onBleInitError(BLE &ble, ble_error_t error);
+void onBleInitError(BLE&, ble_error_t);
 
-void bleInitComplete(BLE::InitializationCompleteCallbackContext *params);
-
-void scheduleBleEventsProcessing(BLE::OnEventsToProcessCallbackContext* context);
+void bleInitComplete(BLE::InitializationCompleteCallbackContext*);
 
 void pirTriggered(bool triggered);
+
+void writeDistanceMeasurements(std::pair<int, int> measurements);
+
+void scanForDevices(BLE &bledevice); 
+
+string printDevice(const uint8_t* int_p);
+
+#endif
