@@ -90,6 +90,8 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);
 
+//		recyclerView.getAdapter(
+
 		// initialise gather data button functionality
         initGatherDataButton();
 	}
