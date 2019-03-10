@@ -23,23 +23,11 @@
 package sonicwaves.android.iot_app;
 
 import android.Manifest;
-import androidx.lifecycle.ViewModelProviders;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-import androidx.appcompat.widget.Toolbar;
-
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +37,16 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -58,13 +56,11 @@ import sonicwaves.android.iot_app.utils.Utils;
 import sonicwaves.android.iot_app.viewmodels.ScannerStateLiveData;
 import sonicwaves.android.iot_app.viewmodels.ScannerViewModel;
 
-public class ScannerActivity extends AppCompatActivity {
+public class GatherDataActivity extends AppCompatActivity implements DevicesAdapter.OnItemClickListener {
 	private static final int REQUEST_ACCESS_COARSE_LOCATION = 1022; // random number
-    private static final String TAG = "ScannerActivity";
 
 	private ScannerViewModel mScannerViewModel;
-    private DevicesAdapter adapter;
-    public List<DiscoveredBluetoothDevice> mDevices;
+    private List<DiscoveredBluetoothDevice> mDevices;
 
     @BindView(R.id.state_scanning) View mScanningView;
 	@BindView(R.id.no_devices)View mEmptyView;
@@ -86,16 +82,17 @@ public class ScannerActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setTitle(R.string.app_name);
 
-		// Create view model containing utility methods for scanning
-		mScannerViewModel = ViewModelProviders.of(this).get(ScannerViewModel.class);
-		mScannerViewModel.getScannerState().observe(this, this::startScan);
+        // Get data from the Scanner Activity
+        ApplicationData app = (ApplicationData) getApplicationContext();
+        mDevices = app.getDevices();
 
 		// Configure the sonicwaves.android.iot_app view
 		final RecyclerView recyclerView = findViewById(R.id.recycler_view_ble_devices);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 		((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-		adapter = new DevicesAdapter(this, mScannerViewModel.getDevices());
+		final DevicesAdapter adapter = new DevicesAdapter(this, mDevices);
+		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);
 
 		// initialise gather data button functionality
@@ -103,38 +100,10 @@ public class ScannerActivity extends AppCompatActivity {
 	}
 
 	@Override
-	protected void onRestart() {
-		super.onRestart();
-		clear();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		stopScan();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(final Menu menu) {
-		getMenuInflater().inflate(R.menu.filter, menu);
-		menu.findItem(R.id.filter_uuid).setChecked(mScannerViewModel.isUuidFilterEnabled());
-		menu.findItem(R.id.filter_nearby).setChecked(mScannerViewModel.isNearbyFilterEnabled());
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(final MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.filter_uuid:
-				item.setChecked(!item.isChecked());
-				mScannerViewModel.filterByUuid(item.isChecked());
-				return true;
-			case R.id.filter_nearby:
-				item.setChecked(!item.isChecked());
-				mScannerViewModel.filterByDistance(item.isChecked());
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
+	public void onItemClick(@NonNull final DiscoveredBluetoothDevice device) {
+		final Intent controlBlinkIntent = new Intent(this, BlinkyActivity.class);
+		controlBlinkIntent.putExtra(BlinkyActivity.EXTRA_DEVICE, device);
+		startActivity(controlBlinkIntent);
 	}
 
 	@Override
@@ -177,114 +146,18 @@ public class ScannerActivity extends AppCompatActivity {
 		startActivity(intent);
 	}
 
-	/**
-	 * Start scanning for Bluetooth devices or displays a message based on the scanner state.
-	 */
-	private void startScan(final ScannerStateLiveData state) {
-		// First, check the Location permission. This is required on Marshmallow onwards in order
-		// to scan for Bluetooth LE devices.
-		if (Utils.isLocationPermissionsGranted(this)) {
-			mNoLocationPermissionView.setVisibility(View.GONE);
-
-			// Bluetooth must be enabled
-			if (state.isBluetoothEnabled()) {
-				mNoBluetoothView.setVisibility(View.GONE);
-
-				// Make the gather data button visible
-				gatherDataButton.setVisibility(View.VISIBLE);
-
-				// We are now OK to start scanning
-				mScannerViewModel.startScan();
-				mScanningView.setVisibility(View.VISIBLE);
-
-				if (!state.hasRecords()) {
-					mEmptyView.setVisibility(View.VISIBLE);
-
-					if (!Utils.isLocationRequired(this) || Utils.isLocationEnabled(this)) {
-						mNoLocationView.setVisibility(View.INVISIBLE);
-					} else {
-						mNoLocationView.setVisibility(View.VISIBLE);
-					}
-				} else {
-					mEmptyView.setVisibility(View.GONE);
-				}
-			} else {
-				mNoBluetoothView.setVisibility(View.VISIBLE);
-				mScanningView.setVisibility(View.INVISIBLE);
-				mEmptyView.setVisibility(View.GONE);
-				clear();
-			}
-		} else {
-			mNoLocationPermissionView.setVisibility(View.VISIBLE);
-			mNoBluetoothView.setVisibility(View.GONE);
-			mScanningView.setVisibility(View.INVISIBLE);
-			mEmptyView.setVisibility(View.GONE);
-
-			final boolean deniedForever = Utils.isLocationPermissionDeniedForever(this);
-			mGrantPermissionButton.setVisibility(deniedForever ? View.GONE : View.VISIBLE);
-			mPermissionSettingsButton.setVisibility(deniedForever ? View.VISIBLE : View.GONE);
-		}
-	}
-
-	/**
-	 * stop scanning for bluetooth devices.
-	 */
-	private void stopScan() {
-		mScannerViewModel.stopScan();
-	}
-
-	/**
-	 * Clears the list of devices, which will notify the observer.
-	 */
-	private void clear() {
-		mScannerViewModel.getDevices().clear();
-		mScannerViewModel.getScannerState().clearRecords();
-	}
-
 	private void initGatherDataButton() {
+
+		gatherDataButton.setText("Download");
 
         gatherDataButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Log.e(TAG, "onClick: here");
-
-                // storing the application data
-                List<DiscoveredBluetoothDevice> selectedDevices = calculateSelectedDevices();
-                ApplicationData app = (ApplicationData) getApplicationContext();
-                app.setDevices(selectedDevices);
-
-                // Ensure a device is selected
-                if (selectedDevices.size() > 1) {
-                    Intent intent = new Intent(ScannerActivity.this, GatherDataActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Please choose some devices",
-                            Toast.LENGTH_LONG);
-                    toast.show();
-                }
-
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "SUCCESS!!",
+                        Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
     }
-
-
-
-    private List<DiscoveredBluetoothDevice> calculateSelectedDevices() {
-        mDevices = adapter.getDevices();
-        List<DiscoveredBluetoothDevice> selectedDevices = new ArrayList<>();
-
-        Log.e(TAG, "mdevicesSize: " + String.valueOf(mDevices.size()));
-
-        for (int i=0;i<mDevices.size(); i++) {
-
-            if (mDevices.get(i).getChecked()) {
-                selectedDevices.add(mDevices.get(i));
-            }
-        }
-        Log.e(TAG, "Finished checked, gatherData: " + String.valueOf(selectedDevices.size()));
-
-        return selectedDevices;
-    }
-
 }

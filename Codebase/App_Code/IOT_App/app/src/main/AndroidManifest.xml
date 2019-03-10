@@ -35,6 +35,7 @@
 		android:required="true"/>
 
 	<application
+        android:name=".ApplicationData"
 		android:allowBackup="true"
 		android:fullBackupContent="true"
 		android:icon="@mipmap/ic_launcher"
@@ -54,6 +55,16 @@
 		</activity>
 		<activity
 			android:name=".ScannerActivity"
+			android:icon="@drawable/ic_blinky_feature"
+			android:label="@string/feature_name"
+			android:launchMode="singleTop">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="sonicwaves.android.nrftoolbox.LAUNCHER"/>
+			</intent-filter>
+		</activity>
+		<activity
+			android:name=".GatherDataActivity"
 			android:icon="@drawable/ic_blinky_feature"
 			android:label="@string/feature_name"
 			android:launchMode="singleTop">

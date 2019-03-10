@@ -32,9 +32,16 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DiffUtil;
+import sonicwaves.android.iot_app.ScannerActivity;
+import sonicwaves.android.iot_app.adapter.DeviceDiffCallback;
+import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
+import sonicwaves.android.iot_app.viewmodels.DevicesLiveData;
 
 public class Utils {
 	private static final String PREFS_LOCATION_NOT_REQUIRED = "location_not_required";
@@ -138,4 +145,16 @@ public class Utils {
 	public static boolean isMarshmallowOrAbove() {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
 	}
+
+//	public static List<DiscoveredBluetoothDevice> convertToDiscovered(@NonNull final Activity activity,
+//																	  @NonNull final DevicesLiveData devicesLiveData){
+//		List<DiscoveredBluetoothDevice> mDevices;
+//
+//		devicesLiveData.observe(activity, devices -> {
+//			DiffUtil.DiffResult result = DiffUtil.calculateDiff(
+//					new DeviceDiffCallback(mDevices, devices), false);
+//			mDevices = devices;
+//			result.dispatchUpdatesTo(this);
+//		});
+//	}
 }
