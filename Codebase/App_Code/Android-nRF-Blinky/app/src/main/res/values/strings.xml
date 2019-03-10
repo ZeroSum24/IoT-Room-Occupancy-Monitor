@@ -70,4 +70,8 @@
 	<string name="state_discovering_services">Discovering services…</string>
 	<string name="state_initializing">Initializing…</string>
 	<string name="state_disconnected">Device disconnected.</string>
+
+
+	<!--Other Strings-->
+	<string name="gatherDataButton">Gather Data</string>
 </resources>
