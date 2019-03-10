@@ -35,10 +35,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
+import sonicwaves.android.iot_app.adapter.ScannerDevicesAdapter;
 import sonicwaves.android.iot_app.viewmodels.BlinkyViewModel;
 
 @SuppressWarnings("ConstantConditions")
@@ -46,9 +51,10 @@ public class BlinkyActivity extends AppCompatActivity {
 	public static final String EXTRA_DEVICE = "sonicwaves.android.iot_app.EXTRA_DEVICE";
 
 	private BlinkyViewModel mViewModel;
+	private ScannerDevicesAdapter adapter;
 
-	@BindView(R.id.led_switch) Switch mLed;
-	@BindView(R.id.button_state) TextView mButtonState;
+//	@BindView(R.id.led_switch) Switch mLed;
+//	@BindView(R.id.button_state) TextView mButtonState;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -67,55 +73,63 @@ public class BlinkyActivity extends AppCompatActivity {
 		getSupportActionBar().setSubtitle(deviceAddress);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		// Configure the view model
-		mViewModel = ViewModelProviders.of(this).get(BlinkyViewModel.class);
-		mViewModel.connect(device);
+//		// Configure the view model
+//		mViewModel = ViewModelProviders.of(this).get(BlinkyViewModel.class);
+//		mViewModel.connect(device);
+//
+//		// Configure the recycler view
+//		final RecyclerView recyclerView = findViewById(R.id.recycler_view_ble_devices);
+//		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//		((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+//		adapter = new ScannerDevicesAdapter(this, mViewModel.getSensors());
+//		recyclerView.setAdapter(adapter);
 
-		// Set up views
-		final TextView ledState = findViewById(R.id.led_state);
-		final LinearLayout progressContainer = findViewById(R.id.progress_container);
-		final TextView connectionState = findViewById(R.id.connection_state);
-		final View content = findViewById(R.id.device_container);
-		final View notSupported = findViewById(R.id.not_supported);
-
-		mLed.setOnCheckedChangeListener((buttonView, isChecked) -> mViewModel.toggleLED(isChecked));
-		mViewModel.isDeviceReady().observe(this, deviceReady -> {
-			progressContainer.setVisibility(View.GONE);
-			content.setVisibility(View.VISIBLE);
-		});
-		mViewModel.getConnectionState().observe(this, text -> {
-			if (text != null) {
-				progressContainer.setVisibility(View.VISIBLE);
-				notSupported.setVisibility(View.GONE);
-				connectionState.setText(text);
-			}
-		});
-		mViewModel.isConnected().observe(this, this::onConnectionStateChanged);
-		mViewModel.isSupported().observe(this, supported -> {
-			if (!supported) {
-				progressContainer.setVisibility(View.GONE);
-				notSupported.setVisibility(View.VISIBLE);
-			}
-		});
-		mViewModel.getLEDState().observe(this, isOn -> {
-			ledState.setText(isOn ? R.string.turn_on : R.string.turn_off);
-			mLed.setChecked(isOn);
-		});
-		mViewModel.getButtonState().observe(this,
-				pressed -> mButtonState.setText(pressed ?
-						R.string.button_pressed : R.string.button_released));
+//		// Set up views
+//		final TextView ledState = findViewById(R.id.led_state);
+//		final LinearLayout progressContainer = findViewById(R.id.progress_container);
+//		final TextView connectionState = findViewById(R.id.connection_state);
+//		final View content = findViewById(R.id.device_container);
+//		final View notSupported = findViewById(R.id.not_supported);
+//
+//		mLed.setOnCheckedChangeListener((buttonView, isChecked) -> mViewModel.toggleLED(isChecked));
+//		mViewModel.isDeviceReady().observe(this, deviceReady -> {
+//			progressContainer.setVisibility(View.GONE);
+//			content.setVisibility(View.VISIBLE);
+//		});
+//		mViewModel.getConnectionState().observe(this, text -> {
+//			if (text != null) {
+//				progressContainer.setVisibility(View.VISIBLE);
+//				notSupported.setVisibility(View.GONE);
+//				connectionState.setText(text);
+//			}
+//		});
+//		mViewModel.isConnected().observe(this, this::onConnectionStateChanged);
+//		mViewModel.isSupported().observe(this, supported -> {
+//			if (!supported) {
+//				progressContainer.setVisibility(View.GONE);
+//				notSupported.setVisibility(View.VISIBLE);
+//			}
+//		});
+//		mViewModel.getLEDState().observe(this, isOn -> {
+//			ledState.setText(isOn ? R.string.turn_on : R.string.turn_off);
+//			mLed.setChecked(isOn);
+//		});
+//		mViewModel.getButtonState().observe(this,
+//				pressed -> mButtonState.setText(pressed ?
+//						R.string.button_pressed : R.string.button_released));
 	}
+//
+//	@OnClick(R.id.action_clear_cache)
+//	public void onTryAgainClicked() {
+//		mViewModel.reconnect();
+//	}
 
-	@OnClick(R.id.action_clear_cache)
-	public void onTryAgainClicked() {
-		mViewModel.reconnect();
-	}
-
-	private void onConnectionStateChanged(final boolean connected) {
-		mLed.setEnabled(connected);
-		if (!connected) {
-			mLed.setChecked(false);
-			mButtonState.setText(R.string.button_unknown);
-		}
-	}
+//	private void onConnectionStateChanged(final boolean connected) {
+//		mLed.setEnabled(connected);
+//		if (!connected) {
+//			mLed.setChecked(false);
+//			mButtonState.setText(R.string.button_unknown);
+//		}
+//	}
 }

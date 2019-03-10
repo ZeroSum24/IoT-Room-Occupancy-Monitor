@@ -90,7 +90,7 @@ public class ScannerActivity extends AppCompatActivity {
 		mScannerViewModel = ViewModelProviders.of(this).get(ScannerViewModel.class);
 		mScannerViewModel.getScannerState().observe(this, this::startScan);
 
-		// Configure the sonicwaves.android.iot_app view
+		// Configure the recycler view
 		final RecyclerView recyclerView = findViewById(R.id.recycler_view_ble_devices);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));

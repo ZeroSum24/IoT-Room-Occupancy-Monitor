@@ -75,7 +75,7 @@
 
 	<!--Other Strings-->
 	<string name="gatherDataButton">Gather Data</string>
-	<string name="gatherDataConnect">Connect</string>
+	<string name="gatherDataConnect">Upload to Firebase</string>
 	<string name="scannerActivity">Scanning for devices</string>
 	<string name="gatherDataActivity">Gather Data</string>
 </resources>
