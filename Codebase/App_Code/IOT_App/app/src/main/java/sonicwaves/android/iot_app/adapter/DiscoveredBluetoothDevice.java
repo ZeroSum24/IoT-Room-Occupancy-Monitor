@@ -28,6 +28,8 @@ import android.os.Parcelable;
 
 import no.nordicsemi.android.support.v18.scanner.ScanResult;
 
+import static sonicwaves.android.iot_app.utils.Utils.isSonicWavesDevice;
+
 public class DiscoveredBluetoothDevice implements Parcelable {
 	private final BluetoothDevice device;
 	private ScanResult lastScanResult;
@@ -40,6 +42,11 @@ public class DiscoveredBluetoothDevice implements Parcelable {
 	public DiscoveredBluetoothDevice(final ScanResult scanResult) {
 		device = scanResult.getDevice();
 		update(scanResult);
+
+		// if the device is a sonicwaves device, automatically check the box
+		if (isSonicWavesDevice(device)) {
+		    checked = true;
+        }
 	}
 
 	public BluetoothDevice getDevice() {

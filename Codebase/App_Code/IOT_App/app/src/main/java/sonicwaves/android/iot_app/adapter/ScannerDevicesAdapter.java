@@ -49,6 +49,7 @@ public class ScannerDevicesAdapter extends RecyclerView.Adapter<ScannerDevicesAd
 	private final Context mContext;
 	private List<DiscoveredBluetoothDevice> mDevices;
 	private OnItemClickListener mOnItemClickListener;
+	private final static String TAG = "ScannerDevicesAdapter";
 
 	@FunctionalInterface
 	public interface OnItemClickListener {
@@ -99,7 +100,12 @@ public class ScannerDevicesAdapter extends RecyclerView.Adapter<ScannerDevicesAd
 		holder.deviceAddress.setText(device.getAddress());
 		final int rssiPercent = (int) (100.0f * (127.0f + device.getRssi()) / (127.0f + 20.0f));
 		holder.rssi.setImageLevel(rssiPercent);
-	}
+
+        // set the checkbox to true if the device is a sonic waves device
+        if (device.getChecked()) {
+            holder.checkBox.setChecked(true);
+        }
+    }
 
 	@Override
 	public long getItemId(final int position) {
@@ -124,6 +130,8 @@ public class ScannerDevicesAdapter extends RecyclerView.Adapter<ScannerDevicesAd
 		private ViewHolder(@NonNull final View view) {
 			super(view);
 			ButterKnife.bind(this, view);
+
+//			DiscoveredBluetoothDevice device = mDevices.get(getAdapterPosition());
 
 			view.findViewById(R.id.device_container).setOnClickListener(v -> {
 				if (mOnItemClickListener != null) {
