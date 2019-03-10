@@ -30,6 +30,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -105,7 +106,8 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHold
 		return getItemCount() == 0;
 	}
 
-	final class ViewHolder extends RecyclerView.ViewHolder {
+	final class ViewHolder extends RecyclerView.ViewHolder{
+		@BindView(R.id.checkBox) CheckBox checkBox;
 		@BindView(R.id.device_address) TextView deviceAddress;
 		@BindView(R.id.device_name) TextView deviceName;
 		@BindView(R.id.rssi) ImageView rssi;
@@ -118,7 +120,20 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHold
 				if (mOnItemClickListener != null) {
 					mOnItemClickListener.onItemClick(mDevices.get(getAdapterPosition()));
 				}
+
+				// update the value which is checked
+				view.findViewById(R.id.checkBox).setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						mDevices.get(getAdapterPosition()).setChecked();
+					}
+				});
+
 			});
 		}
+	}
+
+	public List<DiscoveredBluetoothDevice> getDevices() {
+		return mDevices;
 	}
 }
