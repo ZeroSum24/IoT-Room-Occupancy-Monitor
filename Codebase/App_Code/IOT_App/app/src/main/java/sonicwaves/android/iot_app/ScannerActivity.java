@@ -52,7 +52,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import sonicwaves.android.iot_app.adapter.DevicesAdapter;
+import sonicwaves.android.iot_app.adapter.ScannerDevicesAdapter;
 import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
 import sonicwaves.android.iot_app.utils.Utils;
 import sonicwaves.android.iot_app.viewmodels.ScannerStateLiveData;
@@ -63,7 +63,7 @@ public class ScannerActivity extends AppCompatActivity {
     private static final String TAG = "ScannerActivity";
 
 	private ScannerViewModel mScannerViewModel;
-    private DevicesAdapter adapter;
+    private ScannerDevicesAdapter adapter;
     public List<DiscoveredBluetoothDevice> mDevices;
 
     @BindView(R.id.state_scanning) View mScanningView;
@@ -84,7 +84,7 @@ public class ScannerActivity extends AppCompatActivity {
 
 		final Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		getSupportActionBar().setTitle(R.string.app_name);
+		getSupportActionBar().setTitle(R.string.scannerActivity);
 
 		// Create view model containing utility methods for scanning
 		mScannerViewModel = ViewModelProviders.of(this).get(ScannerViewModel.class);
@@ -95,7 +95,7 @@ public class ScannerActivity extends AppCompatActivity {
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 		((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-		adapter = new DevicesAdapter(this, mScannerViewModel.getDevices());
+		adapter = new ScannerDevicesAdapter(this, mScannerViewModel.getDevices());
 		recyclerView.setAdapter(adapter);
 
 		// initialise gather data button functionality
@@ -254,7 +254,7 @@ public class ScannerActivity extends AppCompatActivity {
                 app.setDevices(selectedDevices);
 
                 // Ensure a device is selected
-                if (selectedDevices.size() > 1) {
+                if (selectedDevices.size() > 0) {
                     Intent intent = new Intent(ScannerActivity.this, GatherDataActivity.class);
                     startActivity(intent);
                 } else {
@@ -267,8 +267,6 @@ public class ScannerActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     private List<DiscoveredBluetoothDevice> calculateSelectedDevices() {
         mDevices = adapter.getDevices();

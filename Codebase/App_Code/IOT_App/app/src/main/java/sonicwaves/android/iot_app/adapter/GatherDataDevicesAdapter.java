@@ -23,20 +23,21 @@
 package sonicwaves.android.iot_app.adapter;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sonicwaves.android.iot_app.GatherDataActivity;
@@ -45,7 +46,7 @@ import sonicwaves.android.iot_app.ScannerActivity;
 import sonicwaves.android.iot_app.viewmodels.DevicesLiveData;
 
 @SuppressWarnings("unused")
-public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHolder> {
+public class GatherDataDevicesAdapter extends RecyclerView.Adapter<GatherDataDevicesAdapter.ViewHolder> {
 	private final Context mContext;
 	private List<DiscoveredBluetoothDevice> mDevices;
 	private OnItemClickListener mOnItemClickListener;
@@ -60,8 +61,8 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHold
 	}
 
 	@SuppressWarnings("ConstantConditions")
-	public DevicesAdapter(@NonNull final ScannerActivity activity,
-						  @NonNull final DevicesLiveData devicesLiveData) {
+	public GatherDataDevicesAdapter(@NonNull final ScannerActivity activity,
+                                    @NonNull final DevicesLiveData devicesLiveData) {
 		mContext = activity;
 		setHasStableIds(true);
 		devicesLiveData.observe(activity, devices -> {
@@ -72,8 +73,8 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHold
 		});
 	}
 
-	public DevicesAdapter(@NonNull final GatherDataActivity activity,
-						  @NonNull final List<DiscoveredBluetoothDevice> mDevices) {
+	public GatherDataDevicesAdapter(@NonNull final GatherDataActivity activity,
+                                    @NonNull final List<DiscoveredBluetoothDevice> mDevices) {
 		mContext = activity;
 		setHasStableIds(true);
 		this.mDevices = mDevices;
@@ -117,6 +118,7 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHold
 
 	final class ViewHolder extends RecyclerView.ViewHolder{
 		@BindView(R.id.checkBox) CheckBox checkBox;
+		@BindView(R.id.cancelButton) ImageButton cancelButton;
 		@BindView(R.id.device_address) TextView deviceAddress;
 		@BindView(R.id.device_name) TextView deviceName;
 		@BindView(R.id.rssi) ImageView rssi;
@@ -125,19 +127,22 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHold
 			super(view);
 			ButterKnife.bind(this, view);
 
-			view.findViewById(R.id.device_container).setOnClickListener(v -> {
+			view.findViewById(R.id.device_container).setOnLongClickListener(v -> {
 				if (mOnItemClickListener != null) {
 					mOnItemClickListener.onItemClick(mDevices.get(getAdapterPosition()));
 				}
-
+				return true;
 			});
 
-            // update the device when it is checked
-            view.findViewById(R.id.checkBox).setOnClickListener(new View.OnClickListener() {
+			// set visibility of item list buttons
+			checkBox.setVisibility(View.INVISIBLE);
+			cancelButton.setVisibility(View.VISIBLE);
+
+			// update the device when it is checked
+            view.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mDevices.get(getAdapterPosition()).setChecked();
-                    Log.e("Devices Adapter", "mDevices address: " + mDevices.get(getAdapterPosition()).getAddress() + "checked: " + mDevices.get(getAdapterPosition()).getChecked());
+					Log.e("Devices Adapter", "Device Cancelled");
                 }
             });
 		}
