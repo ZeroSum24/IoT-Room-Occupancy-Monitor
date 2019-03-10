@@ -32,14 +32,18 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:fitsSystemWindows="true"
+	android:background="@color/ic_launcher_background"
 	tools:context=".SplashScreenActivity"
 	tools:ignore="ContentDescription">
 
 	<androidx.appcompat.widget.AppCompatImageView
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_width="250dp"
+		android:layout_height="200dp"
 		android:fitsSystemWindows="true"
 		android:scaleType="centerCrop"
-		android:background="@color/colorNordicLogoTop"
-		app:srcCompat="@drawable/nordic_logo"/>
+		android:background="@color/ic_launcher_background"
+		android:layout_marginRight="10dp"
+		android:layout_marginLeft="10dp"
+		android:layout_gravity="center"
+		app:srcCompat="@drawable/sonic_waves_icon"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
