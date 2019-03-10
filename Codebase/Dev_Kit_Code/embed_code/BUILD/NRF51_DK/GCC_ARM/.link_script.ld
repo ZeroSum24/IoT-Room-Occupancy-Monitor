@@ -42,26 +42,26 @@ SECTIONS
   __data_start__ = .;
   *(vtable)
   *(.data*)
-  . = ALIGN(8);
+  . = ALIGN(4);
   PROVIDE_HIDDEN (__preinit_array_start = .);
   KEEP(*(.preinit_array))
   PROVIDE_HIDDEN (__preinit_array_end = .);
-  . = ALIGN(8);
+  . = ALIGN(4);
   PROVIDE_HIDDEN (__init_array_start = .);
   KEEP(*(SORT(.init_array.*)))
   KEEP(*(.init_array))
   PROVIDE_HIDDEN (__init_array_end = .);
-  . = ALIGN(8);
+  . = ALIGN(4);
   PROVIDE_HIDDEN (__fini_array_start = .);
   KEEP(*(SORT(.fini_array.*)))
   KEEP(*(.fini_array))
   PROVIDE_HIDDEN (__fini_array_end = .);
-  . = ALIGN(8);
+  . = ALIGN(4);
   PROVIDE(__start_fs_data = .);
   KEEP(*(.fs_data))
   PROVIDE(__stop_fs_data = .);
   *(.jcr)
-  . = ALIGN(8);
+  . = ALIGN(4);
   __data_end__ = .;
  } > RAM
     __edata = .;
@@ -73,11 +73,11 @@ SECTIONS
     } > RAM
  .bss :
  {
-  . = ALIGN(8);
+  . = ALIGN(4);
   __bss_start__ = .;
   *(.bss*)
   *(COMMON)
-  . = ALIGN(8);
+  . = ALIGN(4);
   __bss_end__ = .;
  } > RAM
  .heap (NOLOAD):

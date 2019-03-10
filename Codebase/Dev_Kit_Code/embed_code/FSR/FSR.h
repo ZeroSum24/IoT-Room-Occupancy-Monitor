@@ -46,11 +46,6 @@ public:
     
     /** Read the weight in N. 0 anyway if the weight is less than 100g
      *
-     * @return the weight in kgs ranging from 0.1kg to 10kg
-     */
-    float readWeightKG();
-    /** Read the weight in N. 0 anyway if the weight is less than 100g
-     *
      * @return the weight ranging from 100g to 10000g
      */
      float readWeight();
