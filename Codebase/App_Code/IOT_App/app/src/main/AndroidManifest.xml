@@ -38,7 +38,7 @@
         android:name=".ApplicationData"
 		android:allowBackup="true"
 		android:fullBackupContent="true"
-		android:icon="@mipmap/ic_launcher"
+		android:icon="@mipmap/ic_sonic_launcher"
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme"
