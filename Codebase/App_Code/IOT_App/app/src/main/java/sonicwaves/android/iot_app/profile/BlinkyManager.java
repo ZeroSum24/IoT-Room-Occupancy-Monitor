@@ -54,7 +54,18 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
 	/** SonicWaves Service Branding. */
 	public final static String SONICWAVES_UUID_START = "SonicWaves";
 
-	private BluetoothGattCharacteristic mButtonCharacteristic, mLedCharacteristic;
+    /** Nordic Blinky Service UUID. */
+    public final static UUID SW_UUID_SERVICE = UUID.fromString("0xA00");
+    /** PIR characteristic UUID. */
+    private final static UUID SW_UUID_PIR_CHAR = UUID.fromString("0xA01");
+    /** DISTANCE ONE characteristic UUID. */
+    private final static UUID SW_UUID_DISTONE_CHAR = UUID.fromString("0xA02");
+    /** DISTANCE TWO characteristic UUID. */
+    private final static UUID SW_UUID_DISTTWO_CHAR = UUID.fromString("0xA03");
+    /** PRESSURE characteristic UUID. */
+    private final static UUID SW_UUID_PRESSURE_CHAR = UUID.fromString("0xA04");
+
+    private BluetoothGattCharacteristic mButtonCharacteristic, mLedCharacteristic;
 	private LogSession mLogSession;
 	private boolean mSupported;
 	private boolean mLedOn;
