@@ -43,8 +43,8 @@ import no.nordicsemi.android.support.v18.scanner.ScanResult;
 import no.nordicsemi.android.support.v18.scanner.ScanSettings;
 
 public class ScannerViewModel extends AndroidViewModel {
-	private static final String PREFS_FILTER_UUID_REQUIRED = "filter_uuid";
 	private static final String PREFS_FILTER_NEARBY_ONLY = "filter_nearby";
+	private static final String PREFS_FILTER_SONICWAVES_ONLY = "filter_sonicwaves";
 
 	/**
 	 * MutableLiveData containing the list of devices.
@@ -69,12 +69,12 @@ public class ScannerViewModel extends AndroidViewModel {
 		super(application);
 		mPreferences = PreferenceManager.getDefaultSharedPreferences(application);
 
-		final boolean filterUuidRequired = isUuidFilterEnabled();
 		final boolean filerNearbyOnly = isNearbyFilterEnabled();
+		final boolean filterSonicWaves = isSonicWavesFilterEnabled();
 
 		mScannerStateLiveData = new ScannerStateLiveData(Utils.isBleEnabled(),
 				Utils.isLocationEnabled(application));
-		mDevicesLiveData = new DevicesLiveData(filterUuidRequired, filerNearbyOnly);
+		mDevicesLiveData = new DevicesLiveData(filerNearbyOnly, filterSonicWaves);
 		registerBroadcastReceivers(application);
 	}
 
@@ -88,12 +88,12 @@ public class ScannerViewModel extends AndroidViewModel {
 		}
 	}
 
-	public boolean isUuidFilterEnabled() {
-		return mPreferences.getBoolean(PREFS_FILTER_UUID_REQUIRED, true);
-	}
-
 	public boolean isNearbyFilterEnabled() {
 		return mPreferences.getBoolean(PREFS_FILTER_NEARBY_ONLY, false);
+	}
+
+	public boolean isSonicWavesFilterEnabled() {
+		return mPreferences.getBoolean(PREFS_FILTER_SONICWAVES_ONLY, true);
 	}
 
 	/**
@@ -110,12 +110,11 @@ public class ScannerViewModel extends AndroidViewModel {
 	 * even if they move away from the phone, or change the advertising packet. This is to
 	 * avoid removing devices from the list.
 	 *
-	 * @param uuidRequired if true, the list will display only devices with Led-Button Service UUID
-	 *                     in the advertising packet.
+	 * @param nearbyOnly if true, the list will show only devices with high RSSI.
 	 */
-	public void filterByUuid(final boolean uuidRequired) {
-		mPreferences.edit().putBoolean(PREFS_FILTER_UUID_REQUIRED, uuidRequired).apply();
-		if (mDevicesLiveData.filterByUuid(uuidRequired))
+	public void filterByDistance(final boolean nearbyOnly) {
+		mPreferences.edit().putBoolean(PREFS_FILTER_NEARBY_ONLY, nearbyOnly).apply();
+		if (mDevicesLiveData.filterByDistance(nearbyOnly))
 			mScannerStateLiveData.recordFound();
 		else
 			mScannerStateLiveData.clearRecords();
@@ -126,15 +125,16 @@ public class ScannerViewModel extends AndroidViewModel {
 	 * even if they move away from the phone, or change the advertising packet. This is to
 	 * avoid removing devices from the list.
 	 *
-	 * @param nearbyOnly if true, the list will show only devices with high RSSI.
+	 * @param correctName if true, the list will show only devices with our naming convention.
 	 */
-	public void filterByDistance(final boolean nearbyOnly) {
-		mPreferences.edit().putBoolean(PREFS_FILTER_NEARBY_ONLY, nearbyOnly).apply();
-		if (mDevicesLiveData.filterByDistance(nearbyOnly))
+	public void filterBySonicWaves(final boolean correctName) {
+		mPreferences.edit().putBoolean(PREFS_FILTER_NEARBY_ONLY, correctName).apply();
+		if (mDevicesLiveData.filterBySonicWaves(correctName))
 			mScannerStateLiveData.recordFound();
 		else
 			mScannerStateLiveData.clearRecords();
 	}
+
 
 	/**
 	 * Start scanning for Bluetooth devices.

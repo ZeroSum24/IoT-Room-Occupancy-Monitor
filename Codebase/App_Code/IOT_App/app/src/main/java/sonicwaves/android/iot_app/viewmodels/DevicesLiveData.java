@@ -24,10 +24,12 @@ package sonicwaves.android.iot_app.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import android.os.ParcelUuid;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sonicwaves.android.iot_app.R;
 import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
 import sonicwaves.android.iot_app.profile.BlinkyManager;
 import no.nordicsemi.android.support.v18.scanner.ScanRecord;
@@ -40,18 +42,18 @@ import no.nordicsemi.android.support.v18.scanner.ScanResult;
  */
 @SuppressWarnings("unused")
 public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
-	private static final ParcelUuid FILTER_UUID = new ParcelUuid(BlinkyManager.LBS_UUID_SERVICE);
+	private static final String FILTER_SONICWAVES = BlinkyManager.SONICWAVES_UUID_START;
 	private static final int FILTER_RSSI = -50; // [dBm]
 
 	private final List<DiscoveredBluetoothDevice> mDevices = new ArrayList<>();
 	private List<DiscoveredBluetoothDevice> mFilteredDevices = null;
-	private boolean mFilterUuidRequired;
 	private boolean mFilterNearbyOnly;
+	private boolean mFilterSonicWaves;
 
-	/* package */ DevicesLiveData(final boolean filterUuidRequired, final boolean filterNearbyOnly) {
-		mFilterUuidRequired = filterUuidRequired;
+	/* package */ DevicesLiveData(final boolean filterNearbyOnly, final boolean filterSonicWaves) {
 		mFilterNearbyOnly = filterNearbyOnly;
-	}
+        mFilterSonicWaves = filterSonicWaves;
+    }
 
 	/* package */ synchronized void bluetoothDisabled() {
 		mDevices.clear();
@@ -59,13 +61,13 @@ public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
 		postValue(null);
 	}
 
-	/* package */  boolean filterByUuid(final boolean uuidRequired) {
-		mFilterUuidRequired = uuidRequired;
+	/* package */  boolean filterByDistance(final boolean nearbyOnly) {
+		mFilterNearbyOnly = nearbyOnly;
 		return applyFilter();
 	}
 
-	/* package */  boolean filterByDistance(final boolean nearbyOnly) {
-		mFilterNearbyOnly = nearbyOnly;
+	/* package */  boolean filterBySonicWaves(final boolean correctName) {
+		mFilterSonicWaves = correctName;
 		return applyFilter();
 	}
 
@@ -86,7 +88,7 @@ public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
 
 		// Return true if the device was on the filtered list or is to be added.
 		return (mFilteredDevices != null && mFilteredDevices.contains(device))
-				|| (matchesUuidFilter(result) && matchesNearbyFilter(device.getHighestRssi()));
+				|| (matchesNearbyFilter(device.getHighestRssi()) && matchesSonicWavesFilter(result));
     }
 
 	/**
@@ -105,7 +107,7 @@ public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
 		final List<DiscoveredBluetoothDevice> devices = new ArrayList<>();
 		for (final DiscoveredBluetoothDevice device : mDevices) {
 			final ScanResult result = device.getScanResult();
-			if (matchesUuidFilter(result) && matchesNearbyFilter(device.getHighestRssi())) {
+			if (matchesNearbyFilter(device.getHighestRssi()) && matchesSonicWavesFilter(result)) {
 				devices.add(device);
 			}
 		}
@@ -131,8 +133,16 @@ public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
 	}
 
 	@SuppressWarnings("SimplifiableIfStatement")
-	private boolean matchesUuidFilter(final ScanResult result) {
-		if (!mFilterUuidRequired)
+	private boolean matchesNearbyFilter(final int rssi) {
+		if (!mFilterNearbyOnly)
+			return true;
+
+		return rssi >= FILTER_RSSI;
+	}
+
+	@SuppressWarnings("SimplifiableIfStatement")
+	private boolean matchesSonicWavesFilter(final ScanResult result) {
+		if (!mFilterSonicWaves)
 			return true;
 
 		final ScanRecord record = result.getScanRecord();
@@ -143,14 +153,18 @@ public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
 		if (uuids == null)
 			return false;
 
-		return uuids.contains(FILTER_UUID);
-	}
+        // filter any devices with no name or too short a name
+        String deviceName = result.getDevice().getName();
+        if (deviceName == null) {
+            return false;
+        } else if (deviceName.length() < 11) {
+            return false;
+        }
 
-	@SuppressWarnings("SimplifiableIfStatement")
-	private boolean matchesNearbyFilter(final int rssi) {
-		if (!mFilterNearbyOnly)
-			return true;
+        Log.e("SonicWaves Filter", "Device name: " + deviceName + " substring: " + deviceName.substring(0,10));
+        Log.e("SonicWaves Filter", FILTER_SONICWAVES);
 
-		return rssi >= FILTER_RSSI;
+        //check if the first 10 characters contain the SonicWaves branding
+        return deviceName.substring(0, 10).equals(FILTER_SONICWAVES);
 	}
 }

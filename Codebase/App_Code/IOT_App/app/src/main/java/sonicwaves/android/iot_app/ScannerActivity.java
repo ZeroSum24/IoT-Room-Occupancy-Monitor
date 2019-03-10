@@ -117,21 +117,22 @@ public class ScannerActivity extends AppCompatActivity {
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
 		getMenuInflater().inflate(R.menu.filter, menu);
-		menu.findItem(R.id.filter_uuid).setChecked(mScannerViewModel.isUuidFilterEnabled());
 		menu.findItem(R.id.filter_nearby).setChecked(mScannerViewModel.isNearbyFilterEnabled());
+		menu.findItem(R.id.filter_sonicwaves).setChecked(mScannerViewModel.isSonicWavesFilterEnabled());
+
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.filter_uuid:
-				item.setChecked(!item.isChecked());
-				mScannerViewModel.filterByUuid(item.isChecked());
-				return true;
 			case R.id.filter_nearby:
 				item.setChecked(!item.isChecked());
 				mScannerViewModel.filterByDistance(item.isChecked());
+				return true;
+			case R.id.filter_sonicwaves:
+				item.setChecked(!item.isChecked());
+				mScannerViewModel.filterBySonicWaves(item.isChecked());
 				return true;
 		}
 		return super.onOptionsItemSelected(item);

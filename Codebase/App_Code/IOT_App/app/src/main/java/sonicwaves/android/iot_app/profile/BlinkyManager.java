@@ -51,6 +51,9 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
 	/** LED characteristic UUID. */
 	private final static UUID LBS_UUID_LED_CHAR = UUID.fromString("00001525-1212-efde-1523-785feabcd123");
 
+	/** SonicWaves Service Branding. */
+	public final static String SONICWAVES_UUID_START = "SonicWaves";
+
 	private BluetoothGattCharacteristic mButtonCharacteristic, mLedCharacteristic;
 	private LogSession mLogSession;
 	private boolean mSupported;
