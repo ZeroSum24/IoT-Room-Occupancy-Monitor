@@ -23,6 +23,7 @@
 package sonicwaves.android.iot_app.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Icon;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,11 +32,13 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -50,8 +53,9 @@ public class GatherDataDevicesAdapter extends RecyclerView.Adapter<GatherDataDev
 	private final Context mContext;
 	private List<DiscoveredBluetoothDevice> mDevices;
 	private OnItemClickListener mOnItemClickListener;
+    private final static String TAG = "GatherDevicesAdapter";
 
-	@FunctionalInterface
+    @FunctionalInterface
 	public interface OnItemClickListener {
 		void onItemClick(@NonNull final DiscoveredBluetoothDevice device);
 	}
@@ -85,7 +89,7 @@ public class GatherDataDevicesAdapter extends RecyclerView.Adapter<GatherDataDev
 	public ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
 		final View layoutView = LayoutInflater.from(mContext)
 				.inflate(R.layout.device_item, parent, false);
-		return new ViewHolder(layoutView);
+        return new ViewHolder(layoutView);
 	}
 
 	@Override
@@ -100,6 +104,9 @@ public class GatherDataDevicesAdapter extends RecyclerView.Adapter<GatherDataDev
 		holder.deviceAddress.setText(device.getAddress());
 		final int rssiPercent = (int) (100.0f * (127.0f + device.getRssi()) / (127.0f + 20.0f));
 		holder.rssi.setImageLevel(rssiPercent);
+
+        // set the progress bar to visible
+		holder.progressBar.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -119,7 +126,8 @@ public class GatherDataDevicesAdapter extends RecyclerView.Adapter<GatherDataDev
 	final class ViewHolder extends RecyclerView.ViewHolder{
 		@BindView(R.id.checkBox) CheckBox checkBox;
 		@BindView(R.id.cancelButton) ImageButton cancelButton;
-		@BindView(R.id.device_address) TextView deviceAddress;
+        @BindView(R.id.progressBar) ProgressBar progressBar;
+        @BindView(R.id.device_address) TextView deviceAddress;
 		@BindView(R.id.device_name) TextView deviceName;
 		@BindView(R.id.rssi) ImageView rssi;
 
@@ -143,6 +151,14 @@ public class GatherDataDevicesAdapter extends RecyclerView.Adapter<GatherDataDev
                 @Override
                 public void onClick(View view) {
 					Log.e("Devices Adapter", "Device Cancelled");
+					//set visibility of deviceAddress
+                    if(progressBar.getVisibility() == View.VISIBLE) {
+                        progressBar.setVisibility(View.GONE);
+                        cancelButton.setImageResource(android.R.drawable.stat_sys_download);
+                    } else {
+                        progressBar.setVisibility(View.VISIBLE);
+                        cancelButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+                    }
                 }
             });
 		}
