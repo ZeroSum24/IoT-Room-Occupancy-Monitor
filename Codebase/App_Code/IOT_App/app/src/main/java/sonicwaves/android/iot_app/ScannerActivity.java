@@ -44,6 +44,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,14 +61,17 @@ public class ScannerActivity extends AppCompatActivity implements DevicesAdapter
 	private static final int REQUEST_ACCESS_COARSE_LOCATION = 1022; // random number
 
 	private ScannerViewModel mScannerViewModel;
+    private List<DiscoveredBluetoothDevice> mDevices;
 
-	@BindView(R.id.state_scanning) View mScanningView;
+    @BindView(R.id.state_scanning) View mScanningView;
 	@BindView(R.id.no_devices)View mEmptyView;
 	@BindView(R.id.no_location_permission) View mNoLocationPermissionView;
 	@BindView(R.id.action_grant_location_permission) Button mGrantPermissionButton;
 	@BindView(R.id.action_permission_settings) Button mPermissionSettingsButton;
 	@BindView(R.id.no_location)	View mNoLocationView;
 	@BindView(R.id.bluetooth_off) View mNoBluetoothView;
+	@BindView(R.id.gatherDataButton) Button gatherDataButton;
+
 
 	@Override
 	protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -89,6 +95,10 @@ public class ScannerActivity extends AppCompatActivity implements DevicesAdapter
 		final DevicesAdapter adapter = new DevicesAdapter(this, mScannerViewModel.getDevices());
 		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);
+
+		// initialise gather data button functionality
+        mDevices = adapter.getDevices();
+        initGatherDataButton();
 	}
 
 	@Override
@@ -186,6 +196,9 @@ public class ScannerActivity extends AppCompatActivity implements DevicesAdapter
 			if (state.isBluetoothEnabled()) {
 				mNoBluetoothView.setVisibility(View.GONE);
 
+				// Make the gather data button visible
+				gatherDataButton.setVisibility(View.VISIBLE);
+
 				// We are now OK to start scanning
 				mScannerViewModel.startScan();
 				mScanningView.setVisibility(View.VISIBLE);
@@ -233,4 +246,26 @@ public class ScannerActivity extends AppCompatActivity implements DevicesAdapter
 		mScannerViewModel.getDevices().clear();
 		mScannerViewModel.getScannerState().clearRecords();
 	}
+
+	private void initGatherDataButton() {
+
+        gatherDataButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                String toastText = "";
+
+                for (int i=0;i<mDevices.size(); i++) {
+
+                    if (mDevices.get(i).getChecked()) {
+                        toastText += String.valueOf(mDevices.get(i).getAddress());
+                    }
+                }
+
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "SUCCESS!!"+toastText,
+                        Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+    }
 }

@@ -35,6 +35,7 @@ public class DiscoveredBluetoothDevice implements Parcelable {
 	private int rssi;
 	private int previousRssi;
 	private int highestRssi = -128;
+	private Boolean checked = false;
 
 	public DiscoveredBluetoothDevice(final ScanResult scanResult) {
 		device = scanResult.getDevice();
@@ -97,6 +98,14 @@ public class DiscoveredBluetoothDevice implements Parcelable {
 												3 :
 												4;
 		return newLevel != oldLevel;
+	}
+
+	public Boolean getChecked() {
+		return checked;
+	}
+
+	public void setChecked() {
+		this.checked = !this.checked;
 	}
 
 	/**
