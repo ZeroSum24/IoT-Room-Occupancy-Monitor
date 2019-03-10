@@ -25,12 +25,14 @@ package sonicwaves.android.iot_app.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.util.Log;
 
 import java.util.List;
 
@@ -41,6 +43,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import sonicwaves.android.iot_app.ScannerActivity;
 import sonicwaves.android.iot_app.adapter.DeviceDiffCallback;
 import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
+import sonicwaves.android.iot_app.profile.BlinkyManager;
 import sonicwaves.android.iot_app.viewmodels.DevicesLiveData;
 
 public class Utils {
@@ -146,15 +149,22 @@ public class Utils {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
 	}
 
-//	public static List<DiscoveredBluetoothDevice> convertToDiscovered(@NonNull final Activity activity,
-//																	  @NonNull final DevicesLiveData devicesLiveData){
-//		List<DiscoveredBluetoothDevice> mDevices;
-//
-//		devicesLiveData.observe(activity, devices -> {
-//			DiffUtil.DiffResult result = DiffUtil.calculateDiff(
-//					new DeviceDiffCallback(mDevices, devices), false);
-//			mDevices = devices;
-//			result.dispatchUpdatesTo(this);
-//		});
-//	}
+	public static boolean isSonicWavesDevice(@NonNull BluetoothDevice device) {
+
+		final String FILTER_SONICWAVES = BlinkyManager.SONICWAVES_UUID_START;
+
+		// filter any devices with no name or too short a name
+		String deviceName = device.getName();
+		if (deviceName == null) {
+			return false;
+		} else if (deviceName.length() < 11) {
+			return false;
+		}
+
+		Log.d("SonicWaves Filter", "Device name: " + deviceName + " substring: "
+                + deviceName.substring(0,10) + " Filter MATCH: " + FILTER_SONICWAVES);
+
+		//check if the first 10 characters contain the SonicWaves branding
+		return deviceName.substring(0, 10).equals(FILTER_SONICWAVES);
+	}
 }

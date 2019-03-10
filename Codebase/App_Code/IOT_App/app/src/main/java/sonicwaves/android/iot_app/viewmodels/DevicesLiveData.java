@@ -35,6 +35,8 @@ import sonicwaves.android.iot_app.profile.BlinkyManager;
 import no.nordicsemi.android.support.v18.scanner.ScanRecord;
 import no.nordicsemi.android.support.v18.scanner.ScanResult;
 
+import static sonicwaves.android.iot_app.utils.Utils.isSonicWavesDevice;
+
 /**
  * This class keeps the current list of discovered Bluetooth LE devices matching filter.
  * Each time @{link {@link #applyFilter()} is called, the observers are notified with a new
@@ -42,7 +44,6 @@ import no.nordicsemi.android.support.v18.scanner.ScanResult;
  */
 @SuppressWarnings("unused")
 public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
-	private static final String FILTER_SONICWAVES = BlinkyManager.SONICWAVES_UUID_START;
 	private static final int FILTER_RSSI = -50; // [dBm]
 
 	private final List<DiscoveredBluetoothDevice> mDevices = new ArrayList<>();
@@ -153,18 +154,6 @@ public class DevicesLiveData extends LiveData<List<DiscoveredBluetoothDevice>> {
 		if (uuids == null)
 			return false;
 
-        // filter any devices with no name or too short a name
-        String deviceName = result.getDevice().getName();
-        if (deviceName == null) {
-            return false;
-        } else if (deviceName.length() < 11) {
-            return false;
-        }
-
-        Log.e("SonicWaves Filter", "Device name: " + deviceName + " substring: " + deviceName.substring(0,10));
-        Log.e("SonicWaves Filter", FILTER_SONICWAVES);
-
-        //check if the first 10 characters contain the SonicWaves branding
-        return deviceName.substring(0, 10).equals(FILTER_SONICWAVES);
+        return isSonicWavesDevice(result.getDevice());
 	}
 }
