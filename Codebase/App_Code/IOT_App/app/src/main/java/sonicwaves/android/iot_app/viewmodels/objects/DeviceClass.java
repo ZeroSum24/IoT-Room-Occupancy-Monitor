@@ -1,13 +1,13 @@
-package sonicwaves.android.iot_app.viewmodels;
+package sonicwaves.android.iot_app.viewmodels.objects;
 
 import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
 
 public class DeviceClass {
 
 
-    public String CHAIR = "CHAIR";
-    public String TABLE = "TABLE";
-    public String DOOR = "DOOR";
+    public final String CHAIR = "CHAIR";
+    public final String TABLE = "TABLE";
+    public final String DOOR = "DOOR";
     private String deviceClass;
 
 

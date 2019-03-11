@@ -35,6 +35,7 @@ import sonicwaves.android.iot_app.profile.BlinkyManager;
 import sonicwaves.android.iot_app.profile.BlinkyManagerCallbacks;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
+import sonicwaves.android.iot_app.viewmodels.objects.DeviceClass;
 
 public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCallbacks {
 	private final BlinkyManager mBlinkyManager;
