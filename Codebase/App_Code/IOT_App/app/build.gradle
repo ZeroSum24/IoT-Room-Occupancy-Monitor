@@ -5,7 +5,7 @@ android {
     buildToolsVersion '28.0.3'
 
     defaultConfig {
-        applicationId "no.nordicsemi.android.nrfblinky"
+        applicationId "sonicwaves.android.iot_app"
         minSdkVersion 18
         targetSdkVersion 28
         versionCode 9
@@ -45,6 +45,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     // Butter Knife
     implementation 'com.jakewharton:butterknife:10.0.0'
+    implementation 'androidx.annotation:annotation:1.0.0-beta01'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
     // Brings the new BluetoothLeScanner API to older platforms
     implementation 'no.nordicsemi.android.support.v18:scanner:1.3.0'
@@ -56,8 +57,8 @@ dependencies {
     // and uncomment 2 lines in settings.gradle file.
     // implementation project(":ble")
     implementation 'com.google.firebase:firebase-auth:16.1.0'
-    implementation 'com.google.firebase:firebase-core:16.0.6'
-    implementation 'com.google.firebase:firebase-firestore:18.0.1'
+    implementation 'com.google.firebase:firebase-firestore:18.1.0'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
 }
 //Add to the bottom of the file
 apply plugin: 'com.google.gms.google-services'
