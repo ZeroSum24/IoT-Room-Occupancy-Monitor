@@ -43,10 +43,10 @@ import sonicwaves.android.iot_app.profile.callback.PressureDataCallback;
 import no.nordicsemi.android.log.LogContract;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
-import sonicwaves.android.iot_app.viewmodels.DeviceClass;
+import sonicwaves.android.iot_app.viewmodels.objects.DeviceClass;
 
 public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
-    
+
     /**
      * SonicWaves Service Branding.
      */
