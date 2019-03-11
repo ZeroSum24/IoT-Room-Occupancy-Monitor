@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "769453940559-n5u5892v2veiso1hr0592ciabri7ienm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sonicwaves.android.iot_app",
+            "certificate_hash": "d9f5561c30fb673759a419656c42915a0476ba46"
+          }
+        },
+        {
           "client_id": "769453940559-5fspvlfn06gmr8umuttlvhioiqu0kn19.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "769453940559-5fspvlfn06gmr8umuttlvhioiqu0kn19.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

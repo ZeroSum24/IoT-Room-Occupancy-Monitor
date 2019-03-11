@@ -26,13 +26,13 @@ import android.bluetooth.BluetoothDevice;
 
 import androidx.annotation.NonNull;
 
-public interface BlinkyButtonCallback {
+public interface PIRCallback {
 
     /**
-     * Called when a button was pressed or released on device.
+     * Called when a PIR has a detected a person from a device.
      *
      * @param device the target device.
-     * @param pressed true if the button was pressed, false if released.
+     * @param detected true if the button was pressed, false if released.
      */
-    void onButtonStateChanged(@NonNull final BluetoothDevice device, final boolean pressed);
+    void onPIRStateChanged(@NonNull final BluetoothDevice device, final boolean detected);
 }

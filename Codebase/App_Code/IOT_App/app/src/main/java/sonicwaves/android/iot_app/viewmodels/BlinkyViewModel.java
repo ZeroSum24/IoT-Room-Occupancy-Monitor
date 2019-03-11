@@ -52,12 +52,21 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 	// Flag to determine if the device is ready
 	private final MutableLiveData<Void> mOnDeviceReady = new MutableLiveData<>();
 
-	// Flag that holds the on off state of the LED. On is true, Off is False
-	private final MutableLiveData<Boolean> mLEDState = new MutableLiveData<>();
+    // Flag that holds the pressed released state of the first distance sensor on the devkit.
+    // Pressed is true, Released is false
+	private final MutableLiveData<Boolean> mDistOne = new MutableLiveData<>();
 
-	// Flag that holds the pressed released state of the button on the devkit.
+	// Flag that holds the pressed released state of the second distance sensor on the devkit.
 	// Pressed is true, Released is false
-	private final MutableLiveData<Boolean> mButtonState = new MutableLiveData<>();
+	private final MutableLiveData<Boolean> mDistTwo = new MutableLiveData<>();
+
+    // Flag that holds the pressed released state of the pir sensor on the devkit.
+    // Pressed is true, Released is false
+    private final MutableLiveData<Boolean> mPIR = new MutableLiveData<>();
+
+    // Flag that holds the pressed released state of the pressure sensor on the devkit.
+    // Pressed is true, Released is false
+    private final MutableLiveData<Boolean> mPressure = new MutableLiveData<>();
 
 	public LiveData<Void> isDeviceReady() {
 		return mOnDeviceReady;
@@ -71,23 +80,31 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 		return mIsConnected;
 	}
 
-	public LiveData<Boolean> getButtonState() {
-		return mButtonState;
-	}
+    public MutableLiveData<Boolean> getmDistOne() {
+        return mDistOne;
+    }
 
-	public LiveData<Boolean> getLEDState() {
-		return mLEDState;
-	}
+    public MutableLiveData<Boolean> getmDistTwo() {
+        return mDistTwo;
+    }
 
-	public LiveData<Boolean> isSupported() {
+    public MutableLiveData<Boolean> getmPIR() {
+        return mPIR;
+    }
+
+    public MutableLiveData<Boolean> getmPressure() {
+        return mPressure;
+    }
+
+    public LiveData<Boolean> isSupported() {
 		return mIsSupported;
 	}
 
-	public BlinkyViewModel(@NonNull final Application application) {
+	public BlinkyViewModel(@NonNull final Application application, @NonNull final DeviceClass deviceClass) {
 		super(application);
 
 		// Initialize the manager
-		mBlinkyManager = new BlinkyManager(getApplication());
+		mBlinkyManager = new BlinkyManager(getApplication(), deviceClass);
 		mBlinkyManager.setGattCallbacks(this);
 	}
 
@@ -122,15 +139,15 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 	/**
 	 * Disconnect from peripheral.
 	 */
-	private void disconnect() {
+	public void disconnect() {
 		mDevice = null;
 		mBlinkyManager.disconnect().enqueue();
 	}
 
-	public void toggleLED(final boolean isOn) {
-		mBlinkyManager.send(isOn);
-		mLEDState.setValue(isOn);
-	}
+//	public void toggleLED(final boolean isOn) {
+//		mBlinkyManager.send(isOn);
+//		mLEDState.setValue(isOn);
+//	}
 
 	@Override
 	protected void onCleared() {
@@ -141,14 +158,25 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 	}
 
 	@Override
-	public void onButtonStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
-		mButtonState.postValue(pressed);
+	public void onDistanceOneStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+		mDistOne.postValue(pressed);
 	}
 
-	@Override
-	public void onLedStateChanged(@NonNull final BluetoothDevice device, final boolean on) {
-		mLEDState.postValue(on);
-	}
+    @Override
+    public void onDistanceTwoStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+        mDistTwo.postValue(pressed);
+    }
+
+    @Override
+    public void onPIRStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+        mPIR.postValue(pressed);
+    }
+
+
+    @Override
+    public void onPressureStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+        mPressure.postValue(pressed);
+    }
 
 	@Override
 	public void onDeviceConnecting(@NonNull final BluetoothDevice device) {

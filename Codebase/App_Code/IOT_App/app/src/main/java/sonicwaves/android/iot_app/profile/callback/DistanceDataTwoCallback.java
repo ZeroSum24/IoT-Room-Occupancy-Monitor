@@ -20,15 +20,33 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package sonicwaves.android.iot_app.profile;
+package sonicwaves.android.iot_app.profile.callback;
 
-import no.nordicsemi.android.ble.BleManagerCallbacks;
-import sonicwaves.android.iot_app.profile.callback.DistanceOneCallback;
-import sonicwaves.android.iot_app.profile.callback.DistanceTwoCallback;
-import sonicwaves.android.iot_app.profile.callback.PIRCallback;
-import sonicwaves.android.iot_app.profile.callback.PressureCallback;
+import android.bluetooth.BluetoothDevice;
 
-public interface BlinkyManagerCallbacks extends BleManagerCallbacks,
-		DistanceOneCallback, DistanceTwoCallback, PIRCallback, PressureCallback {
-	// No more methods
+import androidx.annotation.NonNull;
+import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
+import no.nordicsemi.android.ble.data.Data;
+
+@SuppressWarnings("ConstantConditions")
+public abstract class DistanceDataTwoCallback implements ProfileDataCallback, DistanceTwoCallback {
+    private static final int STATE_RELEASED = 0x00;
+    private static final int STATE_PRESSED = 0x01;
+
+    @Override
+    public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        if (data.size() != 1) {
+            onInvalidDataReceived(device, data);
+            return;
+        }
+
+        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
+        if (state == STATE_PRESSED) {
+            onDistanceTwoStateChanged(device, true);
+        } else if (state == STATE_RELEASED) {
+            onDistanceTwoStateChanged(device, false);
+        } else {
+            onInvalidDataReceived(device, data);
+        }
+    }
 }

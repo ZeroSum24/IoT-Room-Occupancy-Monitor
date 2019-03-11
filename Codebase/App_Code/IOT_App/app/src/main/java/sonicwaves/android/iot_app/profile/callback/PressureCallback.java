@@ -26,13 +26,13 @@ import android.bluetooth.BluetoothDevice;
 
 import androidx.annotation.NonNull;
 
-public interface BlinkyLedCallback {
+public interface PressureCallback {
 
     /**
-     * Called when the data has been sent to the connected device.
+     * Called when a pressure sensor was pressed or released on device.
      *
      * @param device the target device.
-     * @param on true when LED was enabled, false when disabled.
+     * @param pressed true if the button was pressed, false if released.
      */
-    void onLedStateChanged(@NonNull final BluetoothDevice device, final boolean on);
+    void onPressureStateChanged(@NonNull final BluetoothDevice device, final boolean pressed);
 }
