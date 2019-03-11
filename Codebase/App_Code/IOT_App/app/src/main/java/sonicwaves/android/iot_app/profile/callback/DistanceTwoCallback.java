@@ -23,30 +23,16 @@
 package sonicwaves.android.iot_app.profile.callback;
 
 import android.bluetooth.BluetoothDevice;
+
 import androidx.annotation.NonNull;
 
-import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
-import no.nordicsemi.android.ble.data.Data;
+public interface DistanceTwoCallback {
 
-@SuppressWarnings("ConstantConditions")
-public abstract class BlinkyButtonDataCallback implements ProfileDataCallback, BlinkyButtonCallback {
-    private static final int STATE_RELEASED = 0x00;
-    private static final int STATE_PRESSED = 0x01;
-
-    @Override
-    public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-        if (data.size() != 1) {
-            onInvalidDataReceived(device, data);
-            return;
-        }
-
-        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
-        if (state == STATE_PRESSED) {
-            onButtonStateChanged(device, true);
-        } else if (state == STATE_RELEASED) {
-            onButtonStateChanged(device, false);
-        } else {
-            onInvalidDataReceived(device, data);
-        }
-    }
+    /**
+     * Called when a distance sensor was tripped from a device.
+     *
+     * @param device the target device.
+     * @param tripped true if the sensor was tripped, false if static.
+     */
+    void onDistanceTwoStateChanged(@NonNull final BluetoothDevice device, final boolean tripped);
 }

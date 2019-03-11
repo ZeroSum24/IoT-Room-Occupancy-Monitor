@@ -47,15 +47,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import sonicwaves.android.iot_app.adapter.GatherDataDevicesAdapter;
-import sonicwaves.android.iot_app.adapter.ScannerDevicesAdapter;
 import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
+import sonicwaves.android.iot_app.firebase.FirebaseUtils;
 import sonicwaves.android.iot_app.utils.Utils;
-import sonicwaves.android.iot_app.viewmodels.ScannerViewModel;
+import sonicwaves.android.iot_app.viewmodels.SequentialViewModel;
 
 public class GatherDataActivity extends AppCompatActivity implements GatherDataDevicesAdapter.OnItemClickListener {
 	private static final int REQUEST_ACCESS_COARSE_LOCATION = 1022; // random number
 
     private List<DiscoveredBluetoothDevice> mDevices;
+    private SequentialViewModel viewModel = new SequentialViewModel();
+    private ApplicationData app;
 
     @BindView(R.id.state_scanning) View mScanningView;
 	@BindView(R.id.no_devices)View mEmptyView;
@@ -78,7 +80,7 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 		getSupportActionBar().setTitle(R.string.gatherDataActivity);
 
         // Get data from the Scanner Activity
-        ApplicationData app = (ApplicationData) getApplicationContext();
+        app = (ApplicationData) getApplicationContext();
         mDevices = app.getDevices();
 
 		// Configure the sonicwaves.android.iot_app view
@@ -90,10 +92,9 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);
 
-//		recyclerView.getAdapter(
-
+		viewModel.iterateThroughDevices(GatherDataActivity.this, mDevices);
 		// initialise gather data button functionality
-        initGatherDataButton();
+        initSendToFirebaseButton();
 	}
 
 	@Override
@@ -131,7 +132,7 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 		startActivity(intent);
 	}
 
-	private void initGatherDataButton() {
+	private void initSendToFirebaseButton() {
 
 		gatherDataButton.setText(R.string.gatherDataConnect);
 		gatherDataButton.setVisibility(View.VISIBLE);
@@ -143,6 +144,9 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
                         "SUCCESS!!",
                         Toast.LENGTH_SHORT);
                 toast.show();
+                FirebaseUtils firebaseUtils = app.getFirebaseUtils(getApplicationContext());
+                firebaseUtils.testDb();
+                firebaseUtils.testDb2();
             }
         });
     }

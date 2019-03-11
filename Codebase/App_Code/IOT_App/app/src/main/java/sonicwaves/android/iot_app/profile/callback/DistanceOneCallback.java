@@ -20,15 +20,19 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package sonicwaves.android.iot_app.profile;
+package sonicwaves.android.iot_app.profile.callback;
 
-import no.nordicsemi.android.ble.BleManagerCallbacks;
-import sonicwaves.android.iot_app.profile.callback.DistanceOneCallback;
-import sonicwaves.android.iot_app.profile.callback.DistanceTwoCallback;
-import sonicwaves.android.iot_app.profile.callback.PIRCallback;
-import sonicwaves.android.iot_app.profile.callback.PressureCallback;
+import android.bluetooth.BluetoothDevice;
 
-public interface BlinkyManagerCallbacks extends BleManagerCallbacks,
-		DistanceOneCallback, DistanceTwoCallback, PIRCallback, PressureCallback {
-	// No more methods
+import androidx.annotation.NonNull;
+
+public interface DistanceOneCallback {
+
+    /**
+     * Called when a distance sensor was tripped from a device.
+     *
+     * @param device the target device.
+     * @param tripped true if the sensor was tripped, false if static.
+     */
+    void onDistanceOneStateChanged(@NonNull final BluetoothDevice device, final boolean tripped);
 }
