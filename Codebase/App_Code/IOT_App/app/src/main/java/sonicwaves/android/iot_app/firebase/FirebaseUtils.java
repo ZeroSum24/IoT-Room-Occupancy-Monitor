@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +32,7 @@ public class FirebaseUtils {
     private static final String DOOR_DATA = "door_data";
     private static final String TABLE_DATA = "table_data";
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
 
     public FirebaseUtils(Context context) {
@@ -43,7 +45,12 @@ public class FirebaseUtils {
                 .build();
         FirebaseApp.initializeApp(context /* Context */, options, "secondary");
 
+        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+    }
+
+    public FirebaseAuth getmAuth() {
+        return mAuth;
     }
 
     public void testDb() {
