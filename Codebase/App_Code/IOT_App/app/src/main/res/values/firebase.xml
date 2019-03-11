@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="firebase_application_id">sonicwaves.android.iot_app</string>
+    <string name="firebase_api_key">AIzaSyDAdRuvIgoAaCOVG8dUdahBR_1kQInTLxg</string>
+    <string name="firebase_project_id">iot-app-3386d</string>
+</resources>
