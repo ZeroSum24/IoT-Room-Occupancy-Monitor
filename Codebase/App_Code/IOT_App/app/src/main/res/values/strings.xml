@@ -91,4 +91,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <string name="alertUpload">Upload</string>
+    <string name="alertCancel">Cancel</string>
 </resources>

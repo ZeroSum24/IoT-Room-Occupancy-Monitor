@@ -23,7 +23,9 @@
 package sonicwaves.android.iot_app;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -83,7 +85,7 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
         app = (ApplicationData) getApplicationContext();
         mDevices = app.getDevices();
 
-		// Configure the sonicwaves.android.iot_app view
+		// Configure the recycler view
 		final RecyclerView recyclerView = findViewById(R.id.recycler_view_ble_devices);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -92,14 +94,14 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);
 
-		viewModel.iterateThroughDevices(GatherDataActivity.this, mDevices);
+		app.setFirebaseHolder(viewModel.getFirebaseInfo(this, mDevices));
 
 		// update ui based on connection state
 		viewModel.getIsConnected().observe(this, connected -> {
-		    int curDevice = viewModel.getCurrentDeviceIndex();
-
-//           update the values in the recycler view, possibly using the whole devices list as a hashmap
-        });
+            //update the values in the recycler view, representing the connection state
+            int position = viewModel.getCurrentDeviceIndex();
+		    adapter.notifyItemChanged(position, connected);
+		});
 		// initialise gather data button functionality
         initSendToFirebaseButton();
 	}
@@ -139,6 +141,9 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 		startActivity(intent);
 	}
 
+    /**
+     * Method shows an alert dialog to confirm if the user wishes to upload to firebase
+     */
 	private void initSendToFirebaseButton() {
 
 		gatherDataButton.setText(R.string.gatherDataConnect);
@@ -147,14 +152,39 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
         gatherDataButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "SUCCESS!!",
-                        Toast.LENGTH_SHORT);
-                toast.show();
-                FirebaseUtils firebaseUtils = app.getFirebaseUtils(getApplicationContext());
-                firebaseUtils.testDb();
-                firebaseUtils.testDb2();
+                AlertDialog.Builder builder = new AlertDialog.Builder(GatherDataActivity.this);
+                builder.setPositiveButton(R.string.alertUpload, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+                        onConfirmUploadToFirebase();
+                    }
+                });
+                builder.setNegativeButton(R.string.alertCancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                builder.create(); // Create the AlertDialog
             }
         });
+    }
+
+    /**
+     * Method uploads to firebase (after the user confirms with the AlertDialog)
+     */
+    private void onConfirmUploadToFirebase() {
+        FirebaseUtils firebaseUtils = app.getFirebaseUtils(getApplicationContext());
+        boolean isUploading = firebaseUtils.uploadToFirebase(app.getFirebaseHolder());
+        String toastText;
+
+        if (isUploading) {
+            toastText = "SUCCESS!! - Uploading!";
+        } else {
+            toastText = "Nothing to upload";
+        }
+
+        Toast toast = Toast.makeText(getApplicationContext(),toastText,
+                Toast.LENGTH_SHORT);
+        toast.show();
     }
 }
