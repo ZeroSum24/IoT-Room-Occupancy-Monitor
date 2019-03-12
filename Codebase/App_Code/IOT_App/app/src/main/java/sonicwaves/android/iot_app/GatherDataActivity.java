@@ -154,7 +154,7 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(GatherDataActivity.this);
 
-                builder.setIcon(R.drawable.ic_sonic_launcher);
+                builder.setIcon(R.drawable.sonic_waves_app);
                 builder.setTitle(R.string.alertTitle);
                 builder.setMessage(R.string.alertMessage);
                 builder.setPositiveButton(R.string.alertUpload, new DialogInterface.OnClickListener() {

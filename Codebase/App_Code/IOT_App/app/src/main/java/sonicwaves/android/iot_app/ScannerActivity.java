@@ -242,6 +242,9 @@ public class ScannerActivity extends AppCompatActivity {
 		mScannerViewModel.getScannerState().clearRecords();
 	}
 
+    /**
+     * Sets up the gather data button functionality
+     */
 	private void initGatherDataButton() {
 
         gatherDataButton.setOnClickListener(new View.OnClickListener() {
@@ -256,8 +259,9 @@ public class ScannerActivity extends AppCompatActivity {
 
                 // Ensure a device is selected
                 if (selectedDevices.size() > 0) {
-                    Intent intent = new Intent(ScannerActivity.this, GatherDataActivity.class);
-                    startActivity(intent);
+
+					final Intent intent = new Intent(ScannerActivity.this, GatherDataActivity.class);
+					startActivity(intent);
                 } else {
                     Toast toast = Toast.makeText(getApplicationContext(),
                             "Please choose some devices",
@@ -269,6 +273,9 @@ public class ScannerActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Calculates the selected devices to update app data with.
+     */
     private List<DiscoveredBluetoothDevice> calculateSelectedDevices() {
 
 		ApplicationData app = (ApplicationData) getApplicationContext();
