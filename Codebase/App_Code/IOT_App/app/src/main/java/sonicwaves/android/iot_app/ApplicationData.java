@@ -12,7 +12,7 @@ import sonicwaves.android.iot_app.firebase.objects.FirebaseHolder;
 public class ApplicationData extends Application {
     private List<DiscoveredBluetoothDevice> selectedDevices;
     private FirebaseUtils firebaseUtils;
-    private FirebaseHolder firebaseHolder;
+    private FirebaseHolder firebaseHolder = new FirebaseHolder();
 
     public List<DiscoveredBluetoothDevice> getDevices() {
         return selectedDevices;

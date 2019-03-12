@@ -94,4 +94,6 @@
 
     <string name="alertUpload">Upload</string>
     <string name="alertCancel">Cancel</string>
+    <string name="alertTitle">Upload to Firebase</string>
+    <string name="alertMessage">Do you wish to upload the sensor data to Firebase?</string>
 </resources>
