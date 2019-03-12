@@ -44,6 +44,7 @@ public class SequentialViewModel {
         List<Chair> chairList = new ArrayList<>();
         List<Door> doorList = new ArrayList<>();
         List<Table> tableList = new ArrayList<>();
+        FirebaseHolder firebaseHolder = new FirebaseHolder();
 
         Iterator it = deviceReadings.entrySet().iterator();
 
@@ -68,7 +69,22 @@ public class SequentialViewModel {
             it.remove(); // avoids a ConcurrentModificationException
         }
 
-        return (new FirebaseHolder(chairList, doorList, tableList));
+        // update chairList
+        if (chairList.size() != 0) {
+            firebaseHolder.setChairList(chairList);
+        }
+
+        // update doorList
+        if (doorList.size() != 0) {
+            firebaseHolder.setDoorList(doorList);
+        }
+
+        // update tableList
+        if (tableList.size() != 0) {
+            firebaseHolder.setTableList(tableList);
+        }
+
+        return firebaseHolder;
     }
 
     /**

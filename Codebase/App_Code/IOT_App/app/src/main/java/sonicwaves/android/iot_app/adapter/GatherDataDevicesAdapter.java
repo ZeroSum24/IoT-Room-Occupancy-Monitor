@@ -91,20 +91,20 @@ public class GatherDataDevicesAdapter extends RecyclerView.Adapter<GatherDataDev
 				.inflate(R.layout.device_item, parent, false);
         return new ViewHolder(layoutView);
 	}
-
-    @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position, @NonNull List<Object> payload) {
-
-        Boolean connected = (Boolean) payload.get(position);
-        if (connected) {
-            holder.progressBar.setVisibility(View.VISIBLE);
-            holder.cancelButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
-        } else {
-            holder.progressBar.setVisibility(View.GONE);
-            holder.cancelButton.setImageResource(android.R.drawable.stat_sys_download);
-        }
-
-    }
+//
+//    @Override
+//    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position, @NonNull List<Object> payload) {
+//
+//        Boolean connected = (Boolean) payload.get(position);
+//        if (connected) {
+//            holder.progressBar.setVisibility(View.VISIBLE);
+//            holder.cancelButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+//        } else {
+//            holder.progressBar.setVisibility(View.GONE);
+//            holder.cancelButton.setImageResource(android.R.drawable.stat_sys_download);
+//        }
+//
+//    }
 
 	@Override
 	public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {

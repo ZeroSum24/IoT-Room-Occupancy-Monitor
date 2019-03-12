@@ -94,14 +94,14 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);
 
-		app.setFirebaseHolder(viewModel.getFirebaseInfo(this, mDevices));
+//		app.setFirebaseHolder(viewModel.getFirebaseInfo(this, mDevices));
 
 		// update ui based on connection state
-		viewModel.getIsConnected().observe(this, connected -> {
-            //update the values in the recycler view, representing the connection state
-            int position = viewModel.getCurrentDeviceIndex();
-		    adapter.notifyItemChanged(position, connected);
-		});
+//		viewModel.getIsConnected().observe(this, connected -> {
+//            //update the values in the recycler view, representing the connection state
+//            int position = viewModel.getCurrentDeviceIndex();
+//		    adapter.notifyItemChanged(position, connected);
+//		});
 		// initialise gather data button functionality
         initSendToFirebaseButton();
 	}
@@ -153,6 +153,10 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
             public void onClick(View v) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(GatherDataActivity.this);
+
+                builder.setIcon(R.drawable.ic_sonic_launcher);
+                builder.setTitle(R.string.alertTitle);
+                builder.setMessage(R.string.alertMessage);
                 builder.setPositiveButton(R.string.alertUpload, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User clicked OK button
@@ -164,7 +168,8 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
                         // User cancelled the dialog
                     }
                 });
-                builder.create(); // Create the AlertDialog
+                AlertDialog alertDialog = builder.create(); // Create the AlertDialog
+                alertDialog.show();
             }
         });
     }
