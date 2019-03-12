@@ -52,4 +52,5 @@
 	<style name="AppTheme.SplashScreen">
 		<item name="colorPrimaryDark">@android:color/transparent</item>
 	</style>
+
 </resources>
