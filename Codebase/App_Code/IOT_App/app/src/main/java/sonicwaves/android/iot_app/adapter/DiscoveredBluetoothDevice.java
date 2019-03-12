@@ -27,6 +27,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import no.nordicsemi.android.support.v18.scanner.ScanResult;
+import sonicwaves.android.iot_app.viewmodels.objects.DeviceClass;
 
 import static sonicwaves.android.iot_app.utils.Utils.isSonicWavesDevice;
 
@@ -38,6 +39,7 @@ public class DiscoveredBluetoothDevice implements Parcelable {
 	private int previousRssi;
 	private int highestRssi = -128;
 	private Boolean checked = false;
+	private DeviceClass deviceClass;
 
 	public DiscoveredBluetoothDevice(final ScanResult scanResult) {
 		device = scanResult.getDevice();
@@ -75,6 +77,14 @@ public class DiscoveredBluetoothDevice implements Parcelable {
 	 */
 	public int getHighestRssi() {
 		return highestRssi;
+	}
+
+	public DeviceClass getDeviceClass() {
+		return deviceClass;
+	}
+
+	public void setDeviceClass(DeviceClass deviceClass) {
+		this.deviceClass = deviceClass;
 	}
 
 	/**

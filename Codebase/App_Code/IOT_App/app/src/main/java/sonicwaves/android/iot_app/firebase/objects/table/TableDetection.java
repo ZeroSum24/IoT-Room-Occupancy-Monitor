@@ -1,29 +1,34 @@
 package sonicwaves.android.iot_app.firebase.objects.table;
 
-import java.util.List;
-
 public class TableDetection {
 
-    private final String timestamp;
-    private final String duration;
-    private final Boolean detection;
+    private final String sensorName;
+    private final String initialTimestamp;
+    private final String finalTimestamp;
+//    private final Boolean detection;
 
 
-    public TableDetection(String timestamp, String duration, Boolean detection) {
-        this.timestamp = timestamp;
-        this.duration = duration;
-        this.detection = detection;
+//    public TableDetection(String sensorName, String initialTimestamp, String finalTimestamp, Boolean detection) {
+    public TableDetection(String sensorName, String initialTimestamp, String finalTimestamp) {
+        this.sensorName = sensorName;
+        this.initialTimestamp = initialTimestamp;
+        this.finalTimestamp = finalTimestamp;
+//        this.detection = detection;
     }
 
-    public String getTimestamp() {
-        return timestamp;
+    public String getSensorName() {
+        return sensorName;
     }
 
-    public String getDuration() {
-        return duration;
+    public String getInitialTimestamp() {
+        return initialTimestamp;
     }
 
-    public Boolean getDetection() {
-        return detection;
+    public String getFinalTimestamp() {
+        return finalTimestamp;
     }
+
+//    public Boolean getDetection() {
+//        return detection;
+//    }
 }
