@@ -38,6 +38,13 @@ public class SequentialViewModel {
     private final static String PRESSURE = "Pressure";
 
 
+    /***
+     * Converts the readings for each device into the appropriate object for their class
+     *
+     * @param activity passed to submethods
+     * @param dBDeviceList the list of discovered bluetooth devices
+     * @return the Firebase data holder
+     */
     public FirebaseHolder getFirebaseInfo(Activity activity, List<DiscoveredBluetoothDevice> dBDeviceList) {
 
         Map<DiscoveredBluetoothDevice, List<Reading>> deviceReadings = iterateThroughDevices(activity, dBDeviceList);
@@ -51,18 +58,22 @@ public class SequentialViewModel {
         while (it.hasNext()) {
             Map.Entry curIter = (Map.Entry) it.next();
 
-            DiscoveredBluetoothDevice device  = (DiscoveredBluetoothDevice) curIter.getKey();
+            DiscoveredBluetoothDevice device = (DiscoveredBluetoothDevice) curIter.getKey();
 
             boolean isChairDevice = device.getDeviceClass().getDeviceClass().equals(device.getDeviceClass().CHAIR);
             boolean isDoorDevice = device.getDeviceClass().getDeviceClass().equals(device.getDeviceClass().DOOR);
             boolean isTableDevice = device.getDeviceClass().getDeviceClass().equals(device.getDeviceClass().TABLE);
 
-            if (isChairDevice) {
-                chairList.add(convertToChair(deviceReadings.get(device)));
-            } else if (isDoorDevice) {
-                doorList.add(convertToDoor(deviceReadings.get(device)));
-            } else if (isTableDevice) {
-                tableList.add(convertToTable(deviceReadings.get(device)));
+            List<Reading> readings = deviceReadings.get(device);
+            if (readings != null) {
+
+                if (isChairDevice) {
+                    chairList.add(convertToChair(readings));
+                } else if (isDoorDevice) {
+                    doorList.add(convertToDoor(readings));
+                } else if (isTableDevice) {
+                    tableList.add(convertToTable(readings));
+                }
             }
 
             System.out.println(curIter.getKey() + " = " + curIter.getValue());
