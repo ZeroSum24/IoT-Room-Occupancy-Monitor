@@ -94,14 +94,14 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);
 
-//		app.setFirebaseHolder(viewModel.getFirebaseInfo(this, mDevices));
+		app.setFirebaseHolder(viewModel.getFirebaseInfo(this, mDevices));
 
 		// update ui based on connection state
-//		viewModel.getIsConnected().observe(this, connected -> {
-//            //update the values in the recycler view, representing the connection state
-//            int position = viewModel.getCurrentDeviceIndex();
-//		    adapter.notifyItemChanged(position, connected);
-//		});
+		viewModel.getIsConnected().observe(this, connected -> {
+            //update the values in the recycler view, representing the connection state
+            int position = viewModel.getCurrentDeviceIndex();
+		    adapter.notifyItemChanged(position, connected);
+		});
 		// initialise gather data button functionality
         initSendToFirebaseButton();
 	}
