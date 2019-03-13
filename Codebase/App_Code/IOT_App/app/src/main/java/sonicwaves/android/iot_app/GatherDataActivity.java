@@ -41,6 +41,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,12 +57,13 @@ import sonicwaves.android.iot_app.firebase.FirebaseUtils;
 import sonicwaves.android.iot_app.utils.Utils;
 import sonicwaves.android.iot_app.viewmodels.SequentialViewModel;
 
-public class GatherDataActivity extends AppCompatActivity implements GatherDataDevicesAdapter.OnItemClickListener {
+public class GatherDataActivity extends AppCompatActivity implements GatherDataDevicesAdapter.OnItemClickListener{
 	private static final int REQUEST_ACCESS_COARSE_LOCATION = 1022; // random number
 
     private List<DiscoveredBluetoothDevice> mDevices;
     private SequentialViewModel viewModel = new SequentialViewModel();
     private ApplicationData app;
+//    private LifecycleRegistry lifecycleRegistry;
 
     @BindView(R.id.state_scanning) View mScanningView;
 	@BindView(R.id.no_devices)View mEmptyView;
@@ -94,17 +98,34 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 		adapter.setOnItemClickListener(this);
 		recyclerView.setAdapter(adapter);
 
-		app.setFirebaseHolder(viewModel.getFirebaseInfo(this, mDevices));
+		// set lifecycle registry up
+//        lifecycleRegistry = new LifecycleRegistry(this);
+//        lifecycleRegistry.markState(Lifecycle.State.CREATED);
 
-		// update ui based on connection state
-		viewModel.getIsConnected().observe(this, connected -> {
-            //update the values in the recycler view, representing the connection state
-            int position = viewModel.getCurrentDeviceIndex();
-		    adapter.notifyItemChanged(position, connected);
-		});
+//		app.setFirebaseHolder(viewModel.getFirebaseInfo(this, mDevices));
+//
+//		// update ui based on connection state
+//		viewModel.getIsConnected().observe(this, connected -> {
+//            //update the values in the recycler view, representing the connection state
+//            int position = viewModel.getCurrentDeviceIndex();
+//		    adapter.notifyItemChanged(position, connected);
+//		});
 		// initialise gather data button functionality
         initSendToFirebaseButton();
+
 	}
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        lifecycleRegistry.markState(Lifecycle.State.STARTED);
+//    }
+//
+//    @NonNull
+//    @Override
+//    public LifecycleRegistry getLifecycle() {
+//        return lifecycleRegistry;
+//    }
 
 	@Override
 	public void onItemClick(@NonNull final DiscoveredBluetoothDevice device) {
