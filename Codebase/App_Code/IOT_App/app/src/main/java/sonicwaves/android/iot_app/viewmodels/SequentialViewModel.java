@@ -47,6 +47,7 @@ public class SequentialViewModel {
      */
     public FirebaseHolder getFirebaseInfo(Activity activity, List<DiscoveredBluetoothDevice> dBDeviceList) {
 
+
         Map<DiscoveredBluetoothDevice, List<Reading>> deviceReadings = iterateThroughDevices(activity, dBDeviceList);
         List<Chair> chairList = new ArrayList<>();
         List<Door> doorList = new ArrayList<>();
@@ -262,7 +263,7 @@ public class SequentialViewModel {
             currentDeviceIndex = dBDeviceList.indexOf(device);
             mViewModel = new BlinkyViewModel(activity.getApplication(), device.getDeviceClass());
             observeDeviceConnection(mViewModel);
-            lifecycleOwner = (LifecycleOwner) activity.getBaseContext();
+            lifecycleOwner = (LifecycleOwner) activity.getApplicationContext();
 
             List<Reading> readingsList = readingsForClass(mViewModel, device);
 
