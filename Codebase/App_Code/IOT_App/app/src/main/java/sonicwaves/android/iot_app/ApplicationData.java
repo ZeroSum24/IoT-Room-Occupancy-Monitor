@@ -3,10 +3,12 @@ import android.app.Application;
 import android.content.Context;
 
 import java.util.List;
+import java.util.Map;
 
 import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
 import sonicwaves.android.iot_app.firebase.FirebaseUtils;
 import sonicwaves.android.iot_app.firebase.objects.FirebaseHolder;
+import sonicwaves.android.iot_app.viewmodels.objects.Reading;
 
 
 public class ApplicationData extends Application {
@@ -37,4 +39,5 @@ public class ApplicationData extends Application {
     public FirebaseHolder getFirebaseHolder() {
         return firebaseHolder;
     }
+
 }

@@ -24,6 +24,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/blinkyActivity"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	tools:context=".BlinkyActivity"
@@ -91,7 +92,8 @@
 		app:layout_constraintTop_toTopOf="parent"
 		tools:visibility="visible" />
 
-	<androidx.recyclerview.widget.RecyclerView
+	<ListView
+		android:id="@+id/listview"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
 		android:clipToPadding="false"
