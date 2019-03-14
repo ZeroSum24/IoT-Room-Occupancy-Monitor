@@ -34,5 +34,7 @@ public interface PressureCallback {
      * @param device the target device.
      * @param pressed true if the button was pressed, false if released.
      */
-    void onPressureStateChanged(@NonNull final BluetoothDevice device, final boolean pressed);
+//    void onPressureStateChanged(@NonNull final BluetoothDevice device, final boolean pressed);
+    void onPressureStateChanged(@NonNull final BluetoothDevice device, final String pressed);
+
 }

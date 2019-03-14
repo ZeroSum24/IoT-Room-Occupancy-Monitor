@@ -14,9 +14,10 @@ public class Reading {
     private String timestamp;
     private String sensor;
 
-    public Reading(String sensor, boolean activated) {
+//    public Reading(String sensor, boolean activated) {
+    public Reading(String sensor, String activated) {
         this.sensor = sensor;
-        this.activated = activated;
+        this.activated = parseString(activated);
 
         String pattern = "yyyy-MM-dd_hh/mm/ss/a";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
@@ -38,6 +39,26 @@ public class Reading {
 
     public String getSensor() {
         return sensor;
+    }
+
+    /***
+     * Parses the string given from the sensor reading into the appropriate values
+     *
+     * @param activated Sensor reading string
+     *
+     * @return boolean to update the activated class variable
+     */
+    private boolean parseString(String activated) {
+        Log.e("Reading", "reading here");
+
+        boolean triggered = false;
+
+        int status = activated.charAt(6) - 48;
+        if (status == 1) {
+            triggered= true;
+        }
+
+        return triggered;
     }
 
     @NonNull

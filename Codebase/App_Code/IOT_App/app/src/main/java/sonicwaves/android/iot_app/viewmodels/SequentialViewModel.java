@@ -11,7 +11,6 @@ import java.util.Map;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProviders;
 import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
 import sonicwaves.android.iot_app.firebase.objects.FirebaseHolder;
 import sonicwaves.android.iot_app.firebase.objects.chair.Chair;
@@ -49,17 +48,13 @@ public class SequentialViewModel {
         HashMap<DiscoveredBluetoothDevice, List<Reading>> deviceReadings = new HashMap<>();
 
         for (DiscoveredBluetoothDevice device: dBDeviceList) {
-            //System.out.println("here");
 
             device.setDeviceClass(new DeviceClass(device));
             currentDeviceIndex = dBDeviceList.indexOf(device);
 
             //connect to further device
             mViewModel = new BlinkyViewModel(activity.getApplication(), device.getDeviceClass());
-            //System.out.println(mViewModel);
-//            mViewModel = ViewModelProviders.of(activity.getBaseContext()).get(BlinkyViewModel.class);
             lifecycleOwner = (LifecycleOwner) activity;
-            //System.out.println(lifecycleOwner);
             observeDeviceConnection(mViewModel);
             List<Reading> readingsList = readingsForClass(mViewModel, device);
             // do something here
@@ -315,6 +310,7 @@ public class SequentialViewModel {
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
             //DOOR readings update
+            Log.e(TAG, "door here");
 
             mViewModel.getmDistOne().observe(lifecycleOwner,
                     tripped -> readingsList.add(new Reading(DIST_ONE, tripped)));
