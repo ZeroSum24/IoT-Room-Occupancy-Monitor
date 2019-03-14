@@ -116,15 +116,15 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
      * has been received, or its data was read.
      * <p>
      * If the data received are valid (single byte equal to 0x00 or 0x01), the
-     * {@link PIRDataCallback#onPIRStateChanged(BluetoothDevice, boolean)} will be called.
+     * {@link PIRDataCallback#onPIRStateChanged(BluetoothDevice, String)} will be called.
      * Otherwise, the {@link PIRDataCallback#onInvalidDataReceived(BluetoothDevice, Data)}
      * will be called with the data received.
      */
     private final PIRDataCallback mPIRCallback = new PIRDataCallback() {
         @Override
         public void onPIRStateChanged(@NonNull final BluetoothDevice device,
-                                         final boolean detected) {
-            log(LogContract.Log.Level.APPLICATION, "PIR " + (detected ? "detected" : "released"));
+                                         final String detected) {
+            log(LogContract.Log.Level.APPLICATION, "PIR " + detected);
             mCallbacks.onPIRStateChanged(device, detected);
         }
 
@@ -140,15 +140,15 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
      * has been received, or its data was read.
      * <p>
      * If the data received are valid (single byte equal to 0x00 or 0x01), the
-     * {@link DistanceDataOneCallback#onDistanceOneStateChanged(BluetoothDevice, boolean)} will be called.
+     * {@link DistanceDataOneCallback#onDistanceOneStateChanged(BluetoothDevice, String)} will be called.
      * Otherwise, the {@link DistanceDataOneCallback#onInvalidDataReceived(BluetoothDevice, Data)}
      * will be called with the data received.
      */
     private final DistanceDataOneCallback mDistanceOneCallback = new DistanceDataOneCallback() {
         @Override
         public void onDistanceOneStateChanged(@NonNull final BluetoothDevice device,
-                                         final boolean tripped) {
-            log(LogContract.Log.Level.APPLICATION, "Distance tripped " + (tripped ? "tripped" : "static"));
+                                         final String tripped) {
+            log(LogContract.Log.Level.APPLICATION, "Distance tripped " + tripped );
             mCallbacks.onDistanceOneStateChanged(device, tripped);
         }
 
@@ -164,15 +164,15 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
      * has been received, or its data was read.
      * <p>
      * If the data received are valid (single byte equal to 0x00 or 0x01), the
-     * {@link DistanceDataTwoCallback#onDistanceTwoStateChanged(BluetoothDevice, boolean)} will be called.
+     * {@link DistanceDataTwoCallback#onDistanceTwoStateChanged(BluetoothDevice, String)} will be called.
      * Otherwise, the {@link DistanceDataTwoCallback#onInvalidDataReceived(BluetoothDevice, Data)}
      * will be called with the data received.
      */
     private final DistanceDataTwoCallback mDistanceTwoCallback = new DistanceDataTwoCallback() {
         @Override
         public void onDistanceTwoStateChanged(@NonNull final BluetoothDevice device,
-                                              final boolean tripped) {
-            log(LogContract.Log.Level.APPLICATION, "Distance tripped " + (tripped ? "tripped" : "static"));
+                                              final String tripped) {
+            log(LogContract.Log.Level.APPLICATION, "Distance tripped " + tripped);
             mCallbacks.onDistanceTwoStateChanged(device, tripped);
         }
 
@@ -182,20 +182,21 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
             log(Log.WARN, "Invalid data received: " + data);
         }
     };
+
     /**
      * The Button callback will be notified when a notification from Button characteristic
      * has been received, or its data was read.
      * <p>
      * If the data received are valid (single byte equal to 0x00 or 0x01), the
-     * {@link PressureDataCallback#onPressureStateChanged(BluetoothDevice, boolean)} will be called.
+     * {@link PressureDataCallback#onPressureStateChanged(BluetoothDevice, String)} will be called.
      * Otherwise, the {@link PressureDataCallback#onInvalidDataReceived(BluetoothDevice, Data)}
      * will be called with the data received.
      */
     private final PressureDataCallback mPressureCallback = new PressureDataCallback() {
         @Override
         public void onPressureStateChanged(@NonNull final BluetoothDevice device,
-                                         final boolean pressed) {
-            log(LogContract.Log.Level.APPLICATION, "Pressure " + (pressed ? "pressed" : "released"));
+                                         final String pressed) {
+            log(LogContract.Log.Level.APPLICATION, "Pressure " + pressed);
             mCallbacks.onPressureStateChanged(device, pressed);
         }
 
@@ -234,7 +235,8 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                         mPressureCharacteristic = service.getCharacteristic(SW_UUID_PRESSURE_CHAR);
                     }
 
-                    mSupported = mPressureCharacteristic != null;
+//                    mSupported = mPressureCharacteristic != null;
+                    mSupported = true;
                     return mSupported;
                 }
 
@@ -264,7 +266,8 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                         mPIRCharacteristic = service.getCharacteristic(SW_UUID_PIR_CHAR);
                     }
 
-                    mSupported = mPIRCharacteristic != null;
+//                    mSupported = mPIRCharacteristic != null;
+                    mSupported = true;
                     return mSupported;
                 }
 
@@ -298,7 +301,8 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                         mDistanceTwoCharacteristic = service.getCharacteristic(SW_UUID_DISTTWO_CHAR);
                     }
 
-                    mSupported = mDistanceOneCharacteristic != null && mDistanceTwoCharacteristic != null;
+//                    mSupported = mDistanceOneCharacteristic != null && mDistanceTwoCharacteristic != null;
+                    mSupported = true;
                     return mSupported;
                 }
 

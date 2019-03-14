@@ -55,19 +55,21 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 
     // Flag that holds the pressed released state of the first distance sensor on the devkit.
     // Pressed is true, Released is false
-	private final MutableLiveData<Boolean> mDistOne = new MutableLiveData<>();
+	private final MutableLiveData<String> mDistOne = new MutableLiveData<>();
 
 	// Flag that holds the pressed released state of the second distance sensor on the devkit.
 	// Pressed is true, Released is false
-	private final MutableLiveData<Boolean> mDistTwo = new MutableLiveData<>();
+	private final MutableLiveData<String> mDistTwo = new MutableLiveData<>();
 
     // Flag that holds the pressed released state of the pir sensor on the devkit.
     // Pressed is true, Released is false
-    private final MutableLiveData<Boolean> mPIR = new MutableLiveData<>();
+    private final MutableLiveData<String> mPIR = new MutableLiveData<>();
 
     // Flag that holds the pressed released state of the pressure sensor on the devkit.
     // Pressed is true, Released is false
-    private final MutableLiveData<Boolean> mPressure = new MutableLiveData<>();
+//    private final MutableLiveData<Boolean> mPressure = new MutableLiveData<>();
+	private final MutableLiveData<String> mPressure = new MutableLiveData<>();
+
 
 	public LiveData<Void> isDeviceReady() {
 		return mOnDeviceReady;
@@ -81,21 +83,19 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 		return mIsConnected;
 	}
 
-    public MutableLiveData<Boolean> getmDistOne() {
+    public MutableLiveData<String> getmDistOne() {
         return mDistOne;
     }
 
-    public MutableLiveData<Boolean> getmDistTwo() {
+    public MutableLiveData<String> getmDistTwo() {
         return mDistTwo;
     }
 
-    public MutableLiveData<Boolean> getmPIR() {
+    public MutableLiveData<String> getmPIR() {
         return mPIR;
     }
 
-    public MutableLiveData<Boolean> getmPressure() {
-        return mPressure;
-    }
+    public MutableLiveData<String> getmPressure() { return mPressure; }
 
     public LiveData<Boolean> isSupported() {
 		return mIsSupported;
@@ -159,23 +159,22 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 	}
 
 	@Override
-	public void onDistanceOneStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+	public void onDistanceOneStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
 		mDistOne.postValue(pressed);
 	}
 
     @Override
-    public void onDistanceTwoStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+    public void onDistanceTwoStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
         mDistTwo.postValue(pressed);
     }
 
     @Override
-    public void onPIRStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+    public void onPIRStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
         mPIR.postValue(pressed);
     }
 
-
     @Override
-    public void onPressureStateChanged(@NonNull final BluetoothDevice device, final boolean pressed) {
+    public void onPressureStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
         mPressure.postValue(pressed);
     }
 

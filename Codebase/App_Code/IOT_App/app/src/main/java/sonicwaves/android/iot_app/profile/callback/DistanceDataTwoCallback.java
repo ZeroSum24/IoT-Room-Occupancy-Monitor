@@ -35,18 +35,6 @@ public abstract class DistanceDataTwoCallback implements ProfileDataCallback, Di
 
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-        if (data.size() != 1) {
-            onInvalidDataReceived(device, data);
-            return;
-        }
-
-        final int state = data.getIntValue(Data.FORMAT_UINT8, 0);
-        if (state == STATE_PRESSED) {
-            onDistanceTwoStateChanged(device, true);
-        } else if (state == STATE_RELEASED) {
-            onDistanceTwoStateChanged(device, false);
-        } else {
-            onInvalidDataReceived(device, data);
-        }
+        onDistanceTwoStateChanged(device, data.toString());
     }
 }

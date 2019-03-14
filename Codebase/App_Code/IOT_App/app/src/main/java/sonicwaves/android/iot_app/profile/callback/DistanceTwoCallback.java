@@ -34,5 +34,5 @@ public interface DistanceTwoCallback {
      * @param device the target device.
      * @param tripped true if the sensor was tripped, false if static.
      */
-    void onDistanceTwoStateChanged(@NonNull final BluetoothDevice device, final boolean tripped);
+    void onDistanceTwoStateChanged(@NonNull final BluetoothDevice device, final String tripped);
 }
