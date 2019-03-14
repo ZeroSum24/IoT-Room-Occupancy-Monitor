@@ -91,20 +91,6 @@ public class GatherDataDevicesAdapter extends RecyclerView.Adapter<GatherDataDev
 				.inflate(R.layout.device_item, parent, false);
         return new ViewHolder(layoutView);
 	}
-//
-//    @Override
-//    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position, @NonNull List<Object> payload) {
-//
-//        Boolean connected = (Boolean) payload.get(position);
-//        if (connected) {
-//            holder.progressBar.setVisibility(View.VISIBLE);
-//            holder.cancelButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
-//        } else {
-//            holder.progressBar.setVisibility(View.GONE);
-//            holder.cancelButton.setImageResource(android.R.drawable.stat_sys_download);
-//        }
-//
-//    }
 
 	@Override
 	public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
@@ -118,6 +104,35 @@ public class GatherDataDevicesAdapter extends RecyclerView.Adapter<GatherDataDev
 		holder.deviceAddress.setText(device.getAddress());
 		final int rssiPercent = (int) (100.0f * (127.0f + device.getRssi()) / (127.0f + 20.0f));
 		holder.rssi.setImageLevel(rssiPercent);
+	}
+
+
+	@Override
+	public void onBindViewHolder(@NonNull final ViewHolder holder, final int position, @NonNull List<Object> payload) {
+
+        if (payload.size() == 0) {
+            final DiscoveredBluetoothDevice device = mDevices.get(position);
+            final String deviceName = device.getName();
+
+            if (!TextUtils.isEmpty(deviceName))
+                holder.deviceName.setText(deviceName);
+            else
+                holder.deviceName.setText(R.string.unknown_device);
+            holder.deviceAddress.setText(device.getAddress());
+            final int rssiPercent = (int) (100.0f * (127.0f + device.getRssi()) / (127.0f + 20.0f));
+            holder.rssi.setImageLevel(rssiPercent);
+        } else {
+            Log.d(TAG, "Entered ui update code");
+            Boolean connected = (Boolean) payload.get(position);
+            if (connected) {
+                holder.progressBar.setVisibility(View.VISIBLE);
+                holder.cancelButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+            } else {
+                holder.progressBar.setVisibility(View.GONE);
+                holder.cancelButton.setImageResource(android.R.drawable.stat_sys_download);
+            }
+        }
+
 	}
 
 	@Override

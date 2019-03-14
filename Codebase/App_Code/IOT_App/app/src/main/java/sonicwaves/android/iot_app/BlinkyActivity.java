@@ -23,17 +23,28 @@
 package sonicwaves.android.iot_app;
 
 import androidx.lifecycle.ViewModelProviders;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,13 +56,16 @@ import butterknife.OnClick;
 import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
 import sonicwaves.android.iot_app.adapter.ScannerDevicesAdapter;
 import sonicwaves.android.iot_app.viewmodels.BlinkyViewModel;
+import sonicwaves.android.iot_app.viewmodels.objects.Reading;
 
 @SuppressWarnings("ConstantConditions")
 public class BlinkyActivity extends AppCompatActivity {
 	public static final String EXTRA_DEVICE = "sonicwaves.android.iot_app.EXTRA_DEVICE";
 
-	private BlinkyViewModel mViewModel;
-	private ScannerDevicesAdapter adapter;
+//	private BlinkyViewModel mViewModel;
+//	private ScannerDevicesAdapter adapter;
+	private ApplicationData app;
+
 
 //	@BindView(R.id.led_switch) Switch mLed;
 //	@BindView(R.id.button_state) TextView mButtonState;
@@ -72,6 +86,50 @@ public class BlinkyActivity extends AppCompatActivity {
 		getSupportActionBar().setTitle(deviceName);
 		getSupportActionBar().setSubtitle(deviceAddress);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		// Get data from the Gather Data Activity
+		app = (ApplicationData) getApplicationContext();
+		List<Reading> deviceReadings = app.getFirebaseHolder().getDeviceReadings().get(device);
+
+		if (deviceReadings != null) {
+            // show a list with all the readings
+
+            if (deviceReadings.size() != 0) {
+                final ListView listview = (ListView) findViewById(R.id.listview);
+
+                final ArrayList<String> list = new ArrayList<String>();
+                for (int i = 0; i < deviceReadings.size(); ++i) {
+                    list.add(deviceReadings.get(i).toString());
+                }
+                final StableArrayAdapter adapter = new StableArrayAdapter(this,
+                        android.R.layout.simple_list_item_1, list);
+                listview.setAdapter(adapter);
+
+                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, final View view,
+                                            int position, long id) {
+                        final String item = (String) parent.getItemAtPosition(position);
+                        view.animate().setDuration(2000).alpha(0)
+                                .withEndAction(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        list.remove(item);
+                                        adapter.notifyDataSetChanged();
+                                        view.setAlpha(1);
+                                    }
+                                });
+                    }
+
+                });
+            } else {
+                showSnackbar();
+            }
+        } else {
+            showSnackbar();
+        }
+
 
 //		// Configure the view model
 //		mViewModel = ViewModelProviders.of(this).get(BlinkyViewModel.class);
@@ -132,4 +190,42 @@ public class BlinkyActivity extends AppCompatActivity {
 //			mButtonState.setText(R.string.button_unknown);
 //		}
 //	}
+
+    private void showSnackbar() {
+        // show  a snackbar asking the user to quit
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.blinkyActivity), "No device readings available", Snackbar.LENGTH_LONG);
+        snackbar.setAction("Return", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        snackbar.show();
+    }
+}
+
+class StableArrayAdapter extends ArrayAdapter<String> {
+
+	HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+	public StableArrayAdapter(Context context, int textViewResourceId,
+							  List<String> objects) {
+		super(context, textViewResourceId, objects);
+		for (int i = 0; i < objects.size(); ++i) {
+			mIdMap.put(objects.get(i), i);
+		}
+	}
+
+	@Override
+	public long getItemId(int position) {
+		String item = getItem(position);
+		return mIdMap.get(item);
+	}
+
+	@Override
+	public boolean hasStableIds() {
+		return true;
+	}
+
 }

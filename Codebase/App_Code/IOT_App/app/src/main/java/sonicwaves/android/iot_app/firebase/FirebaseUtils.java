@@ -65,17 +65,17 @@ public class FirebaseUtils {
 
         boolean isUploading = false;
 
-        if (firebaseHolder.getChairList() != null) {
+        if (firebaseHolder.getChairList().size() != 0) {
             updateChairData(firebaseHolder.getChairList());
             isUploading = true;
         }
 
-        if (firebaseHolder.getDoorList() != null) {
+        if (firebaseHolder.getDoorList().size() != 0) {
             updateDoorData(firebaseHolder.getDoorList());
             isUploading = true;
         }
 
-        if (firebaseHolder.getTableList() != null) {
+        if (firebaseHolder.getTableList().size() != 0) {
             updateTableData(firebaseHolder.getTableList());
             isUploading = true;
         }

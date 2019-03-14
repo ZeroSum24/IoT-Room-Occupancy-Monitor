@@ -1,8 +1,12 @@
 package sonicwaves.android.iot_app.viewmodels.objects;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
 
 public class Reading {
 
@@ -20,6 +24,8 @@ public class Reading {
         //This method returns the time in millislong timeMilli = date.getTime();
         // System.out.println(“Time in milliseconds using Date class: ” + timeMilli);
         this.timestamp = simpleDateFormat.format(new Date());
+
+        Log.e("Reading", toString());
     }
 
     public String getTimestamp() {
@@ -32,5 +38,11 @@ public class Reading {
 
     public String getSensor() {
         return sensor;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.valueOf(sensor) + " " + String.valueOf(activated) + " " + String.valueOf(timestamp);
     }
 }
