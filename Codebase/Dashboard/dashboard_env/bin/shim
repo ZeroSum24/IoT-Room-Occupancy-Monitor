@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+export NODE_PATH=/home/zerosum24/Documents/Computer_Science/Dissertation/Codebase/url_env/lib/node_modules
+export NPM_CONFIG_PREFIX=/home/zerosum24/Documents/Computer_Science/Dissertation/Codebase/url_env
+export npm_config_prefix=/home/zerosum24/Documents/Computer_Science/Dissertation/Codebase/url_env
+exec /home/zerosum24/Documents/Computer_Science/Dissertation/Codebase/url_env/bin/node "$@"
