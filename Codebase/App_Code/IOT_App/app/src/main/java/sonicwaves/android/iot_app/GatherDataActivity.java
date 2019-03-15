@@ -66,6 +66,7 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 	private Map<DiscoveredBluetoothDevice, List<Reading>> deviceReadings;
 //    private LifecycleRegistry lifecycleRegistry;
     private final static String TAG = "GatherDataActivity";
+    private int currentDeviceIndex = 0;
 
     @BindView(R.id.state_scanning) View mScanningView;
 	@BindView(R.id.no_devices)View mEmptyView;
@@ -104,7 +105,8 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 //        lifecycleRegistry = new LifecycleRegistry(this);
 //        lifecycleRegistry.markState(Lifecycle.State.CREATED);
 
-		app.setFirebaseHolder(viewModel.getFirebaseInfo(this, mDevices));
+//		app.setFirebaseHolder(viewModel.getFirebaseInfo(this, mDevices));
+		viewModel.iterateThroughDevices(this, mDevices.get(currentDeviceIndex));
 
 		// update ui based on connection state
 		viewModel.getIsConnectedMut().observe(this, connected -> {
@@ -112,6 +114,8 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
             int position = viewModel.getCurrentDeviceIndex();
 		    adapter.notifyItemChanged(position, connected);
 		    Log.e(TAG, "Device status: " + String.valueOf(connected));
+		    currentDeviceIndex++;
+			viewModel.iterateThroughDevices(this, mDevices.get(currentDeviceIndex));
 		});
 		// initialise gather data button functionality
         initSendToFirebaseButton();
