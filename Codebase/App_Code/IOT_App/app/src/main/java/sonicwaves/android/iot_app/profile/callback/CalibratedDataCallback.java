@@ -20,17 +20,19 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package sonicwaves.android.iot_app.profile;
+package sonicwaves.android.iot_app.profile.callback;
 
-import no.nordicsemi.android.ble.BleManagerCallbacks;
-import sonicwaves.android.iot_app.profile.callback.CalibratedCallback;
-import sonicwaves.android.iot_app.profile.callback.DistanceOneCallback;
-import sonicwaves.android.iot_app.profile.callback.DistanceTwoCallback;
-import sonicwaves.android.iot_app.profile.callback.PIRCallback;
-import sonicwaves.android.iot_app.profile.callback.PressureOneCallback;
-import sonicwaves.android.iot_app.profile.callback.PressureTwoCallback;
+import android.bluetooth.BluetoothDevice;
 
-public interface BlinkyManagerCallbacks extends BleManagerCallbacks,
-		DistanceOneCallback, DistanceTwoCallback, PIRCallback, PressureOneCallback, PressureTwoCallback, CalibratedCallback {
-	// No more methods
+import androidx.annotation.NonNull;
+import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
+import no.nordicsemi.android.ble.data.Data;
+
+@SuppressWarnings("ConstantConditions")
+public abstract class CalibratedDataCallback implements ProfileDataCallback, CalibratedCallback {
+
+    @Override
+    public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        onCalibratedStateChanged(device, data.toString());
+    }
 }

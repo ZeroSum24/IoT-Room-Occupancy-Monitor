@@ -67,8 +67,15 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 
     // Flag that holds the pressed released state of the pressure sensor on the devkit.
     // Pressed is true, Released is false
-//    private final MutableLiveData<Boolean> mPressure = new MutableLiveData<>();
-	private final MutableLiveData<String> mPressure = new MutableLiveData<>();
+	private final MutableLiveData<String> mPressureOne = new MutableLiveData<>();
+
+	// Flag that holds the pressed released state of the pressure sensor on the devkit.
+	// Pressed is true, Released is false
+	private final MutableLiveData<String> mPressureTwo = new MutableLiveData<>();
+
+	// Flag that holds the is Calibrated state of the device on the devkit.
+	// Connected is true, NotConnected is false
+	private final MutableLiveData<String> isCalibrated = new MutableLiveData<>();
 
 
 	public LiveData<Void> isDeviceReady() {
@@ -95,9 +102,13 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
         return mPIR;
     }
 
-    public MutableLiveData<String> getmPressure() { return mPressure; }
+    public MutableLiveData<String> getmPressureOne() { return mPressureOne; }
 
-    public LiveData<Boolean> isSupported() {
+	public MutableLiveData<String> getmPressureTwo() { return mPressureTwo; }
+
+	public MutableLiveData<String> getIsCalibrated() { return isCalibrated; }
+
+	public LiveData<Boolean> isSupported() {
 		return mIsSupported;
 	}
 
@@ -174,9 +185,20 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
     }
 
     @Override
-    public void onPressureStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
-        mPressure.postValue(pressed);
+    public void onPressureOneStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
+        mPressureOne.postValue(pressed);
     }
+
+	@Override
+	public void onPressureTwoStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
+		mPressureTwo.postValue(pressed);
+	}
+
+
+	@Override
+	public void onCalibratedStateChanged(@NonNull BluetoothDevice device, String pressed) {
+		isCalibrated.postValue(pressed);
+	}
 
 	@Override
 	public void onDeviceConnecting(@NonNull final BluetoothDevice device) {
