@@ -25,16 +25,14 @@ package sonicwaves.android.iot_app.profile.callback;
 import android.bluetooth.BluetoothDevice;
 
 import androidx.annotation.NonNull;
+import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
+import no.nordicsemi.android.ble.data.Data;
 
-public interface PressureCallback {
+@SuppressWarnings("ConstantConditions")
+public abstract class SetTimeDataCallback implements ProfileDataCallback, SetTimeCallback {
 
-    /**
-     * Called when a pressure sensor was pressed or released on device.
-     *
-     * @param device the target device.
-     * @param pressed true if the button was pressed, false if released.
-     */
-//    void onPressureStateChanged(@NonNull final BluetoothDevice device, final boolean pressed);
-    void onPressureStateChanged(@NonNull final BluetoothDevice device, final String pressed);
-
+    @Override
+    public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
+        onSetTimeStateChanged(device, data.toString());
+    }
 }

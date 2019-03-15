@@ -29,10 +29,10 @@ import no.nordicsemi.android.ble.callback.profile.ProfileDataCallback;
 import no.nordicsemi.android.ble.data.Data;
 
 @SuppressWarnings("ConstantConditions")
-public abstract class PressureDataCallback implements ProfileDataCallback, PressureCallback {
+public abstract class PressureOneDataCallback implements ProfileDataCallback, PressureOneCallback {
 
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-        onPressureStateChanged(device, data.toString());
+        onPressureOneStateChanged(device, data.toString());
     }
 }

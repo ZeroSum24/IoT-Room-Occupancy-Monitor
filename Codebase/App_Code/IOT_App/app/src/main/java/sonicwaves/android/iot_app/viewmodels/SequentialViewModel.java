@@ -28,8 +28,10 @@ public class SequentialViewModel {
     private BlinkyViewModel mViewModel;
     private LifecycleOwner lifecycleOwner;
     private int currentDeviceIndex;
-    private MutableLiveData<Boolean> isConnected = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isConnectedMut = new MutableLiveData<>();
+    private Boolean isConnected = true;
     private MutableLiveData<Boolean> isSupported = new MutableLiveData<>();
+    private MutableLiveData<String> isCalibrated = new MutableLiveData<>();
 
     private final static String DIST_ONE = new Door().DIST_INTERNAL;
     private final static String DIST_TWO = new Door().DIST_EXTERNAL;
@@ -55,7 +57,9 @@ public class SequentialViewModel {
             //connect to further device
             mViewModel = new BlinkyViewModel(activity.getApplication(), device.getDeviceClass());
             lifecycleOwner = (LifecycleOwner) activity;
+            System.out.print("HERE1");
             observeDeviceConnection(mViewModel);
+            System.out.print("HERE");
             List<Reading> readingsList = readingsForClass(mViewModel, device);
             // do something here
             //Log.d(TAG, device.getName() + " " + device.getDeviceClass());
@@ -285,9 +289,13 @@ public class SequentialViewModel {
 		});
 
         // watching the viewModel connection state
-        mViewModel.isConnected().observe(lifecycleOwner, connected -> {isConnected.setValue(connected);});
+//        mViewModel.isConnected().observe(lifecycleOwner, connected -> {
+//            isConnectedMut.setValue(connected);
+//            isConnected = connected;
+//            Log.e("Reading watcher", connected.toString());});
         //Log.d(TAG, String.valueOf(connected));
         mViewModel.isSupported().observe(lifecycleOwner, supported -> {isSupported.setValue(supported);});
+        mViewModel.getIsCalibrated().observe(lifecycleOwner, calibrated -> {isCalibrated.setValue(calibrated);});
     }
 
     // Flag to determine if the device is connected
@@ -296,44 +304,118 @@ public class SequentialViewModel {
         DeviceClass deviceClass = new DeviceClass(device);
         mViewModel.connect(device);
 
-        if (deviceClass.getDeviceClass().equals(deviceClass.CHAIR)) {
-            //CHAIR readings update
-            Log.e(TAG, "chair here");
-            mViewModel.getmPressure().observe(lifecycleOwner,
-                    pressed -> readingsList.add(new Reading(PRESSURE, pressed)));
+        System.out.print("Reading For Class");
 
-        } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
-            //TABLE readings update
+//        while(isConnected) {
+        mViewModel.isConnected().observe(lifecycleOwner, connected -> {
+            isConnectedMut.setValue(connected);
+            isConnected = connected;
+            Log.e("Reading watcher", connected.toString());
 
-            mViewModel.getmPIR().observe(lifecycleOwner,
-                    tripped -> readingsList.add(new Reading(PIR, tripped)));
+            Log.e("Connected Reading", isConnected.toString());
 
-        } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
-            //DOOR readings update
-            Log.e(TAG, "door here");
+                isCalibrated.observe(lifecycleOwner, text -> {
+                    if (text != null) {
+                        Log.e("Calibrated Reading", text);
+                    }
+                });
 
-            mViewModel.getmDistOne().observe(lifecycleOwner,
-                    tripped -> readingsList.add(new Reading(DIST_ONE, tripped)));
+                System.out.print("Is Connected");
+                if (deviceClass.getDeviceClass().equals(deviceClass.CHAIR)) {
+                    //CHAIR readings update
+                    Log.e(TAG, "chair here");
+                    mViewModel.getmPressureOne().observe(lifecycleOwner,
+                            pressed -> readingsList.add(new Reading(PRESSURE, pressed)));
 
-            mViewModel.getmDistTwo().observe(lifecycleOwner,
-                    tripped -> readingsList.add(new Reading(DIST_TWO, tripped)));
-        }
+                } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
+                    //TABLE readings update
 
-        if (readingsList.size() == 0) {
-            Log.e(TAG, "No readings for device");
-        } else {
-            //Log all readings
-            for (Reading reading: readingsList) {
-                if (reading != null) {
-                    Log.e(TAG, reading.toString());
-                } else {
-                    Log.e(TAG, "reading is null");
+                    mViewModel.getmPIR().observe(lifecycleOwner,
+                            tripped -> readingsList.add(new Reading(PIR, tripped)));
+
+                } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
+                    //DOOR readings update
+                    Log.e(TAG, "door here");
+
+                    mViewModel.getmDistOne().observe(lifecycleOwner,
+                            tripped -> readingsList.add(new Reading(DIST_ONE, tripped)));
+
+                    mViewModel.getmDistTwo().observe(lifecycleOwner,
+                            tripped -> readingsList.add(new Reading(DIST_TWO, tripped)));
                 }
-            }
-        }
 
-        //disconnect from device
-//            mViewModel.disconnect();
+                if (readingsList.size() == 0) {
+                    Log.e(TAG, "No readings for device");
+                } else {
+                    //Log all readings
+                    for (Reading reading : readingsList) {
+                        if (reading != null) {
+                            Log.e(TAG, reading.toString());
+                        } else {
+                            Log.e(TAG, "reading is null");
+                        }
+                    }
+                }
+        });
+                // lag the ui thread
+        try {
+            while (isConnectedMut.getValue() == true) {
+                Log.e("Reading", "still connnected");
+            }
+        }catch (NullPointerException e) {
+            Log.e("Reading", e.toString());
+        }
+        Log.e("Connected Reading", isConnected.toString());
+
+
+//            isCalibrated.observe(lifecycleOwner, isCalibratedStr -> {
+//
+//                System.out.print("Is Calibrated");
+//
+//                boolean isCalibrated = parseCalibrationString(isCalibratedStr);
+//                if (!isCalibrated) {
+//                    //temp here
+//                } else {
+//                    if (deviceClass.getDeviceClass().equals(deviceClass.CHAIR)) {
+//                        //CHAIR readings update
+//                        Log.e(TAG, "chair here");
+//                        mViewModel.getmPressureOne().observe(lifecycleOwner,
+//                                pressed -> readingsList.add(new Reading(PRESSURE, pressed)));
+//
+//                    } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
+//                        //TABLE readings update
+//
+//                        mViewModel.getmPIR().observe(lifecycleOwner,
+//                                tripped -> readingsList.add(new Reading(PIR, tripped)));
+//
+//                    } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
+//                        //DOOR readings update
+//                        Log.e(TAG, "door here");
+//
+//                        mViewModel.getmDistOne().observe(lifecycleOwner,
+//                                tripped -> readingsList.add(new Reading(DIST_ONE, tripped)));
+//
+//                        mViewModel.getmDistTwo().observe(lifecycleOwner,
+//                                tripped -> readingsList.add(new Reading(DIST_TWO, tripped)));
+//                    }
+//
+//                    if (readingsList.size() == 0) {
+//                        Log.e(TAG, "No readings for device");
+//                    } else {
+//                        //Log all readings
+//                        for (Reading reading : readingsList) {
+//                            if (reading != null) {
+//                                Log.e(TAG, reading.toString());
+//                            } else {
+//                                Log.e(TAG, "reading is null");
+//                            }
+//                        }
+//                    }
+//
+//                }
+//            });
+//        }
+//        }
         return readingsList;
     }
 
@@ -341,11 +423,31 @@ public class SequentialViewModel {
         return currentDeviceIndex;
     }
 
-    public MutableLiveData<Boolean> getIsConnected() {
-        return isConnected;
+    public MutableLiveData<Boolean> getIsConnectedMut() {
+        return isConnectedMut;
     }
 
     public MutableLiveData<Boolean> getIsSupported() {
         return isSupported;
+    }
+
+    /***
+     * Parses the string given from the sensor reading into the appropriate values
+     *
+     * @param activated Sensor reading string
+     *
+     * @return boolean to update the activated class variable
+     */
+    private boolean parseCalibrationString(String activated) {
+        Log.e("Reading", "reading here");
+
+        boolean triggered = false;
+
+        int status = activated.charAt(6) - 48;
+        if (status == 1) {
+            triggered= true;
+        }
+
+        return triggered;
     }
 }

@@ -36,13 +36,15 @@ import java.util.UUID;
 
 import no.nordicsemi.android.ble.BleManager;
 import no.nordicsemi.android.ble.data.Data;
+import sonicwaves.android.iot_app.profile.callback.CalibratedDataCallback;
 import sonicwaves.android.iot_app.profile.callback.DistanceDataOneCallback;
 import sonicwaves.android.iot_app.profile.callback.DistanceDataTwoCallback;
 import sonicwaves.android.iot_app.profile.callback.PIRDataCallback;
-import sonicwaves.android.iot_app.profile.callback.PressureDataCallback;
+import sonicwaves.android.iot_app.profile.callback.PressureOneDataCallback;
 import no.nordicsemi.android.log.LogContract;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
+import sonicwaves.android.iot_app.profile.callback.PressureTwoDataCallback;
 import sonicwaves.android.iot_app.viewmodels.objects.DeviceClass;
 
 public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
@@ -57,9 +59,9 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
      */
     public final static UUID SW_UUID_SERVICE = UUID.fromString("0000a000-0000-1000-8000-00805f9b34fb");
     /**
-     * PIR characteristic UUID.
+     * DEVICE SIGNAL STRENGTH characteristic UUID.
      */
-    private final static UUID SW_UUID_PIR_CHAR = UUID.fromString("0000a001-0000-1000-8000-00805f9b34fb");
+    private final static UUID SW_UUID_DEVICE_SIGNAL_STRENGTH_CHAR = UUID.fromString("0000a001-0000-1000-8000-00805f9b34fb");
     /**
      * DISTANCE ONE characteristic UUID.
      */
@@ -69,12 +71,24 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
      */
     private final static UUID SW_UUID_DISTTWO_CHAR = UUID.fromString("0000a003-0000-1000-8000-00805f9b34fb");
     /**
-     * PRESSURE characteristic UUID.
+     * PRESSURE ONE characteristic UUID.
      */
-    private final static UUID SW_UUID_PRESSURE_CHAR = UUID.fromString("0000a004-0000-1000-8000-00805f9b34fb");
+    private final static UUID SW_UUID_PRESSUREONE_CHAR = UUID.fromString("0000a004-0000-1000-8000-00805f9b34fb");
+    /**
+     * PRESSURE TWO characteristic UUID.
+     */
+    private final static UUID SW_UUID_PRESSURETWO_CHAR = UUID.fromString("0000a005-0000-1000-8000-00805f9b34fb");
+    /**
+     * SETTIME characteristic UUID.
+     */
+    private final static UUID SW_UUID_SETTIME_CHAR = UUID.fromString("0000a008-0000-1000-8000-00805f9b34fb");
+    /**
+     * CALIBRATED characteristic UUID.
+     */
+    private final static UUID SW_UUID_CALIBRATED_CHAR = UUID.fromString("0000a009-0000-1000-8000-00805f9b34fb");
 
-    private BluetoothGattCharacteristic mPressureCharacteristic, mPIRCharacteristic, mDistanceOneCharacteristic,
-                                        mDistanceTwoCharacteristic;
+    private BluetoothGattCharacteristic mPressureOneCharacteristic, mPressureTwoCharacteristic, mPIRCharacteristic, mDistanceOneCharacteristic,
+                                        mDistanceTwoCharacteristic, mSetTimeCharacteristic, mCalibratedCharacteristic;
     private LogSession mLogSession;
     private boolean mSupported;
     private BleManagerGattCallback mGattCallback;
@@ -188,16 +202,16 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
      * has been received, or its data was read.
      * <p>
      * If the data received are valid (single byte equal to 0x00 or 0x01), the
-     * {@link PressureDataCallback#onPressureStateChanged(BluetoothDevice, String)} will be called.
-     * Otherwise, the {@link PressureDataCallback#onInvalidDataReceived(BluetoothDevice, Data)}
+     * {@link PressureOneDataCallback#onPressureOneStateChanged(BluetoothDevice, String)} will be called.
+     * Otherwise, the {@link PressureOneDataCallback#onInvalidDataReceived(BluetoothDevice, Data)}
      * will be called with the data received.
      */
-    private final PressureDataCallback mPressureCallback = new PressureDataCallback() {
+    private final PressureOneDataCallback mPressureOneCallback = new PressureOneDataCallback() {
         @Override
-        public void onPressureStateChanged(@NonNull final BluetoothDevice device,
-                                         final String pressed) {
+        public void onPressureOneStateChanged(@NonNull final BluetoothDevice device,
+                                              final String pressed) {
             log(LogContract.Log.Level.APPLICATION, "Pressure " + pressed);
-            mCallbacks.onPressureStateChanged(device, pressed);
+            mCallbacks.onPressureOneStateChanged(device, pressed);
         }
 
         @Override
@@ -206,6 +220,55 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
             log(Log.WARN, "Invalid data received: " + data);
         }
     };
+
+
+    /**
+     * The Button callback will be notified when a notification from Button characteristic
+     * has been received, or its data was read.
+     * <p>
+     * If the data received are valid (single byte equal to 0x00 or 0x01), the
+     * {@link PressureTwoDataCallback#onPressureTwoStateChanged(BluetoothDevice, String)} will be called.
+     * Otherwise, the {@link PressureTwoDataCallback#onInvalidDataReceived(BluetoothDevice, Data)}
+     * will be called with the data received.
+     */
+    private final PressureTwoDataCallback mPressureTwoCallback = new PressureTwoDataCallback() {
+        @Override
+        public void onPressureTwoStateChanged(@NonNull final BluetoothDevice device,
+                                              final String pressed) {
+            log(LogContract.Log.Level.APPLICATION, "Pressure " + pressed);
+            mCallbacks.onPressureOneStateChanged(device, pressed);
+        }
+
+        @Override
+        public void onInvalidDataReceived(@NonNull final BluetoothDevice device,
+                                          @NonNull final Data data) {
+            log(Log.WARN, "Invalid data received: " + data);
+        }
+    };
+    /**
+     * The Button callback will be notified when a notification from Button characteristic
+     * has been received, or its data was read.
+     * <p>
+     * If the data received are valid (single byte equal to 0x00 or 0x01), the
+     * {@link CalibratedDataCallback#onCalibratedStateChanged(BluetoothDevice, String)} will be called.
+     * Otherwise, the {@link CalibratedDataCallback#onInvalidDataReceived(BluetoothDevice, Data)}
+     * will be called with the data received.
+     */
+    private final CalibratedDataCallback mCalibratedCallback = new CalibratedDataCallback() {
+        @Override
+        public void onCalibratedStateChanged(@NonNull final BluetoothDevice device,
+                                           final String pressed) {
+            log(LogContract.Log.Level.APPLICATION, "Pressure " + pressed);
+            mCallbacks.onCalibratedStateChanged(device, pressed);
+        }
+
+        @Override
+        public void onInvalidDataReceived(@NonNull final BluetoothDevice device,
+                                          @NonNull final Data data) {
+            log(Log.WARN, "Invalid data received: " + data);
+        }
+    };
+
 
     /***
      * Method selects the appropriate Gatt Callback based on the class of the device
@@ -223,26 +286,38 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
             mGattCallback = new BleManagerGattCallback() {
                 @Override
                 protected void initialize() {
-                    setNotificationCallback(mPressureCharacteristic).with(mPressureCallback);
-                    readCharacteristic(mPressureCharacteristic).with(mPressureCallback).enqueue();
-                    enableNotifications(mPressureCharacteristic).enqueue();
+                    setNotificationCallback(mPressureOneCharacteristic).with(mPressureOneCallback);
+                    readCharacteristic(mPressureOneCharacteristic).with(mPressureOneCallback).enqueue();
+                    enableNotifications(mPressureOneCharacteristic).enqueue();
+
+                    setNotificationCallback(mPressureTwoCharacteristic).with(mPressureTwoCallback);
+                    readCharacteristic(mPressureTwoCharacteristic).with(mPressureTwoCallback).enqueue();
+                    enableNotifications(mPressureTwoCharacteristic).enqueue();
+
+                    setNotificationCallback(mCalibratedCharacteristic).with(mCalibratedCallback);
+                    readCharacteristic(mCalibratedCharacteristic).with(mCalibratedCallback).enqueue();
+                    enableNotifications(mCalibratedCharacteristic).enqueue();
                 }
 
                 @Override
                 public boolean isRequiredServiceSupported(@NonNull final BluetoothGatt gatt) {
                     final BluetoothGattService service = gatt.getService(SW_UUID_SERVICE);
                     if (service != null) {
-                        mPressureCharacteristic = service.getCharacteristic(SW_UUID_PRESSURE_CHAR);
+                        mPressureOneCharacteristic = service.getCharacteristic(SW_UUID_PRESSUREONE_CHAR);
+                        mPressureTwoCharacteristic = service.getCharacteristic(SW_UUID_PRESSURETWO_CHAR);
+                        mCalibratedCharacteristic = service.getCharacteristic(SW_UUID_CALIBRATED_CHAR);
                     }
 
-//                    mSupported = mPressureCharacteristic != null;
+//                    mSupported = mPressureOneCharacteristic != null;
                     mSupported = true;
                     return mSupported;
                 }
 
                 @Override
                 protected void onDeviceDisconnected() {
-                    mPressureCharacteristic = null;
+                    mPressureOneCharacteristic = null;
+                    mPressureTwoCharacteristic = null;
+                    mCalibratedCharacteristic = null;
                 }
             };
 
@@ -253,17 +328,20 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                 @Override
                 protected void initialize() {
                     setNotificationCallback(mPIRCharacteristic).with(mPIRCallback);
-
                     readCharacteristic(mPIRCharacteristic).with(mPIRCallback).enqueue();
-
                     enableNotifications(mPIRCharacteristic).enqueue();
+
+                    setNotificationCallback(mCalibratedCharacteristic).with(mCalibratedCallback);
+                    readCharacteristic(mCalibratedCharacteristic).with(mCalibratedCallback).enqueue();
+                    enableNotifications(mCalibratedCharacteristic).enqueue();
                 }
 
                 @Override
                 public boolean isRequiredServiceSupported(@NonNull final BluetoothGatt gatt) {
                     final BluetoothGattService service = gatt.getService(SW_UUID_SERVICE);
                     if (service != null) {
-                        mPIRCharacteristic = service.getCharacteristic(SW_UUID_PIR_CHAR);
+                        mPIRCharacteristic = service.getCharacteristic(SW_UUID_DEVICE_SIGNAL_STRENGTH_CHAR);
+                        mCalibratedCharacteristic = service.getCharacteristic(SW_UUID_CALIBRATED_CHAR);
                     }
 
 //                    mSupported = mPIRCharacteristic != null;
@@ -274,6 +352,7 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                 @Override
                 protected void onDeviceDisconnected() {
                     mPIRCharacteristic = null;
+                    mCalibratedCharacteristic = null;
                 }
             };
 
@@ -284,13 +363,16 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                 @Override
                 protected void initialize() {
                     setNotificationCallback(mDistanceOneCharacteristic).with(mDistanceOneCallback);
-                    setNotificationCallback(mDistanceTwoCharacteristic).with(mDistanceTwoCallback);
-
                     readCharacteristic(mDistanceOneCharacteristic).with(mDistanceOneCallback).enqueue();
-                    readCharacteristic(mDistanceTwoCharacteristic).with(mDistanceTwoCallback).enqueue();
-
                     enableNotifications(mDistanceOneCharacteristic).enqueue();
+
+                    setNotificationCallback(mDistanceTwoCharacteristic).with(mDistanceTwoCallback);
+                    readCharacteristic(mDistanceTwoCharacteristic).with(mDistanceTwoCallback).enqueue();
                     enableNotifications(mDistanceTwoCharacteristic).enqueue();
+
+                    setNotificationCallback(mCalibratedCharacteristic).with(mCalibratedCallback);
+                    readCharacteristic(mCalibratedCharacteristic).with(mCalibratedCallback).enqueue();
+                    enableNotifications(mCalibratedCharacteristic).enqueue();
                 }
 
                 @Override
@@ -299,6 +381,7 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                     if (service != null) {
                         mDistanceOneCharacteristic = service.getCharacteristic(SW_UUID_DISTONE_CHAR);
                         mDistanceTwoCharacteristic = service.getCharacteristic(SW_UUID_DISTTWO_CHAR);
+                        mCalibratedCharacteristic = service.getCharacteristic(SW_UUID_CALIBRATED_CHAR);
                     }
 
 //                    mSupported = mDistanceOneCharacteristic != null && mDistanceTwoCharacteristic != null;
@@ -310,6 +393,7 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                 protected void onDeviceDisconnected() {
                     mDistanceOneCharacteristic = null;
                     mDistanceTwoCharacteristic = null;
+                    mCalibratedCharacteristic = null;
                 }
             };
         }

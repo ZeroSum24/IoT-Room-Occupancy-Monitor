@@ -20,17 +20,21 @@
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package sonicwaves.android.iot_app.profile;
+package sonicwaves.android.iot_app.profile.callback;
 
-import no.nordicsemi.android.ble.BleManagerCallbacks;
-import sonicwaves.android.iot_app.profile.callback.CalibratedCallback;
-import sonicwaves.android.iot_app.profile.callback.DistanceOneCallback;
-import sonicwaves.android.iot_app.profile.callback.DistanceTwoCallback;
-import sonicwaves.android.iot_app.profile.callback.PIRCallback;
-import sonicwaves.android.iot_app.profile.callback.PressureOneCallback;
-import sonicwaves.android.iot_app.profile.callback.PressureTwoCallback;
+import android.bluetooth.BluetoothDevice;
 
-public interface BlinkyManagerCallbacks extends BleManagerCallbacks,
-		DistanceOneCallback, DistanceTwoCallback, PIRCallback, PressureOneCallback, PressureTwoCallback, CalibratedCallback {
-	// No more methods
+import androidx.annotation.NonNull;
+
+public interface PressureOneCallback {
+
+    /**
+     * Called when a pressure sensor was pressed or released on device.
+     *
+     * @param device the target device.
+     * @param pressed true if the button was pressed, false if released.
+     */
+//    void onPressureOneStateChanged(@NonNull final BluetoothDevice device, final boolean pressed);
+    void onPressureOneStateChanged(@NonNull final BluetoothDevice device, final String pressed);
+
 }

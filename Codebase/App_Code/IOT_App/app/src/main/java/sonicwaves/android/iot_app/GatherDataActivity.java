@@ -43,9 +43,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LifecycleRegistry;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -110,7 +107,7 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
 		app.setFirebaseHolder(viewModel.getFirebaseInfo(this, mDevices));
 
 		// update ui based on connection state
-		viewModel.getIsConnected().observe(this, connected -> {
+		viewModel.getIsConnectedMut().observe(this, connected -> {
             //update the values in the recycler view, representing the connection state
             int position = viewModel.getCurrentDeviceIndex();
 		    adapter.notifyItemChanged(position, connected);
