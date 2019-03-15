@@ -18,6 +18,7 @@ import dashboardStyle from "../assets/jss/material-dashboard-react/layouts/dashb
 
 import image from "../assets/img/sidebar-4.jpg";
 import logo from "../assets/img/sonicWavesIcon.png";
+import logoTextImg from "../assets/img/sonicWavesTransparentWhiteTitle.png"
 
 const switchRoutes = (
   <Switch>
@@ -95,6 +96,7 @@ class Dashboard extends React.Component {
           routes={routes}
           logoText={"Sonic Waves"}
           logo={logo}
+          logoTextImg={logoTextImg}
           image={this.state.image}
           handleDrawerToggle={this.handleDrawerToggle}
           open={this.state.mobileOpen}
