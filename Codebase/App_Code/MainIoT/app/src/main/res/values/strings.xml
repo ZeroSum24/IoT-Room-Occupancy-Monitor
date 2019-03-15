@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">MainIoT</string>
-    <string name="title_home">Devices</string>
-    <string name="title_dashboard">Gather Data</string>
-    <string name="title_notifications">Analytics</string>
-    <string name="title_activity_gather_data">GatherDataActivity</string>
-    <string name="title_activity_analytics">AnalyticsActivity</string>
-</resources>
