@@ -100,6 +100,14 @@ const sidebarStyle = theme => ({
     marginLeft: "10px",
     marginRight: "15px"
   },
+  logoTextImg: {
+    position: "inline-block",
+    paddingLeft: 15,
+    paddingTop: 10,
+    marginLeft: "40px",
+    height:"900%",
+    width:"400%",
+  },
   img: {
     width: "35px",
     top: "22px",
