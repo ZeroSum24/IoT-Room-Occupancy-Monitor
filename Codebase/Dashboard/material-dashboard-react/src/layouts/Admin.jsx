@@ -18,7 +18,7 @@ import dashboardStyle from "../assets/jss/material-dashboard-react/layouts/dashb
 
 import image from "../assets/img/sidebar-4.jpg";
 import logo from "../assets/img/sonicWavesIcon.png";
-import logoTextImg from "../assets/img/sonicWavesTransparentWhiteTitle.png"
+import logoTextImg from "../assets/img/sonicWavesTransparentTitle.png"
 
 const switchRoutes = (
   <Switch>
