@@ -411,23 +411,26 @@ public class SequentialViewModel {
                         //CHAIR readings update
                         Log.e(TAG, "chair here");
                         mViewModel.getmPressureOne().observe(lifecycleOwner,
-                                pressed -> readingsList.add(new Reading(PRESSURE, pressed)));
+                                pressed -> {Reading reading = (new Reading(device, PRESSURE, pressed));});
+
+                        mViewModel.getmPressureTwo().observe(lifecycleOwner,
+                                pressed -> {Reading reading = (new Reading(device, PRESSURE, pressed));});
 
                     } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
                         //TABLE readings update
 
                         mViewModel.getmPIR().observe(lifecycleOwner,
-                                tripped -> readingsList.add(new Reading(PIR, tripped)));
+                                tripped -> readingsList.add(new Reading(device, PIR, tripped)));
 
                     } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
                         //DOOR readings update
                         Log.e(TAG, "door here");
 
                         mViewModel.getmDistOne().observe(lifecycleOwner,
-                                tripped -> readingsList.add(new Reading(DIST_ONE, tripped)));
+                                tripped -> readingsList.add(new Reading(device, DIST_ONE, tripped)));
 
                         mViewModel.getmDistTwo().observe(lifecycleOwner,
-                                tripped -> readingsList.add(new Reading(DIST_TWO, tripped)));
+                                tripped -> readingsList.add(new Reading(device, DIST_TWO, tripped)));
                     }
 
                     if (readingsList.size() == 0) {

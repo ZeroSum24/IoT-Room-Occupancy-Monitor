@@ -114,8 +114,11 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
             int position = viewModel.getCurrentDeviceIndex();
 		    adapter.notifyItemChanged(position, connected);
 		    Log.e(TAG, "Device status: " + String.valueOf(connected));
-		    currentDeviceIndex++;
-			viewModel.iterateThroughDevices(this, mDevices.get(currentDeviceIndex));
+//
+//		    if (!connected) {
+//				currentDeviceIndex++;
+//				viewModel.iterateThroughDevices(this, mDevices.get(currentDeviceIndex));
+//			}
 		});
 		// initialise gather data button functionality
         initSendToFirebaseButton();
