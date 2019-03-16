@@ -29,23 +29,23 @@ const dashboardRoutes = [
   },
   {
     path: "/user",
-    name: "User Profile",
+    name: "Space Usage",
     rtlName: "ملف تعريفي للمستخدم",
-    icon: Person,
+    icon: BubbleChart,
     component: UserProfile,
     layout: "/admin"
   },
   {
     path: "/table",
-    name: "Table List",
+    name: "Occupancy Statistics",
     rtlName: "قائمة الجدول",
-    icon: "content_paste",
-    component: TableList,
+    icon: Person,
+    component: Icons,
     layout: "/admin"
   },
   {
     path: "/typography",
-    name: "Typography",
+    name: "Room Usage",
     rtlName: "طباعة",
     icon: LibraryBooks,
     component: Typography,
@@ -53,10 +53,10 @@ const dashboardRoutes = [
   },
   {
     path: "/icons",
-    name: "Icons",
+    name: "Tables List",
     rtlName: "الرموز",
-    icon: BubbleChart,
-    component: Icons,
+    icon: "content_paste",
+    component: TableList,
     layout: "/admin"
   },
   {
