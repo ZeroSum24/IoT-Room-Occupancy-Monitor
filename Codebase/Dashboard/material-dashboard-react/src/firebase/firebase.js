@@ -98,6 +98,16 @@ class Firebase {
       });
     });
   }
+
+  dbCurrentOccupancyRef = () => {
+    var ref = this.db.collection("data_visual").doc("current_occupancy");
+    return ref
+  }
+
+  dbHistoryInfoRef = () => {
+    var ref = this.db.collection("data_visual").doc("history_info");
+    return ref
+  }
 }
 
 export default Firebase;
