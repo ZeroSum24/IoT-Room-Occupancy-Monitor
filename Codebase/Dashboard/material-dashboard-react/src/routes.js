@@ -28,19 +28,19 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/user",
-    name: "Space Usage",
-    rtlName: "ملف تعريفي للمستخدم",
-    icon: BubbleChart,
-    component: UserProfile,
-    layout: "/admin"
-  },
-  {
     path: "/table",
     name: "Occupancy Statistics",
     rtlName: "قائمة الجدول",
     icon: Person,
     component: Icons,
+    layout: "/admin"
+  },
+  {
+    path: "/user",
+    name: "Space Usage",
+    rtlName: "ملف تعريفي للمستخدم",
+    icon: BubbleChart,
+    component: UserProfile,
     layout: "/admin"
   },
   {

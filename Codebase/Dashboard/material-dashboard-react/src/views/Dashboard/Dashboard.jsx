@@ -37,9 +37,9 @@ import { withFirebase } from '../../firebase';
 
 
 import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart
+  occupancyStatsChart,
+  spaceUsageChart,
+  roomUsageChart
 } from "../../variables/charts.jsx";
 
 import dashboardStyle from "../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
@@ -54,6 +54,9 @@ class Dashboard extends React.Component {
       chairsFreeContents: "49/50",
       mostPopularTimeContents: "12AM",
       totalOccupancyContents: "+234",
+      roomUsageData: [[23, 75, 45, 30, 28, 24, 20, 19]],
+      spaceUsageData: [[54, 43]],
+      occupancyStatsData: [[12, 17, 7, 17, 23, 18, 38]],
     };
   }
 
@@ -71,6 +74,15 @@ class Dashboard extends React.Component {
         this.setState({
           mostPopularTimeContents: doc.data()['most_popular_time'].toString(),
           totalOccupancyContents: ("+" + doc.data()['total_occupancy'].toString()),
+         });
+      });
+
+      this.props.firebase.db.collection("data-visual").doc("dashboard_charts").get().then(doc => {
+        console.log(doc.id, " => ", doc.data());
+        this.setState({
+          roomUsageData: [doc.data()['room_usage']],
+          spaceUsageData: [doc.data()['space_usage']],
+          occupancyStatsData: [doc.data()['occupancy_stats']],
          });
       });
     }
@@ -172,43 +184,18 @@ class Dashboard extends React.Component {
                 <CardHeader color="success">
                   <ChartistGraph
                     className="ct-chart"
-                    data={dailySalesChart.data}
+                    data={occupancyStatsChart(this.state.occupancyStatsData).data}
                     type="Line"
-                    options={dailySalesChart.options}
-                    listener={dailySalesChart.animation}
-                  />
-                </CardHeader>
-                <CardBody>
-                  <h4 className={classes.cardTitle}>Space Usage</h4>
-                  <p className={classes.cardCategory}>
-                    <span className={classes.successText}>
-                      <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                    </span>{" "}
-                    Whether people are standing or sitting
-                  </p>
-                </CardBody>
-                <CardFooter chart>
-                  <div className={classes.stats}>
-                    <AccessTime /> updated 4 minutes ago
-                  </div>
-                </CardFooter>
-              </Card>
-            </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-              <Card chart>
-                <CardHeader color="warning">
-                  <ChartistGraph
-                    className="ct-chart"
-                    data={emailsSubscriptionChart.data}
-                    type="Bar"
-                    options={emailsSubscriptionChart.options}
-                    responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                    listener={emailsSubscriptionChart.animation}
+                    options={occupancyStatsChart.options}
+                    listener={occupancyStatsChart.animation}
                   />
                 </CardHeader>
                 <CardBody>
                   <h4 className={classes.cardTitle}>Occupancy Statistics</h4>
                   <p className={classes.cardCategory}>
+                    <span className={classes.successText}>
+                      <ArrowUpward className={classes.upArrowCardCategory} /> 55%
+                    </span>{" "}
                     Most popular days of the week
                   </p>
                 </CardBody>
@@ -221,13 +208,38 @@ class Dashboard extends React.Component {
             </GridItem>
             <GridItem xs={12} sm={12} md={4}>
               <Card chart>
+                <CardHeader color="warning">
+                  <ChartistGraph
+                    className="ct-chart"
+                    data={spaceUsageChart(this.state.spaceUsageData).data}
+                    type="Bar"
+                    options={spaceUsageChart().options}
+                    responsiveOptions={spaceUsageChart().responsiveOptions}
+                    listener={spaceUsageChart().animation}
+                  />
+                </CardHeader>
+                <CardBody>
+                  <h4 className={classes.cardTitle}>Space Usage</h4>
+                  <p className={classes.cardCategory}>
+                    Whether people are standing or sitting
+                  </p>
+                </CardBody>
+                <CardFooter chart>
+                  <div className={classes.stats}>
+                    <AccessTime /> updated 4 minutes ago
+                  </div>
+                </CardFooter>
+              </Card>
+            </GridItem>
+            <GridItem xs={12} sm={12} md={4}>
+              <Card chart>
                 <CardHeader color="danger">
                   <ChartistGraph
                     className="ct-chart"
-                    data={completedTasksChart.data}
+                    data={roomUsageChart(this.state.roomUsageData).data}
                     type="Line"
-                    options={completedTasksChart.options}
-                    listener={completedTasksChart.animation}
+                    options={roomUsageChart().options}
+                    listener={roomUsageChart().animation}
                   />
                 </CardHeader>
                 <CardBody>
