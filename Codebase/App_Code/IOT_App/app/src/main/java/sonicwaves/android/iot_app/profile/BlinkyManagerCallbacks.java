@@ -26,12 +26,12 @@ import no.nordicsemi.android.ble.BleManagerCallbacks;
 import sonicwaves.android.iot_app.profile.callback.CalibratedCallback;
 import sonicwaves.android.iot_app.profile.callback.DistanceOneCallback;
 import sonicwaves.android.iot_app.profile.callback.DistanceTwoCallback;
-import sonicwaves.android.iot_app.profile.callback.PIRCallback;
+import sonicwaves.android.iot_app.profile.callback.DeviceSignalStrengthCallback;
 import sonicwaves.android.iot_app.profile.callback.PressureOneCallback;
 import sonicwaves.android.iot_app.profile.callback.PressureTwoCallback;
 import sonicwaves.android.iot_app.profile.callback.SetTimeCallback;
 
 public interface BlinkyManagerCallbacks extends BleManagerCallbacks,
-		DistanceOneCallback, DistanceTwoCallback, PIRCallback, PressureOneCallback, PressureTwoCallback, SetTimeCallback, CalibratedCallback {
+		DistanceOneCallback, DistanceTwoCallback, DeviceSignalStrengthCallback, PressureOneCallback, PressureTwoCallback, SetTimeCallback, CalibratedCallback {
 	// No more methods
 }

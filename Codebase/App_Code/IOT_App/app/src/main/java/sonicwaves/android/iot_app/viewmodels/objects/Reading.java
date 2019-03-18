@@ -29,7 +29,6 @@ public class Reading {
 
     private static final String TAG = "FirebaseUtils";
 
-    //    public Reading(String sensor, boolean activated) {
     public Reading(DiscoveredBluetoothDevice device, String sensor, String activated) {
         this.sensor = sensor;
         this.activated = statusValue(activated);

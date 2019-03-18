@@ -26,7 +26,7 @@ import android.bluetooth.BluetoothDevice;
 
 import androidx.annotation.NonNull;
 
-public interface PIRCallback {
+public interface DeviceSignalStrengthCallback {
 
     /**
      * Called when a PIR has a detected a person from a device.
