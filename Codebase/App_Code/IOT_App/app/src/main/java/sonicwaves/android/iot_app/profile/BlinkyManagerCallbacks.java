@@ -29,8 +29,9 @@ import sonicwaves.android.iot_app.profile.callback.DistanceTwoCallback;
 import sonicwaves.android.iot_app.profile.callback.PIRCallback;
 import sonicwaves.android.iot_app.profile.callback.PressureOneCallback;
 import sonicwaves.android.iot_app.profile.callback.PressureTwoCallback;
+import sonicwaves.android.iot_app.profile.callback.SetTimeCallback;
 
 public interface BlinkyManagerCallbacks extends BleManagerCallbacks,
-		DistanceOneCallback, DistanceTwoCallback, PIRCallback, PressureOneCallback, PressureTwoCallback, CalibratedCallback {
+		DistanceOneCallback, DistanceTwoCallback, PIRCallback, PressureOneCallback, PressureTwoCallback, SetTimeCallback, CalibratedCallback {
 	// No more methods
 }
