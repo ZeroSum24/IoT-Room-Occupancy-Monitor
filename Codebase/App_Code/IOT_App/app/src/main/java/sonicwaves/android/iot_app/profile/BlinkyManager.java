@@ -39,12 +39,11 @@ import no.nordicsemi.android.ble.data.Data;
 import sonicwaves.android.iot_app.profile.callback.CalibratedDataCallback;
 import sonicwaves.android.iot_app.profile.callback.DistanceDataOneCallback;
 import sonicwaves.android.iot_app.profile.callback.DistanceDataTwoCallback;
-import sonicwaves.android.iot_app.profile.callback.PIRDataCallback;
+import sonicwaves.android.iot_app.profile.callback.DeviceSignalStrengthDataCallback;
 import sonicwaves.android.iot_app.profile.callback.PressureOneDataCallback;
 import no.nordicsemi.android.log.LogContract;
 import no.nordicsemi.android.log.LogSession;
 import no.nordicsemi.android.log.Logger;
-import sonicwaves.android.iot_app.profile.callback.PressureTwoDataCallback;
 import sonicwaves.android.iot_app.profile.callback.SetTimeDataCallback;
 import sonicwaves.android.iot_app.viewmodels.objects.DeviceClass;
 
@@ -75,16 +74,16 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
      * PRESSURE ONE characteristic UUID.
      */
     private final static UUID SW_UUID_PRESSURE_CHAR = UUID.fromString("0000a004-0000-1000-8000-00805f9b34fb");
-    /**
-     * SETTIME characteristic UUID.
-     */
-    private final static UUID SW_UUID_SETTIME_CHAR = UUID.fromString("0000a008-0000-1000-8000-00805f9b34fb");
-    /**
-     * CALIBRATED characteristic UUID.
-     */
-    private final static UUID SW_UUID_CALIBRATED_CHAR = UUID.fromString("0000a009-0000-1000-8000-00805f9b34fb");
+//    /**
+//     * SETTIME characteristic UUID.
+//     */
+//    private final static UUID SW_UUID_SETTIME_CHAR = UUID.fromString("0000a008-0000-1000-8000-00805f9b34fb");
+//    /**
+//     * CALIBRATED characteristic UUID.
+//     */
+//    private final static UUID SW_UUID_CALIBRATED_CHAR = UUID.fromString("0000a009-0000-1000-8000-00805f9b34fb");
 
-    private BluetoothGattCharacteristic mPressureOneCharacteristic, mPressureTwoCharacteristic, mPIRCharacteristic, mDistanceOneCharacteristic,
+    private BluetoothGattCharacteristic mPressureOneCharacteristic, mPressureTwoCharacteristic, mDeviceSignalStrengthCharacteristic, mDistanceOneCharacteristic,
             mDistanceTwoCharacteristic, mSetTimeCharacteristic, mCalibratedCharacteristic;
     private LogSession mLogSession;
     private boolean mSupported;
@@ -127,11 +126,11 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
      * has been received, or its data was read.
      * <p>
      * If the data received are valid (single byte equal to 0x00 or 0x01), the
-     * {@link PIRDataCallback#onPIRStateChanged(BluetoothDevice, String)} will be called.
-     * Otherwise, the {@link PIRDataCallback#onInvalidDataReceived(BluetoothDevice, Data)}
+     * {@link DeviceSignalStrengthDataCallback#onPIRStateChanged(BluetoothDevice, String)} will be called.
+     * Otherwise, the {@link DeviceSignalStrengthDataCallback#onInvalidDataReceived(BluetoothDevice, Data)}
      * will be called with the data received.
      */
-    private final PIRDataCallback mPIRCallback = new PIRDataCallback() {
+    private final DeviceSignalStrengthDataCallback mPIRCallback = new DeviceSignalStrengthDataCallback() {
         @Override
         public void onPIRStateChanged(@NonNull final BluetoothDevice device,
                                       final String detected) {
@@ -330,8 +329,8 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                     if (service != null) {
                         mPressureOneCharacteristic = service.getCharacteristic(SW_UUID_PRESSURE_CHAR);
 //                        mPressureTwoCharacteristic = service.getCharacteristic(SW_UUID_PRESSURETWO_CHAR);
-                        mSetTimeCharacteristic = service.getCharacteristic(SW_UUID_SETTIME_CHAR);
-                        mCalibratedCharacteristic = service.getCharacteristic(SW_UUID_CALIBRATED_CHAR);
+//                        mSetTimeCharacteristic = service.getCharacteristic(SW_UUID_SETTIME_CHAR);
+//                        mCalibratedCharacteristic = service.getCharacteristic(SW_UUID_CALIBRATED_CHAR);
                     }
 
 //                    mSupported = mPressureOneCharacteristic != null;
@@ -343,8 +342,8 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                 protected void onDeviceDisconnected() {
                     mPressureOneCharacteristic = null;
 //                    mPressureTwoCharacteristic = null;
-                    mSetTimeCharacteristic = null;
-                    mCalibratedCharacteristic = null;
+//                    mSetTimeCharacteristic = null;
+//                    mCalibratedCharacteristic = null;
                 }
             };
 
@@ -354,38 +353,38 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
             mGattCallback = new BleManagerGattCallback() {
                 @Override
                 protected void initialize() {
-                    setNotificationCallback(mPIRCharacteristic).with(mPIRCallback);
-                    readCharacteristic(mPIRCharacteristic).with(mPIRCallback).enqueue();
-                    enableNotifications(mPIRCharacteristic).enqueue();
+                    setNotificationCallback(mDeviceSignalStrengthCharacteristic).with(mPIRCallback);
+                    readCharacteristic(mDeviceSignalStrengthCharacteristic).with(mPIRCallback).enqueue();
+                    enableNotifications(mDeviceSignalStrengthCharacteristic).enqueue();
 
-                    setNotificationCallback(mSetTimeCharacteristic).with(mSetTimeCallback);
-                    readCharacteristic(mSetTimeCharacteristic).with(mSetTimeCallback).enqueue();
-                    enableNotifications(mSetTimeCharacteristic).enqueue();
-
-                    setNotificationCallback(mCalibratedCharacteristic).with(mCalibratedCallback);
-                    readCharacteristic(mCalibratedCharacteristic).with(mCalibratedCallback).enqueue();
-                    enableNotifications(mCalibratedCharacteristic).enqueue();
+//                    setNotificationCallback(mSetTimeCharacteristic).with(mSetTimeCallback);
+//                    readCharacteristic(mSetTimeCharacteristic).with(mSetTimeCallback).enqueue();
+//                    enableNotifications(mSetTimeCharacteristic).enqueue();
+//
+//                    setNotificationCallback(mCalibratedCharacteristic).with(mCalibratedCallback);
+//                    readCharacteristic(mCalibratedCharacteristic).with(mCalibratedCallback).enqueue();
+//                    enableNotifications(mCalibratedCharacteristic).enqueue();
                 }
 
                 @Override
                 public boolean isRequiredServiceSupported(@NonNull final BluetoothGatt gatt) {
                     final BluetoothGattService service = gatt.getService(SW_UUID_SERVICE);
                     if (service != null) {
-                        mPIRCharacteristic = service.getCharacteristic(SW_UUID_DEVICE_SIGNAL_STRENGTH_CHAR);
-                        mSetTimeCharacteristic = service.getCharacteristic(SW_UUID_SETTIME_CHAR);
-                        mCalibratedCharacteristic = service.getCharacteristic(SW_UUID_CALIBRATED_CHAR);
+                        mDeviceSignalStrengthCharacteristic = service.getCharacteristic(SW_UUID_DEVICE_SIGNAL_STRENGTH_CHAR);
+//                        mSetTimeCharacteristic = service.getCharacteristic(SW_UUID_SETTIME_CHAR);
+//                        mCalibratedCharacteristic = service.getCharacteristic(SW_UUID_CALIBRATED_CHAR);
                     }
 
-//                    mSupported = mPIRCharacteristic != null;
+//                    mSupported = mDeviceSignalStrengthCharacteristic != null;
                     mSupported = true;
                     return mSupported;
                 }
 
                 @Override
                 protected void onDeviceDisconnected() {
-                    mPIRCharacteristic = null;
-                    mSetTimeCharacteristic = null;
-                    mCalibratedCharacteristic = null;
+                    mDeviceSignalStrengthCharacteristic = null;
+//                    mSetTimeCharacteristic = null;
+//                    mCalibratedCharacteristic = null;
                 }
             };
 
@@ -403,13 +402,13 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                     readCharacteristic(mDistanceTwoCharacteristic).with(mDistanceTwoCallback).enqueue();
                     enableNotifications(mDistanceTwoCharacteristic).enqueue();
 
-                    setNotificationCallback(mSetTimeCharacteristic).with(mSetTimeCallback);
-                    readCharacteristic(mSetTimeCharacteristic).with(mSetTimeCallback).enqueue();
-                    enableNotifications(mSetTimeCharacteristic).enqueue();
-
-                    setNotificationCallback(mCalibratedCharacteristic).with(mCalibratedCallback);
-                    readCharacteristic(mCalibratedCharacteristic).with(mCalibratedCallback).enqueue();
-                    enableNotifications(mCalibratedCharacteristic).enqueue();
+//                    setNotificationCallback(mSetTimeCharacteristic).with(mSetTimeCallback);
+//                    readCharacteristic(mSetTimeCharacteristic).with(mSetTimeCallback).enqueue();
+//                    enableNotifications(mSetTimeCharacteristic).enqueue();
+//
+//                    setNotificationCallback(mCalibratedCharacteristic).with(mCalibratedCallback);
+//                    readCharacteristic(mCalibratedCharacteristic).with(mCalibratedCallback).enqueue();
+//                    enableNotifications(mCalibratedCharacteristic).enqueue();
                 }
 
                 @Override
@@ -418,8 +417,8 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                     if (service != null) {
                         mDistanceOneCharacteristic = service.getCharacteristic(SW_UUID_DISTONE_CHAR);
                         mDistanceTwoCharacteristic = service.getCharacteristic(SW_UUID_DISTTWO_CHAR);
-                        mSetTimeCharacteristic = service.getCharacteristic(SW_UUID_SETTIME_CHAR);
-                        mCalibratedCharacteristic = service.getCharacteristic(SW_UUID_CALIBRATED_CHAR);
+//                        mSetTimeCharacteristic = service.getCharacteristic(SW_UUID_SETTIME_CHAR);
+//                        mCalibratedCharacteristic = service.getCharacteristic(SW_UUID_CALIBRATED_CHAR);
                     }
 
 //                    mSupported = mDistanceOneCharacteristic != null && mDistanceTwoCharacteristic != null;
@@ -431,8 +430,8 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                 protected void onDeviceDisconnected() {
                     mDistanceOneCharacteristic = null;
                     mDistanceTwoCharacteristic = null;
-                    mSetTimeCharacteristic = null;
-                    mCalibratedCharacteristic = null;
+//                    mSetTimeCharacteristic = null;
+//                    mCalibratedCharacteristic = null;
                 }
             };
         }
