@@ -73,6 +73,10 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 	// Pressed is true, Released is false
 	private final MutableLiveData<String> mPressureTwo = new MutableLiveData<>();
 
+    // Flag that holds the is SetTime state of the device on the devkit.
+    // Connected is true, NotConnected is false
+    private final MutableLiveData<String> setTime = new MutableLiveData<>();
+
 	// Flag that holds the is Calibrated state of the device on the devkit.
 	// Connected is true, NotConnected is false
 	private final MutableLiveData<String> isCalibrated = new MutableLiveData<>();
@@ -106,7 +110,9 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 
 	public MutableLiveData<String> getmPressureTwo() { return mPressureTwo; }
 
-	public MutableLiveData<String> getIsCalibrated() { return isCalibrated; }
+    public MutableLiveData<String> getSetTime() { return setTime; }
+
+    public MutableLiveData<String> getIsCalibrated() { return isCalibrated; }
 
 	public LiveData<Boolean> isSupported() {
 		return mIsSupported;
@@ -194,9 +200,14 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 		mPressureTwo.postValue(pressed);
 	}
 
+	@Override
+	public void onSetTimeStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
+		setTime.postValue(pressed);
+	}
+
 
 	@Override
-	public void onCalibratedStateChanged(@NonNull BluetoothDevice device, String pressed) {
+	public void onCalibratedStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
 		isCalibrated.postValue(pressed);
 	}
 

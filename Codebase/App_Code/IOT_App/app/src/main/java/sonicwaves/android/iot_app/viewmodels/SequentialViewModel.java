@@ -44,14 +44,14 @@ public class SequentialViewModel {
     /**
      * Iterate through all the devices and get their readings
      *
-     * @param activity application for the BlinkyViewModel
+     * @param activity     application for the BlinkyViewModel
      * @param dBDeviceList list of discovered bluetooth devices
      * @return true when all the devices are complete
      */
     public HashMap<DiscoveredBluetoothDevice, List<Reading>> iterateThroughDevices(Activity activity, List<DiscoveredBluetoothDevice> dBDeviceList) {
         HashMap<DiscoveredBluetoothDevice, List<Reading>> deviceReadings = new HashMap<>();
 
-        for (DiscoveredBluetoothDevice device: dBDeviceList) {
+        for (DiscoveredBluetoothDevice device : dBDeviceList) {
 
             device.setDeviceClass(new DeviceClass(device));
             currentDeviceIndex = dBDeviceList.indexOf(device);
@@ -76,24 +76,24 @@ public class SequentialViewModel {
      * Iterate through all the devices and get their readings
      *
      * @param activity application for the BlinkyViewModel
-     * @param device current discovered bluetooth devices
+     * @param device   current discovered bluetooth devices
      * @return true when all the devices are complete
      */
     public void iterateThroughDevices(Activity activity, DiscoveredBluetoothDevice device) {
 //        HashMap<DiscoveredBluetoothDevice, List<Reading>> deviceReadings = new HashMap<>();
 
 
-            device.setDeviceClass(new DeviceClass(device));
+        device.setDeviceClass(new DeviceClass(device));
 
-            //connect to further device
-            mViewModel = new BlinkyViewModel(activity.getApplication(), device.getDeviceClass());
-            lifecycleOwner = (LifecycleOwner) activity;
-            System.out.print("HERE1");
-            observeDeviceConnection(mViewModel);
-            System.out.print("HERE");
-            app = (ApplicationData) activity.getApplication();
-            readingsForClass(mViewModel, device);
-            // do something here
+        //connect to further device
+        mViewModel = new BlinkyViewModel(activity.getApplication(), device.getDeviceClass());
+        lifecycleOwner = (LifecycleOwner) activity;
+        System.out.print("HERE1");
+        observeDeviceConnection(mViewModel);
+        System.out.print("HERE");
+        app = (ApplicationData) activity.getApplication();
+        readingsForClass(mViewModel, device);
+        // do something here
 //            //Log.d(TAG, device.getName() + " " + device.getDeviceClass());
 //
 //            // add the device to the device readings
@@ -164,7 +164,7 @@ public class SequentialViewModel {
 
     /**
      * Method converts the readings from the chair sensors to the table object
-     *
+     * <p>
      * NB: Assuming the readings are order on arrival
      *
      * @param readingList a list of device readings
@@ -172,29 +172,29 @@ public class SequentialViewModel {
      */
     private Chair convertToChair(List<Reading> readingList) {
 
-        String initialTimestamp = readingList.get(0).getTimestamp();
+        String initialTimestamp = readingList.get(0).getAppTimestamp();
         String finalTimestamp = "";
         Chair chair = new Chair();
-        int i = 0 ;
+        int i = 0;
         int j;
 
         // iterate over all the readings in the table
-        while (i <= readingList.size()-1) {
+        while (i <= readingList.size() - 1) {
 
             Reading reading = readingList.get(i);
             String readingName = reading.getSensor();
             boolean isActivated = reading.isActivated();
             j = i;
 
-            while (j <= readingList.size()-1) {
+            while (j <= readingList.size() - 1) {
 
                 Reading comparedReading = readingList.get(j);
 
                 // sets the final timestamp for the reading
                 if (readingName.equals(readingList.get(j).getSensor())) {
 
-                    if (!comparedReading.isActivated()  && comparedReading.isActivated()!=isActivated) { //should always be true
-                        finalTimestamp = reading.getTimestamp();
+                    if (!comparedReading.isActivated() && comparedReading.isActivated() != isActivated) { //should always be true
+                        finalTimestamp = reading.getAppTimestamp();
                         chair.addDetection(new ChairDetection("001", initialTimestamp, finalTimestamp));
 
                         // remove the used readings from the list
@@ -213,7 +213,7 @@ public class SequentialViewModel {
 
     /**
      * Method converts the readings from the chair sensors to the table object
-     *
+     * <p>
      * NB: Assuming the readings are order on arrival
      *
      * @param readingList a list of device readings
@@ -221,29 +221,29 @@ public class SequentialViewModel {
      */
     private Door convertToDoor(List<Reading> readingList) {
 
-        String initialTimestamp = readingList.get(0).getTimestamp();
+        String initialTimestamp = readingList.get(0).getAppTimestamp();
         String finalTimestamp = "";
         Door door = new Door();
         int i = 0;
         int j;
 
         // iterate over all the readings in the table
-        while (i <= readingList.size()-1) {
+        while (i <= readingList.size() - 1) {
 
             Reading reading = readingList.get(i);
             String sensorName = reading.getSensor();
             boolean isActivated = reading.isActivated();
             j = i;
 
-            while (j <= readingList.size()-1) {
+            while (j <= readingList.size() - 1) {
 
                 Reading comparedReading = readingList.get(j);
 
                 // sets the final timestamp for the reading
                 if (sensorName.equals(readingList.get(j).getSensor())) {
 
-                    if (!comparedReading.isActivated()  && comparedReading.isActivated()!=isActivated) { //should always be true
-                        finalTimestamp = reading.getTimestamp();
+                    if (!comparedReading.isActivated() && comparedReading.isActivated() != isActivated) { //should always be true
+                        finalTimestamp = reading.getAppTimestamp();
 
                         door.addDetection(new DoorDetection(sensorName, initialTimestamp, finalTimestamp));
 
@@ -263,7 +263,7 @@ public class SequentialViewModel {
 
     /**
      * Method converts the readings from the table sensors to the table object
-     *
+     * <p>
      * NB: Assuming the readings are order on arrival
      *
      * @param readingList a list of device readings
@@ -271,29 +271,29 @@ public class SequentialViewModel {
      */
     private Table convertToTable(List<Reading> readingList) {
 
-        String initialTimestamp = readingList.get(0).getTimestamp();
+        String initialTimestamp = readingList.get(0).getAppTimestamp();
         String finalTimestamp = "";
         Table table = new Table();
         int i = 0;
         int j;
 
         // iterate over all the readings in the table
-        while (i <= readingList.size()-1) {
+        while (i <= readingList.size() - 1) {
 
             Reading reading = readingList.get(i);
             String readingName = reading.getSensor();
             boolean isActivated = reading.isActivated();
             j = i;
 
-            while (j <= readingList.size()-1) {
+            while (j <= readingList.size() - 1) {
 
                 Reading comparedReading = readingList.get(j);
 
                 // sets the final timestamp for the reading
                 if (readingName.equals(readingList.get(j).getSensor())) {
 
-                    if (!comparedReading.isActivated()  && comparedReading.isActivated()!=isActivated) { //should always be true
-                        finalTimestamp = reading.getTimestamp();
+                    if (!comparedReading.isActivated() && comparedReading.isActivated() != isActivated) { //should always be true
+                        finalTimestamp = reading.getAppTimestamp();
                         table.addDetection(new TableDetection(reading.getSensor(), initialTimestamp, finalTimestamp));
 
                         // remove the used readings from the list
@@ -317,137 +317,73 @@ public class SequentialViewModel {
             if (text != null) {
                 Log.d(TAG, text);
             }
-		});
+        });
 
         // watching the viewModel connection state
         mViewModel.isConnected().observe(lifecycleOwner, connected -> {
             isConnectedMut.setValue(connected);
             isConnected = connected;
-            Log.e("Reading watcher", connected.toString());});
+            Log.e("Reading watcher", connected.toString());
+        });
         //Log.d(TAG, String.valueOf(connected));
-        mViewModel.isSupported().observe(lifecycleOwner, supported -> {isSupported.setValue(supported);});
-        mViewModel.getIsCalibrated().observe(lifecycleOwner, calibrated -> {isCalibrated.setValue(calibrated);});
+        mViewModel.isSupported().observe(lifecycleOwner, supported -> {
+            isSupported.setValue(supported);
+        });
+        mViewModel.getIsCalibrated().observe(lifecycleOwner, calibrated -> {
+            isCalibrated.setValue(calibrated);
+        });
     }
 
     // Flag to determine if the device is connected
-    private void readingsForClass(BlinkyViewModel mViewModel, DiscoveredBluetoothDevice device){
+    private void readingsForClass(BlinkyViewModel mViewModel, DiscoveredBluetoothDevice device) {
         DeviceClass deviceClass = new DeviceClass(device);
         mViewModel.connect(device);
-
         System.out.print("Reading For Class");
 
-//        while(isConnected) {
-//        mViewModel.isConnected().observe(lifecycleOwner, connected -> {
-//            isConnectedMut.setValue(connected);
-//            isConnected = connected;
-//            Log.e("Reading watcher", connected.toString());
-//
-//            Log.e("Connected Reading", isConnected.toString());
-//
-//                isCalibrated.observe(lifecycleOwner, text -> {
-//                    if (text != null) {
-//                        Log.e("Calibrated Reading", text);
-//                    }
-//                });
-//
-//                System.out.print("Is Connected");
-//                if (deviceClass.getDeviceClass().equals(deviceClass.CHAIR)) {
-//                    //CHAIR readings update
-//                    Log.e(TAG, "chair here");
-//                    mViewModel.getmPressureOne().observe(lifecycleOwner,
-//                            pressed -> readingsList.add(new Reading(PRESSURE, pressed)));
-//
-//                } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
-//                    //TABLE readings update
-//
-//                    mViewModel.getmPIR().observe(lifecycleOwner,
-//                            tripped -> readingsList.add(new Reading(PIR, tripped)));
-//
-//                } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
-//                    //DOOR readings update
-//                    Log.e(TAG, "door here");
-//
-//                    mViewModel.getmDistOne().observe(lifecycleOwner,
-//                            tripped -> readingsList.add(new Reading(DIST_ONE, tripped)));
-//
-//                    mViewModel.getmDistTwo().observe(lifecycleOwner,
-//                            tripped -> readingsList.add(new Reading(DIST_TWO, tripped)));
-//                }
-//
-//                if (readingsList.size() == 0) {
-//                    Log.e(TAG, "No readings for device");
-//                } else {
-//                    //Log all readings
-//                    for (Reading reading : readingsList) {
-//                        if (reading != null) {
-//                            Log.e(TAG, reading.toString());
-//                        } else {
-//                            Log.e(TAG, "reading is null");
-//                        }
-//                    }
-//                }
-//        });
-//                // lag the ui thread
-//        try {
-//            while (isConnectedMut.getValue() == true) {
-//                Log.e("Reading", "still connnected");
-//            }
-//        }catch (NullPointerException e) {
-//            Log.e("Reading", e.toString());
-//        }
-//        Log.e("Connected Reading", isConnected.toString());
+        List<Reading> readingsList = new ArrayList<>();
 
+        if (deviceClass.getDeviceClass().equals(deviceClass.CHAIR)) {
+            //CHAIR readings update
+            Log.e(TAG, "chair here");
+            mViewModel.getmPressureOne().observe(lifecycleOwner,
+                    pressed -> {
+                        Reading reading = (new Reading(device, PRESSURE, pressed));
+                    });
 
-            isCalibrated.observe(lifecycleOwner, isCalibratedStr -> {
-                List<Reading> readingsList = new ArrayList<>();
+            mViewModel.getmPressureTwo().observe(lifecycleOwner,
+                    pressed -> {
+                        Reading reading = (new Reading(device, PRESSURE, pressed));
+                    });
 
-                System.out.print("Is Calibrated");
+        } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
+            //TABLE readings update
 
-                boolean isCalibrated = parseCalibrationString(isCalibratedStr);
-                if (!isCalibrated) {
-                    //temp here
+            mViewModel.getmPIR().observe(lifecycleOwner,
+                    tripped -> readingsList.add(new Reading(device, PIR, tripped)));
+
+        } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
+            //DOOR readings update
+            Log.e(TAG, "door here");
+
+            mViewModel.getmDistOne().observe(lifecycleOwner,
+                    tripped -> readingsList.add(new Reading(device, DIST_ONE, tripped)));
+
+            mViewModel.getmDistTwo().observe(lifecycleOwner,
+                    tripped -> readingsList.add(new Reading(device, DIST_TWO, tripped)));
+        }
+
+        if (readingsList.size() == 0) {
+            Log.e(TAG, "No readings for device");
+        } else {
+            //Log all readings
+            for (Reading reading : readingsList) {
+                if (reading != null) {
+                    Log.e(TAG, reading.toString());
                 } else {
-                    if (deviceClass.getDeviceClass().equals(deviceClass.CHAIR)) {
-                        //CHAIR readings update
-                        Log.e(TAG, "chair here");
-                        mViewModel.getmPressureOne().observe(lifecycleOwner,
-                                pressed -> {Reading reading = (new Reading(device, PRESSURE, pressed));});
-
-                        mViewModel.getmPressureTwo().observe(lifecycleOwner,
-                                pressed -> {Reading reading = (new Reading(device, PRESSURE, pressed));});
-
-                    } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
-                        //TABLE readings update
-
-                        mViewModel.getmPIR().observe(lifecycleOwner,
-                                tripped -> readingsList.add(new Reading(device, PIR, tripped)));
-
-                    } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
-                        //DOOR readings update
-                        Log.e(TAG, "door here");
-
-                        mViewModel.getmDistOne().observe(lifecycleOwner,
-                                tripped -> readingsList.add(new Reading(device, DIST_ONE, tripped)));
-
-                        mViewModel.getmDistTwo().observe(lifecycleOwner,
-                                tripped -> readingsList.add(new Reading(device, DIST_TWO, tripped)));
-                    }
-
-                    if (readingsList.size() == 0) {
-                        Log.e(TAG, "No readings for device");
-                    } else {
-                        //Log all readings
-                        for (Reading reading : readingsList) {
-                            if (reading != null) {
-                                Log.e(TAG, reading.toString());
-                            } else {
-                                Log.e(TAG, "reading is null");
-                            }
-                        }
-                    }
-
+                    Log.e(TAG, "reading is null");
                 }
-            });
+            }
+        }
 
     }
 
@@ -471,14 +407,16 @@ public class SequentialViewModel {
      * @return boolean to update the activated class variable
      */
     private boolean parseCalibrationString(String activated) {
-        Log.e("Reading", "reading here");
 
         boolean triggered = false;
 
         int status = activated.charAt(6) - 48;
         if (status == 1) {
-            triggered= true;
+            triggered = true;
         }
+        Log.e("Reading", "parseCalibration: " + String.valueOf(triggered));
+        Log.e("Reading", "parseCalibration: " + activated);
+
 
         return triggered;
     }
