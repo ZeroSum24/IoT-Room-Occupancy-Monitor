@@ -102,7 +102,7 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
         return mDistTwo;
     }
 
-    public MutableLiveData<String> getmPIR() {
+    public MutableLiveData<String> getmDeviceSignalStrength() {
         return mPIR;
     }
 
@@ -186,7 +186,7 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
     }
 
     @Override
-    public void onPIRStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
+    public void onDeviceSignalStrengthStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
         mPIR.postValue(pressed);
     }
 

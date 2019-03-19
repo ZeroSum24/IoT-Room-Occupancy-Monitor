@@ -33,7 +33,7 @@ public abstract class DeviceSignalStrengthDataCallback implements ProfileDataCal
 
     @Override
     public void onDataReceived(@NonNull final BluetoothDevice device, @NonNull final Data data) {
-        onPIRStateChanged(device, data.toString());
+        onDeviceSignalStrengthStateChanged(device, data.toString());
 
     }
 }

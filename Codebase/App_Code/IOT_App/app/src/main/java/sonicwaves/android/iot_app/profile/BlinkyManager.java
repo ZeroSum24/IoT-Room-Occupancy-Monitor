@@ -126,16 +126,16 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
      * has been received, or its data was read.
      * <p>
      * If the data received are valid (single byte equal to 0x00 or 0x01), the
-     * {@link DeviceSignalStrengthDataCallback#onPIRStateChanged(BluetoothDevice, String)} will be called.
+     * {@link DeviceSignalStrengthDataCallback#onDeviceSignalStrengthStateChanged(BluetoothDevice, String)} will be called.
      * Otherwise, the {@link DeviceSignalStrengthDataCallback#onInvalidDataReceived(BluetoothDevice, Data)}
      * will be called with the data received.
      */
-    private final DeviceSignalStrengthDataCallback mPIRCallback = new DeviceSignalStrengthDataCallback() {
+    private final DeviceSignalStrengthDataCallback deviceSignalStrengthCallback = new DeviceSignalStrengthDataCallback() {
         @Override
-        public void onPIRStateChanged(@NonNull final BluetoothDevice device,
-                                      final String detected) {
+        public void onDeviceSignalStrengthStateChanged(@NonNull final BluetoothDevice device,
+                                                       final String detected) {
             log(LogContract.Log.Level.APPLICATION, "PIR " + detected);
-            mCallbacks.onPIRStateChanged(device, detected);
+            mCallbacks.onDeviceSignalStrengthStateChanged(device, detected);
         }
 
         @Override
@@ -353,8 +353,8 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
             mGattCallback = new BleManagerGattCallback() {
                 @Override
                 protected void initialize() {
-                    setNotificationCallback(mDeviceSignalStrengthCharacteristic).with(mPIRCallback);
-                    readCharacteristic(mDeviceSignalStrengthCharacteristic).with(mPIRCallback).enqueue();
+                    setNotificationCallback(mDeviceSignalStrengthCharacteristic).with(deviceSignalStrengthCallback);
+                    readCharacteristic(mDeviceSignalStrengthCharacteristic).with(deviceSignalStrengthCallback).enqueue();
                     enableNotifications(mDeviceSignalStrengthCharacteristic).enqueue();
 
 //                    setNotificationCallback(mSetTimeCharacteristic).with(mSetTimeCallback);

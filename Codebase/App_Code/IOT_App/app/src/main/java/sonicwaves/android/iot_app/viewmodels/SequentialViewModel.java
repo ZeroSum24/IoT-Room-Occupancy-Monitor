@@ -36,7 +36,7 @@ public class SequentialViewModel {
 
     private final static String DIST_ONE = new Door().DIST_INTERNAL;
     private final static String DIST_TWO = new Door().DIST_EXTERNAL;
-    private final static String PIR = "PIR";
+    private final static String DEVICE_SIGNAL_STRENGTH = "DEVICE_SIGNAL_STRENGTH";
     private final static String PRESSURE = "Pressure";
     private ApplicationData app;
 
@@ -357,9 +357,10 @@ public class SequentialViewModel {
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
             //TABLE readings update
+            Log.e(TAG, "table here");
 
-            mViewModel.getmPIR().observe(lifecycleOwner,
-                    tripped -> readingsList.add(new Reading(device, PIR, tripped)));
+            mViewModel.getmDeviceSignalStrength().observe(lifecycleOwner,
+                    tripped -> readingsList.add(new Reading(device, DEVICE_SIGNAL_STRENGTH, tripped)));
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
             //DOOR readings update
