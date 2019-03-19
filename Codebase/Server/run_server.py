@@ -57,9 +57,9 @@ def get_firebase_data(db, name):
     if device == "chair":
         chair_calculations.chair_analysis(name, data)
     elif device == "table":
-        table_calculations.chair_analysis(name, data)
+        table_calculations.table_analysis(name, data)
     else: # device == door
-        door_calculations.chair_analysis(name, data)
+        door_calculations.table_analysis(name, data)
 
 
 def setFirebaseData():
