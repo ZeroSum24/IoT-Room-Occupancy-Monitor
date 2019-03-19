@@ -29,7 +29,7 @@ import androidx.annotation.NonNull;
 public interface DeviceSignalStrengthCallback {
 
     /**
-     * Called when a PIR has a detected a person from a device.
+     * Called when when the table device detects the chair rssi values.
      *
      * @param device the target device.
      * @param detected true if the button was pressed, false if released.

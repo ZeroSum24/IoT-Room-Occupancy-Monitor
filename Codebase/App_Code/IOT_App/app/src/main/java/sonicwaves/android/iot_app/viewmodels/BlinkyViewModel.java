@@ -63,7 +63,7 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 
     // Flag that holds the pressed released state of the pir sensor on the devkit.
     // Pressed is true, Released is false
-    private final MutableLiveData<String> mPIR = new MutableLiveData<>();
+    private final MutableLiveData<String> deviceSignalStrength = new MutableLiveData<>();
 
     // Flag that holds the pressed released state of the pressure sensor on the devkit.
     // Pressed is true, Released is false
@@ -103,7 +103,7 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
     }
 
     public MutableLiveData<String> getmDeviceSignalStrength() {
-        return mPIR;
+        return deviceSignalStrength;
     }
 
     public MutableLiveData<String> getmPressure() { return mPressureOne; }
@@ -187,7 +187,7 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
 
     @Override
     public void onDeviceSignalStrengthStateChanged(@NonNull final BluetoothDevice device, final String pressed) {
-        mPIR.postValue(pressed);
+        deviceSignalStrength.postValue(pressed);
     }
 
     @Override

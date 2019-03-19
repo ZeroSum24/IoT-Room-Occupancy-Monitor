@@ -349,6 +349,7 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
             // TABLE Callback
+            Log.e("Reading", "table gatt callback");
 
             mGattCallback = new BleManagerGattCallback() {
                 @Override
