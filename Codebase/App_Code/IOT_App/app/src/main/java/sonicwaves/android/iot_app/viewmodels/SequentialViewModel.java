@@ -358,17 +358,23 @@ public class SequentialViewModel {
             Log.e(TAG, "table here");
 
             mViewModel.getmDeviceSignalStrength().observe(lifecycleOwner,
-                    tripped -> {Reading reading = (new Reading(device, DEVICE_SIGNAL_STRENGTH, tripped, initTimestamp));});
+                    tripped -> {Log.e(TAG, "table observe");
+                        initTimestamp = parseInitTimestampString(tripped, initTimestamp, currentDate);
+                        Reading reading = (new Reading(device, DEVICE_SIGNAL_STRENGTH, tripped, initTimestamp));});
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
             //DOOR readings update
             Log.e(TAG, "door here");
 
             mViewModel.getmDistOne().observe(lifecycleOwner,
-                    tripped -> {Reading reading = (new Reading(device, DIST_ONE, tripped, initTimestamp));});
+                    tripped -> {
+                        initTimestamp = parseInitTimestampString(tripped, initTimestamp, currentDate);
+                        Reading reading = (new Reading(device, DIST_ONE, tripped, initTimestamp));});
 
             mViewModel.getmDistTwo().observe(lifecycleOwner,
-                    tripped -> {Reading reading = (new Reading(device, DIST_TWO, tripped, initTimestamp));});
+                    tripped -> {
+                        initTimestamp = parseInitTimestampString(tripped, initTimestamp, currentDate);
+                        Reading reading = (new Reading(device, DIST_TWO, tripped, initTimestamp));});
         }
 
     }
@@ -381,10 +387,6 @@ public class SequentialViewModel {
         return isConnectedMut;
     }
 
-    public MutableLiveData<Boolean> getIsSupported() {
-        return isSupported;
-    }
-
     /***
      * Parses the string given from the sensor reading into the appropriate values
      *
@@ -393,6 +395,7 @@ public class SequentialViewModel {
      * @return boolean to update the activated class variable
      */
     private Date parseInitTimestampString(String activated, Date initTimestamp, Date currentDate) {
+        Log.e(TAG, activated);
 
         String timestampStr;
         Date timestampOut;

@@ -17,7 +17,7 @@ import sonicwaves.android.iot_app.adapter.DiscoveredBluetoothDevice;
 
 public class Reading {
 
-    private boolean activated;
+    private Boolean activated;
     private String sensor_timestamp;
     private Date currentDate;
     private String app_timestamp;
@@ -32,7 +32,7 @@ public class Reading {
 
     public Reading(DiscoveredBluetoothDevice device, String sensor, String activated, Date initialDeviceTime) {
         this.sensor = sensor;
-        this.activated = statusValue(activated);
+        this.activated = null;
         this.currentDate = new Date();
         this.initialDeviceTime = initialDeviceTime;
         this.app_timestamp = formatDate(this.currentDate);
@@ -53,30 +53,38 @@ public class Reading {
 
         if (deviceClass.getDeviceClass().equals(deviceClass.CHAIR)) {
 
+            this.activated = statusValue(activated);
             data.put("sensor_name", this.sensor);
             data.put("activated", this.activated);
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
 
+            this.activated = statusValue(activated);
             data.put("sensor_name", this.sensor);
             data.put("activated", this.activated);
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
             //Iterate over all the sensor ids for the chairs
             // TODO check this works with a real table device
+            Log.e(TAG, "data update here");
 
-            activated = "(0x) 72-0E-00-00-72-0E-00-D5-72-0E-0f-30-26-0E-00-00-62-0E-13-20-72-0E-00-50-72-0E-D0-00";
-            int iterLen = activated.length()/4;
+            int iterLen = activated.length();
+            Log.e(TAG, activated.substring(11, 16));
 
-            for (int i = 8; i < iterLen; i+=8 ) {
-               String chairID = activated.substring(i, i+4);
-               String rssiVal = activated.substring(i+4, i+8);
+            // calculating the chair id
+            String chairID = activated.substring(14, 16) + activated.substring(11, 13);
+            Log.e(TAG, "chair hex id:" + chairID);
+            Log.e(TAG, "long chair val: " + String.valueOf(Long.parseLong(chairID, 16)));
 
-               Log.e(TAG, "iterLen: " + String.valueOf(iterLen) + " chairID: " + chairID + " rssiVal: " + rssiVal );
+            chairID = String.valueOf(Long.parseLong(chairID, 16));
 
-               int rssi = Integer.valueOf(rssiVal);
-               data.put(chairID, rssi);
-            }
+            String rssiVal = activated.substring(20, 22) + activated.substring(17, 19);
+            rssiVal = String.valueOf(Long.parseLong(rssiVal, 16));
+
+            Log.e(TAG, "iterLen: " + String.valueOf(iterLen) + " chairID: " + chairID + " rssiVal: " + rssiVal);
+
+            data.put(chairID, rssiVal);
+
         }
 
         return data;
@@ -86,7 +94,7 @@ public class Reading {
         DeviceClass deviceClass = device.getDeviceClass();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        String deviceName = device.getName().substring(0,16);
+        String deviceName = device.getName().substring(0, 16);
 
         if (deviceClass.getDeviceClass().equals(deviceClass.CHAIR)) {
             // Add a new document with a generated ID
@@ -136,11 +144,11 @@ public class Reading {
 
         boolean triggered = false;
 
-        int status = Integer.valueOf( activated.substring(12,13));
+        int status = Integer.valueOf(activated.substring(12, 13));
         if (status == 1) {
-            triggered= true;
+            triggered = true;
         }
-        Log.e(TAG, "status str: "+String.valueOf(status) + " " + String.valueOf(triggered));
+        Log.e(TAG, "status str: " + String.valueOf(status) + " " + String.valueOf(triggered));
 
         return triggered;
     }
@@ -156,13 +164,13 @@ public class Reading {
     private Date sensorTimestamp(String activated) {
         Log.e("Reading", "reading here");
 
-        String timestamp =  activated.substring(8,10) + activated.substring(5,7);
+        String timestamp = activated.substring(8, 10) + activated.substring(5, 7);
         long hexVal = Long.parseLong(timestamp, 16);
-        long secs = (this.initialDeviceTime.getTime()/1000);
+        long secs = (this.initialDeviceTime.getTime() / 1000);
         long sensorTimeLong = secs + hexVal;
-        Date sensorDate = new Date(sensorTimeLong*1000);
+        Date sensorDate = new Date(sensorTimeLong * 1000);
 
-        Log.e(TAG, "date: " + sensorDate.toString() + " timestamp: "+String.valueOf(timestamp)
+        Log.e(TAG, "date: " + sensorDate.toString() + " timestamp: " + String.valueOf(timestamp)
                 + " hexVal: " + String.valueOf(hexVal) + " secs: " + String.valueOf(secs)
                 + " sensorTime: " + String.valueOf(sensorTimeLong));
 
