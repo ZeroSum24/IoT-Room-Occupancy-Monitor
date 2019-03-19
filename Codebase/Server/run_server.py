@@ -8,17 +8,13 @@ import chair_calculations
 import door_calculations
 import table_calculations
 
-last_read_timestamps = {'SonicWaves-C-001': datetime.datetime(year=0), 'SonicWaves-C-002':datetime.datetime(year=0), 'SonicWaves-C-003':datetime.datetime(year=0),
-                        'SonicWaves-T-001': datetime.datetime(year=0), 'SonicWaves-T-002':datetime.datetime(year=0), 'SonicWaves-D-001':datetime.datetime(year=0)}
+from utils import parse_datetime
+
+last_read_timestamps = {'SonicWaves-C-001': datetime.datetime(year=datetime.MINYEAR, month=1, day=1), 'SonicWaves-C-002':datetime.datetime(year=datetime.MINYEAR, month=1, day=1), 'SonicWaves-C-003':datetime.datetime(year=datetime.MINYEAR, month=1, day=1),
+                        'SonicWaves-T-001': datetime.datetime(year=datetime.MINYEAR, month=1, day=1), 'SonicWaves-T-002':datetime.datetime(year=datetime.MINYEAR, month=1, day=1), 'SonicWaves-D-001':datetime.datetime(year=datetime.MINYEAR, month=1, day=1)}
 
 # Used for global access to firebase client
 db_pointer = None
-
-def parse_datetime(datetime_str):
-    date, time = datetime_str.split('_')
-    year, month, day = map(int, date.split('-'))
-    hour, minute, second, milli = map(int, time.split('-'))
-    return datetime.datetime(year, month, day, hour, minute, second, milli)
 
 def init_firestore():
     # Using a service account credentials to verify the user
@@ -26,38 +22,37 @@ def init_firestore():
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://iot-app-3386d.firebaseio.com'})
 
 
-def filter_sort_data(document: dict, last_timestamp, sensor_name):
+def filter_sort_data(documents, last_timestamp, sensor_name):
     data = []
-    largest_timestamp = datetime.datetime(year=0)
-    for data_timestamp in document.keys():
-        data_datetime = parse_datetime(data_timestamp)
+    largest_timestamp = datetime.datetime(year=datetime.MINYEAR, month=1, day=1)
+    for document in documents:
+        timestamp = document.id
+        doc = document.to_dict() 
+        data_datetime = parse_datetime(timestamp)
         if data_datetime > last_timestamp:
             if data_datetime > largest_timestamp:
                 largest_timestamp = data_datetime
-            data.append(document[data_timestamp])
+            data.append(doc)
     last_read_timestamps[sensor_name] = largest_timestamp
     return data
-
-
-
 
 
 def get_firebase_data(db, name):
     device = "None"
     if '-C-' in name:
-        ref = db.collection('chair_data').document(name).collection('detections')
+        ref = db_pointer.collection('chair_data').document(name).collection('detections')
         device = "chair"
     elif '-T-' in name:
-        ref = db.collection('table_data').document(name).collection('detections')
+        ref = db_pointer.collection('table_data').document(name).collection('detections')
         device = "table"
     elif '-D-' in name:
-        ref = db.collection('door_data').document(name).collection('detections')
+        ref = db_pointer.collection('door_data').document(name).collection('detections')
         device = "door"
     else:
         print("Did not recognize name of change")
         return
-    docs = ref.get().to_dict()
-
+    docs = ref.get()
+        
     data = filter_sort_data(docs, last_read_timestamps[name], name)
     if device == "chair":
         chair_calculations.chair_analysis(name, data)
