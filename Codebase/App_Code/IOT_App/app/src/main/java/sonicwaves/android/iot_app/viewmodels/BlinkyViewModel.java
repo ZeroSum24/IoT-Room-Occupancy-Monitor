@@ -106,7 +106,7 @@ public class BlinkyViewModel extends AndroidViewModel implements BlinkyManagerCa
         return mPIR;
     }
 
-    public MutableLiveData<String> getmPressureOne() { return mPressureOne; }
+    public MutableLiveData<String> getmPressure() { return mPressureOne; }
 
 	public MutableLiveData<String> getmPressureTwo() { return mPressureTwo; }
 

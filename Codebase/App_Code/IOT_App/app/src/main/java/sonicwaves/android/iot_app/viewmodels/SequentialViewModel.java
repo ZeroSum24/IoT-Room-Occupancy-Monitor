@@ -33,6 +33,7 @@ public class SequentialViewModel {
     private Boolean isConnected = true;
     private MutableLiveData<Boolean> isSupported = new MutableLiveData<>();
     private MutableLiveData<String> isCalibrated = new MutableLiveData<>();
+    private String initTimestamp = "";
 
     private final static String DIST_ONE = new Door().DIST_INTERNAL;
     private final static String DIST_TWO = new Door().DIST_EXTERNAL;
@@ -345,32 +346,33 @@ public class SequentialViewModel {
         if (deviceClass.getDeviceClass().equals(deviceClass.CHAIR)) {
             //CHAIR readings update
             Log.e(TAG, "chair here");
-            mViewModel.getmPressureOne().observe(lifecycleOwner,
+            mViewModel.getmPressure().observe(lifecycleOwner,
                     pressed -> {
-                        Reading reading = (new Reading(device, PRESSURE, pressed));
+                        initTimestamp = parseInitTimestampString(pressed, initTimestamp);
+                        Reading reading = (new Reading(device, PRESSURE, pressed, initTimestamp));
                     });
 
-            mViewModel.getmPressureTwo().observe(lifecycleOwner,
-                    pressed -> {
-                        Reading reading = (new Reading(device, PRESSURE, pressed));
-                    });
+//            mViewModel.getmPressureTwo().observe(lifecycleOwner,
+//                    pressed -> {
+//                        Reading reading = (new Reading(device, PRESSURE, pressed));
+//                    });
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
             //TABLE readings update
             Log.e(TAG, "table here");
 
             mViewModel.getmDeviceSignalStrength().observe(lifecycleOwner,
-                    tripped -> readingsList.add(new Reading(device, DEVICE_SIGNAL_STRENGTH, tripped)));
+                    tripped -> {Reading reading = (new Reading(device, DEVICE_SIGNAL_STRENGTH, tripped, initTimestamp));});
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
             //DOOR readings update
             Log.e(TAG, "door here");
 
             mViewModel.getmDistOne().observe(lifecycleOwner,
-                    tripped -> readingsList.add(new Reading(device, DIST_ONE, tripped)));
+                    tripped -> {Reading reading = (new Reading(device, DIST_ONE, tripped, initTimestamp));});
 
             mViewModel.getmDistTwo().observe(lifecycleOwner,
-                    tripped -> readingsList.add(new Reading(device, DIST_TWO, tripped)));
+                    tripped -> {Reading reading = (new Reading(device, DIST_TWO, tripped, initTimestamp));});
         }
 
         if (readingsList.size() == 0) {
@@ -407,18 +409,18 @@ public class SequentialViewModel {
      *
      * @return boolean to update the activated class variable
      */
-    private boolean parseCalibrationString(String activated) {
+    private String parseInitTimestampString(String activated, String timestamp) {
 
-        boolean triggered = false;
+        String timestampOut = "";
 
-        int status = activated.charAt(6) - 48;
-        if (status == 1) {
-            triggered = true;
+        if (timestamp == null) {
+            timestampOut = activated.substring(8, 10) + activated.substring(5, 7);
+
+        } else {
+            timestampOut = timestamp;
         }
-        Log.e("Reading", "parseCalibration: " + String.valueOf(triggered));
-        Log.e("Reading", "parseCalibration: " + activated);
 
-
-        return triggered;
+        return timestampOut;
     }
+
 }
