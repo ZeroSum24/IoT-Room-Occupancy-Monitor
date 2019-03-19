@@ -34,5 +34,5 @@ public interface DeviceSignalStrengthCallback {
      * @param device the target device.
      * @param detected true if the button was pressed, false if released.
      */
-    void onPIRStateChanged(@NonNull final BluetoothDevice device, final String detected);
+    void onDeviceSignalStrengthStateChanged(@NonNull final BluetoothDevice device, final String detected);
 }
