@@ -1,28 +1,33 @@
-
+from utils import calculate_time_diff
 
 # takes in chair id and a list of detections (which is a dictionary with each field value as the key)
+# assumes the readings list is ordered into true/false pairs based on the timestamp
 def chair_analysis(chair_id, readingsList):
 
-    cur_chairs = []
-    templateDict = {"initialTimestamp": "", "finalTimestamp": "", "duration": ""}
-    chair_usage = [{"initialTimestamp": "", "finalTimestamp": "", "duration": ""}]
-    sitting_count = len(cur_chairs)
+    currently_used = False
+    templateDict = {"initialTimestamp": "", "finalTimestamp": "", "duration": 0}
+    chair_usage = []
+    i = 0
 
-    while(i+1 < len(readingsList)) {
+    while(i < len(readingsList)-1) {
 
         if (readingsList[i]['activated'] && !readingsList[i+1]['activated']) {
             templateDict["initialTimestamp"] = readingsList[i]['timestamp']
             templateDict["finalTimestamp"] = readingsList[i+1]['timestamp']
 
-            duration = parseDateTime(readingsList[i+1]['timestamp']) - parseDateTime(readingsList[i]['timestamp'])
-            templateDict["duration"] = duration
-
+            templateDict["duration"] = calculate_time_diff(readingsList[i]['timestamp'], readingsList[i+1]['timestamp'])
             chair_usage.append(templateDict)
 
             # remove the used readings
             readingsList.remove(i)
             readingsList.remove(i+1)
         }
+        i+=1
     }
 
-    return (sitting_count, cur_chairs, chair_usage)
+    # if the last item does not have a pair and it is activated then it is currently_used
+    if (len(readingsList) == 1):
+        if (readingsList[0]['activated']):
+            currently_used = True
+
+    return (currently_used, chair_usage)
