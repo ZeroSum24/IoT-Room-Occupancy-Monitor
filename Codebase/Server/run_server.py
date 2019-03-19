@@ -29,7 +29,7 @@ def filter_sort_data(documents, last_timestamp, sensor_name):
         timestamp = document.id
         doc = document.to_dict() 
         data_datetime = parse_datetime(timestamp)
-        if data_datetime > last_timestamp:
+        if data_datetime >= last_timestamp:
             if data_datetime > largest_timestamp:
                 largest_timestamp = data_datetime
             data.append(doc)
