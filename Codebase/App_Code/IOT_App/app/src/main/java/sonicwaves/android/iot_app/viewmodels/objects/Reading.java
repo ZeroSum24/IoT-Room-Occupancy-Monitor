@@ -22,7 +22,7 @@ public class Reading {
     private Date currentDate;
     private String app_timestamp;
     private String sensor;
-    private long initialDeviceTime;
+    private Date initialDeviceTime;
 
     private static final String CHAIR_DATA = "chair_data";
     private static final String DOOR_DATA = "door_data";
@@ -30,11 +30,11 @@ public class Reading {
 
     private static final String TAG = "FirebaseUtils";
 
-    public Reading(DiscoveredBluetoothDevice device, String sensor, String activated, String initialDeviceTime) {
+    public Reading(DiscoveredBluetoothDevice device, String sensor, String activated, Date initialDeviceTime) {
         this.sensor = sensor;
         this.activated = statusValue(activated);
         this.currentDate = new Date();
-        this.initialDeviceTime = parseInitTimestamp(initialDeviceTime);
+        this.initialDeviceTime = initialDeviceTime;
         this.app_timestamp = formatDate(this.currentDate);
         this.sensor_timestamp = formatDate(sensorTimestamp(activated));
 
@@ -158,8 +158,8 @@ public class Reading {
 
         String timestamp =  activated.substring(8,10) + activated.substring(5,7);
         long hexVal = Long.parseLong(timestamp, 16);
-        long secs = this.initialDeviceTime;
-        long sensorTimeLong = secs - hexVal;
+        long secs = (this.initialDeviceTime.getTime()/1000);
+        long sensorTimeLong = secs + hexVal;
         Date sensorDate = new Date(sensorTimeLong*1000);
 
         Log.e(TAG, "date: " + sensorDate.toString() + " timestamp: "+String.valueOf(timestamp)
@@ -167,12 +167,6 @@ public class Reading {
                 + " sensorTime: " + String.valueOf(sensorTimeLong));
 
         return sensorDate;
-    }
-
-    private long parseInitTimestamp(String initialDeviceTime) {
-
-        long deviceSeconds = Long.parseLong(initialDeviceTime, 16);
-        return deviceSeconds;
     }
 
     @NonNull

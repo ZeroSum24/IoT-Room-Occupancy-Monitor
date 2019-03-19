@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +34,8 @@ public class SequentialViewModel {
     private Boolean isConnected = true;
     private MutableLiveData<Boolean> isSupported = new MutableLiveData<>();
     private MutableLiveData<String> isCalibrated = new MutableLiveData<>();
-    private String initTimestamp = "";
+    private Date initTimestamp;
+    private Date currentDate =  new Date();
 
     private final static String DIST_ONE = new Door().DIST_INTERNAL;
     private final static String DIST_TWO = new Door().DIST_EXTERNAL;
@@ -341,21 +343,15 @@ public class SequentialViewModel {
         mViewModel.connect(device);
         System.out.print("Reading For Class");
 
-        List<Reading> readingsList = new ArrayList<>();
 
         if (deviceClass.getDeviceClass().equals(deviceClass.CHAIR)) {
             //CHAIR readings update
             Log.e(TAG, "chair here");
             mViewModel.getmPressure().observe(lifecycleOwner,
                     pressed -> {
-                        initTimestamp = parseInitTimestampString(pressed, initTimestamp);
+                        initTimestamp = parseInitTimestampString(pressed, initTimestamp, currentDate);
                         Reading reading = (new Reading(device, PRESSURE, pressed, initTimestamp));
                     });
-
-//            mViewModel.getmPressureTwo().observe(lifecycleOwner,
-//                    pressed -> {
-//                        Reading reading = (new Reading(device, PRESSURE, pressed));
-//                    });
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
             //TABLE readings update
@@ -373,19 +369,6 @@ public class SequentialViewModel {
 
             mViewModel.getmDistTwo().observe(lifecycleOwner,
                     tripped -> {Reading reading = (new Reading(device, DIST_TWO, tripped, initTimestamp));});
-        }
-
-        if (readingsList.size() == 0) {
-            Log.e(TAG, "No readings for device");
-        } else {
-            //Log all readings
-            for (Reading reading : readingsList) {
-                if (reading != null) {
-                    Log.e(TAG, reading.toString());
-                } else {
-                    Log.e(TAG, "reading is null");
-                }
-            }
         }
 
     }
@@ -409,15 +392,25 @@ public class SequentialViewModel {
      *
      * @return boolean to update the activated class variable
      */
-    private String parseInitTimestampString(String activated, String timestamp) {
+    private Date parseInitTimestampString(String activated, Date initTimestamp, Date currentDate) {
 
-        String timestampOut = "";
+        String timestampStr;
+        Date timestampOut;
 
-        if (timestamp == null) {
-            timestampOut = activated.substring(8, 10) + activated.substring(5, 7);
+        if (initTimestamp == null) {
+            timestampStr = activated.substring(8, 10) + activated.substring(5, 7);
+            long hexVal = Long.parseLong(timestampStr, 16);
+            long secs = (currentDate.getTime())/1000;
+            long sensorTimeLong = secs - hexVal;
+            Date initSensorTime = new Date(sensorTimeLong*1000);
 
+            Log.e(TAG, "date: " + initSensorTime.toString() + " timestamp: "+String.valueOf(timestampStr)
+                    + " hexVal: " + String.valueOf(hexVal) + " secs: " + String.valueOf(secs)
+                    + " sensorTime: " + String.valueOf(sensorTimeLong));
+
+            timestampOut = initSensorTime;
         } else {
-            timestampOut = timestamp;
+            timestampOut = initTimestamp;
         }
 
         return timestampOut;
