@@ -32,7 +32,7 @@ function occupancyStatsChart(seriesIn) {
         right: 0,
         bottom: 0,
         left: 0
-      }
+      },
     },
     // for animation
     animation: {
