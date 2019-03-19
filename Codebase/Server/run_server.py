@@ -3,12 +3,22 @@ import firebase_admin
 import time
 from firebase_admin import credentials, db
 from firebase_admin import firestore
+import datetime
+import chair_calculations
+import door_calculations
+import table_calculations
 
-last_read_timestamps = {'SonicWaves-C-001': 0, 'SonicWaves-C-002':0, 'SonicWaves-C-003':0,
-                        'SonicWaves-T-001': 0, 'SonicWaves-T-002':0, 'SonicWaves-D-001': 0}
+last_read_timestamps = {'SonicWaves-C-001': datetime.datetime(year=0), 'SonicWaves-C-002':datetime.datetime(year=0), 'SonicWaves-C-003':datetime.datetime(year=0),
+                        'SonicWaves-T-001': datetime.datetime(year=0), 'SonicWaves-T-002':datetime.datetime(year=0), 'SonicWaves-D-001':datetime.datetime(year=0)}
 
 # Used for global access to firebase client
 db_pointer = None
+
+def parse_datetime(datetime_str):
+    date, time = datetime_str.split('_')
+    year, month, day = map(int, date.split('-'))
+    hour, minute, second, milli = map(int, time.split('-'))
+    return datetime.datetime(year, month, day, hour, minute, second, milli)
 
 def init_firestore():
     # Using a service account credentials to verify the user
@@ -16,22 +26,45 @@ def init_firestore():
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://iot-app-3386d.firebaseio.com'})
 
 
-def filter_sort_data(document: dict, timestamp):
-    print(document)
+def filter_sort_data(document: dict, last_timestamp, sensor_name):
+    data = []
+    largest_timestamp = datetime.datetime(year=0)
+    for data_timestamp in document.keys():
+        data_datetime = parse_datetime(data_timestamp)
+        if data_datetime > last_timestamp:
+            if data_datetime > largest_timestamp:
+                largest_timestamp = data_datetime
+            data.append(document[data_timestamp])
+    last_read_timestamps[sensor_name] = largest_timestamp
+    return data
+
+
+
 
 
 def get_firebase_data(db, name):
+    device = "None"
     if '-C-' in name:
-        ref = db.collection('chair_data').document(name)
+        ref = db.collection('chair_data').document(name).collection('detections')
+        device = "chair"
     elif '-T-' in name:
-        ref = db.collection('table_data').document(name)
+        ref = db.collection('table_data').document(name).collection('detections')
+        device = "table"
     elif '-D-' in name:
-        ref = db.collection('door_data').document(name)
+        ref = db.collection('door_data').document(name).collection('detections')
+        device = "door"
     else:
         print("Did not recognize name of change")
         return
     docs = ref.get().to_dict()
-    filter_sort_data(docs, last_read_timestamps[name])
+
+    data = filter_sort_data(docs, last_read_timestamps[name], name)
+    if device == "chair":
+        chair_calculations.chair_analysis(name, data)
+    elif device == "table":
+        table_calculations.chair_analysis(name, data)
+    else: # device == door
+        door_calculations.chair_analysis(name, data)
 
 
 def setFirebaseData():
@@ -86,7 +119,7 @@ def update_averages(value_dictionary, weeks=True):
         collection_names.append('24-0')
     for i in collection_names:
         for document_name in ['average_chair_count', 'average_missing_chairs', 'average_table_count', 'total_occupancy']:
-            collection = realtime_db.collection('data-visual').document('average_week').collection(i).document(
+            collection = db_pointer.collection('data-visual').document('average_week').collection(i).document(
                 document_name)
             values = collection.get().to_dict()
             average_count = values[document_name]
