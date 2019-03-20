@@ -15,6 +15,9 @@ import Paper from "@material-ui/core/Paper";
 import iconsStyle from "../../assets/jss/material-dashboard-react/views/iconsStyle.jsx";
 import BarGraph from "../../components/Graphs/BarGraph";
 
+import Firebase, { FirebaseContext } from '../../firebase';
+import { withFirebase } from '../../firebase';
+
 import {
   occupancyStatsChart,
   spaceUsageChart,
@@ -66,6 +69,17 @@ class OccupancyStatistics extends React.Component  {
     };
   }
 
+  componentDidMount() {
+      this.props.firebase.db.collection("data-visual").doc("dashboard_charts").get().then(doc => {
+        console.log(doc.id, " => ", doc.data());
+        this.setState({
+          roomUsageData: [doc.data()['room_usage']],
+          spaceUsageData: [doc.data()['space_usage']],
+          occupancyStatsData: [doc.data()['occupancy_stats']],
+         });
+      });
+    }
+
   handleChange = (event, value) => {
     this.setState({ value });
     // this.setState({xScale: ReactD3.time.scale().domain([extent[0], extent[1]]).range([0, 400 - 70])});
@@ -114,4 +128,4 @@ OccupancyStatistics.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(iconsStyle)(OccupancyStatistics);
+export default withFirebase(withStyles(iconsStyle)(OccupancyStatistics));
