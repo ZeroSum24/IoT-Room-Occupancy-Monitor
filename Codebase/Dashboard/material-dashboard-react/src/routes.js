@@ -9,10 +9,11 @@ import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
 import DashboardPage from "./views/Dashboard/Dashboard.jsx";
-import UserProfile from "./views/UserProfile/UserProfile.jsx";
+import SpaceUsage from "./views/SpaceUsage/SpaceUsage.jsx";
 import TableList from "./views/TableList/TableList.jsx";
-import Typography from "./views/Typography/Typography.jsx";
-import Icons from "./views/Icons/Icons.jsx";
+import RoomUsage from "./views/RoomUsage/RoomUsage.jsx";
+import OccupancyStatistics from "./views/OccupancyStatistics/OccupancyStatistics.jsx";
+import IssuesList from "./views/IssuesList/IssuesList.jsx";
 import Maps from "./views/Maps/Maps.jsx";
 import NotificationsPage from "./views/Notifications/Notifications.jsx";
 // core components/views for RTL layout
@@ -28,32 +29,32 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/table",
+    path: "/occupancy_statistics",
     name: "Occupancy Statistics",
     rtlName: "قائمة الجدول",
     icon: Person,
-    component: Icons,
+    component: OccupancyStatistics,
     layout: "/admin"
   },
   {
-    path: "/user",
+    path: "/space_usage",
     name: "Space Usage",
     rtlName: "ملف تعريفي للمستخدم",
     icon: BubbleChart,
-    component: UserProfile,
+    component: SpaceUsage,
     layout: "/admin"
   },
   {
-    path: "/typography",
+    path: "/room_usage",
     name: "Room Usage",
     rtlName: "طباعة",
     icon: LibraryBooks,
-    component: Typography,
+    component: RoomUsage,
     layout: "/admin"
   },
   {
-    path: "/icons",
-    name: "Tables List",
+    path: "/table_details",
+    name: "Table Details",
     rtlName: "الرموز",
     icon: "content_paste",
     component: TableList,
@@ -68,13 +69,13 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/notifications",
-    name: "Notifications",
-    rtlName: "إخطارات",
+    path: "/issues_list",
+    name: "Room Maintenance",
+    rtlName: "الرموز",
     icon: Notifications,
-    component: NotificationsPage,
+    component: IssuesList,
     layout: "/admin"
-  }
+  },
 ];
 
 export default dashboardRoutes;
