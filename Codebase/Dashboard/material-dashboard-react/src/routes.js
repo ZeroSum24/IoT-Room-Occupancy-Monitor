@@ -13,6 +13,7 @@ import SpaceUsage from "./views/SpaceUsage/SpaceUsage.jsx";
 import TableList from "./views/TableList/TableList.jsx";
 import RoomUsage from "./views/RoomUsage/RoomUsage.jsx";
 import OccupancyStatistics from "./views/OccupancyStatistics/OccupancyStatistics.jsx";
+import IssuesList from "./views/IssuesList/IssuesList.jsx";
 import Maps from "./views/Maps/Maps.jsx";
 import NotificationsPage from "./views/Notifications/Notifications.jsx";
 // core components/views for RTL layout
@@ -68,13 +69,13 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/notifications",
-    name: "Notifications",
-    rtlName: "إخطارات",
+    path: "/issues_list",
+    name: "Room Maintenance",
+    rtlName: "الرموز",
     icon: Notifications,
-    component: NotificationsPage,
+    component: IssuesList,
     layout: "/admin"
-  }
+  },
 ];
 
 export default dashboardRoutes;
