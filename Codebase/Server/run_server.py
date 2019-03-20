@@ -18,8 +18,21 @@ def init_firestore():
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://iot-app-3386d.firebaseio.com'})
 
 
-def filter_sort_data(document: dict, timestamp):
-    print(document)
+def filter_sort_data(documents, last_timestamp, sensor_name):
+    data = []
+    largest_timestamp = datetime.datetime(year=datetime.MINYEAR, month=1, day=1)
+    for document in documents:
+        timestamp = document.id
+        doc = document.to_dict()
+        data_datetime = parse_datetime(timestamp)
+        if data_datetime >= last_timestamp:
+            if data_datetime > largest_timestamp:
+                largest_timestamp = data_datetime
+            data.append((doc, data_datetime))
+    last_read_timestamps[sensor_name] = largest_timestamp
+    data = sorted(data, key=lambda x: x[1])
+    data = [x[0] for x in data]
+    return data
 
 
 def get_firebase_data(db, name):
