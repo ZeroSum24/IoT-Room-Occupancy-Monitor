@@ -13,7 +13,6 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import Paper from "@material-ui/core/Paper";
 
 import iconsStyle from "../../assets/jss/material-dashboard-react/views/iconsStyle.jsx";
-import BarGraph from "../../components/Graphs/BarGraph";
 
 import Firebase, { FirebaseContext } from '../../firebase';
 import { withFirebase } from '../../firebase';
