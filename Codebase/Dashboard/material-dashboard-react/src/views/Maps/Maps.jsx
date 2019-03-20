@@ -1,4 +1,7 @@
 import React from "react";
+
+import maps_api_key from "../../maps_api_key.json";
+
 import {
   withScriptjs,
   withGoogleMap,
@@ -6,11 +9,18 @@ import {
   Marker
 } from "react-google-maps";
 
+function jsonObjToMaps() {
+  var obj = JSON.parse(maps_api_key)
+  console.log("JSON msg", obj)
+
+  return obj['maps_api_key']
+}
+
 const CustomSkinMap = withScriptjs(
   withGoogleMap(props => (
     <GoogleMap
-      defaultZoom={13}
-      defaultCenter={{ lat: 40.748817, lng: -73.985428 }}
+      defaultZoom={16}
+      defaultCenter={{ lat: 55.944710, lng: -3.187690 }}
       defaultOptions={{
         scrollwheel: false,
         zoomControl: true,
@@ -76,15 +86,17 @@ const CustomSkinMap = withScriptjs(
         ]
       }}
     >
-      <Marker position={{ lat: 40.748817, lng: -73.985428 }} />
+      <Marker position={{ lat: 55.944710, lng: -3.187690 }} />
     </GoogleMap>
   ))
 );
 
 function Maps({ ...props }) {
+  const googleMapURL = "https://maps.googleapis.com/maps/api/js?key=" + maps_api_key['maps_api_key']
+  console.log(maps_api_key['maps_api_key'])
   return (
     <CustomSkinMap
-      googleMapURL="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"
+      googleMapURL= {googleMapURL}
       loadingElement={<div style={{ height: `100%` }} />}
       containerElement={<div style={{ height: `100vh` }} />}
       mapElement={<div style={{ height: `100%` }} />}

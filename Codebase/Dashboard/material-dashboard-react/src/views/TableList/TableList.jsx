@@ -30,7 +30,7 @@ import CardIcon from "../../components/Card/CardIcon.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 
-import { bugs, website, server } from "../../variables/general.jsx";
+import { issues, maintenance, digital } from "../../variables/general.jsx";
 
 import Firebase, { FirebaseContext } from '../../firebase';
 import { withFirebase } from '../../firebase';
@@ -40,7 +40,7 @@ import {
   occupancyStatsChart,
   spaceUsageChart,
   roomUsageChart
-} from "../../variables/charts.jsx";
+} from "../../variables/tableCharts.jsx";
 
 import dashboardStyle from "../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
@@ -50,9 +50,9 @@ class TableList extends React.Component {
     super(props);
 
     this.state = {
-      roomOccupancyContents: "23 ",
+      roomOccupancyContents: "1 ",
       chairsFreeContents: "49/50",
-      mostPopularTimeContents: "12AM",
+      mostPopularTimeContents: "Table 5 @ 12AM",
       totalOccupancyContents: "+234",
       roomUsageData: [[23, 75, 45, 30, 28, 24, 20, 19]],
       spaceUsageData: [[54, 43]],
@@ -61,30 +61,30 @@ class TableList extends React.Component {
   }
 
   componentDidMount() {
-      this.props.firebase.db.collection("data-visual").doc("current_occupancy").get().then(doc => {
-        console.log(doc.id, " => ", doc.data());
-        this.setState({
-          roomOccupancyContents: (doc.data()['occupants'].toString() + " "),
-          chairsFreeContents: (doc.data()['chairs'].toString()+"/3"),
-         });
-      });
-
-      this.props.firebase.db.collection("data-visual").doc("history_info").get().then(doc => {
-        console.log(doc.id, " => ", doc.data());
-        this.setState({
-          mostPopularTimeContents: doc.data()['most_popular_time'].toString(),
-          totalOccupancyContents: ("+" + doc.data()['total_occupancy'].toString()),
-         });
-      });
-
-      this.props.firebase.db.collection("data-visual").doc("dashboard_charts").get().then(doc => {
-        console.log(doc.id, " => ", doc.data());
-        this.setState({
-          roomUsageData: [doc.data()['room_usage']],
-          spaceUsageData: [doc.data()['space_usage']],
-          occupancyStatsData: [doc.data()['occupancy_stats']],
-         });
-      });
+      // this.props.firebase.db.collection("data-visual").doc("current_occupancy").get().then(doc => {
+      //   console.log(doc.id, " => ", doc.data());
+      //   this.setState({
+      //     roomOccupancyContents: (doc.data()['occupants'].toString() + " "),
+      //     chairsFreeContents: (doc.data()['chairs'].toString()+"/3"),
+      //    });
+      // });
+      //
+      // this.props.firebase.db.collection("data-visual").doc("history_info").get().then(doc => {
+      //   console.log(doc.id, " => ", doc.data());
+      //   this.setState({
+      //     mostPopularTimeContents: doc.data()['most_popular_time'].toString(),
+      //     totalOccupancyContents: ("+" + doc.data()['total_occupancy'].toString()),
+      //    });
+      // });
+      //
+      // this.props.firebase.db.collection("data-visual").doc("dashboard_charts").get().then(doc => {
+      //   console.log(doc.id, " => ", doc.data());
+      //   this.setState({
+      //     roomUsageData: [doc.data()['room_usage']],
+      //     spaceUsageData: [doc.data()['space_usage']],
+      //     occupancyStatsData: [doc.data()['occupancy_stats']],
+      //    });
+      // });
     }
 
   handleChange = (event, value) => {
@@ -100,15 +100,15 @@ class TableList extends React.Component {
     return (
         <div>
           <GridContainer>
-            <GridItem xs={12} sm={6} md={3}>
+            <GridItem xs={12} sm={6} md={4}>
               <Card>
                 <CardHeader color="warning" stats icon>
                   <CardIcon color="warning">
                     <Icon>content_copy</Icon>
                   </CardIcon>
-                  <p className={classes.cardCategory}>Room Occupancy</p>
+                  <p className={classes.cardCategory}>Current Chairs Free</p>
                   <h3 className={classes.cardTitle}>
-                    {this.state.roomOccupancyContents}<small>People</small>
+                    {this.state.roomOccupancyContents}<small>Chair</small>
                   </h3>
                 </CardHeader>
                 <CardFooter stats>
@@ -123,13 +123,13 @@ class TableList extends React.Component {
                 </CardFooter>
               </Card>
             </GridItem>
-            <GridItem xs={12} sm={6} md={3}>
+            <GridItem xs={12} sm={6} md={4}>
               <Card>
                 <CardHeader color="success" stats icon>
                   <CardIcon color="success">
                     <Store />
                   </CardIcon>
-                  <p className={classes.cardCategory}>Current Chairs Free</p>
+                  <p className={classes.cardCategory}>Missing Chairs</p>
                   <h3 className={classes.cardTitle}>
                   {this.state.chairsFreeContents}</h3>
                 </CardHeader>
@@ -141,13 +141,13 @@ class TableList extends React.Component {
                 </CardFooter>
               </Card>
             </GridItem>
-            <GridItem xs={12} sm={6} md={3}>
+            <GridItem xs={12} sm={6} md={4}>
                   <Card>
                     <CardHeader color="danger" stats icon>
                       <CardIcon color="danger">
                         <Icon>info_outline</Icon>
                       </CardIcon>
-                      <p className={classes.cardCategory}>Most Popular Time</p>
+                      <p className={classes.cardCategory}>Most Popular Table</p>
                       <h3 className={classes.cardTitle}>
                       {this.state.mostPopularTimeContents}</h3>
                     </CardHeader>
@@ -159,44 +159,26 @@ class TableList extends React.Component {
                     </CardFooter>
                   </Card>
             </GridItem>
-            <GridItem xs={12} sm={6} md={3}>
-              <Card>
-                <CardHeader color="info" stats icon>
-                  <CardIcon color="info">
-                    <Accessibility />
-                  </CardIcon>
-                  <p className={classes.cardCategory}>Total Room Usage</p>
-                  <h3 className={classes.cardTitle}>
-                  {this.state.totalOccupancyContents}</h3>
-                </CardHeader>
-                <CardFooter stats>
-                  <div className={classes.stats}>
-                    <Update />
-                    Just Updated
-                  </div>
-                </CardFooter>
-              </Card>
-            </GridItem>
           </GridContainer>
           <GridContainer>
-            <GridItem xs={12} sm={12} md={4}>
+            <GridItem xs={12} sm={12} md={6}>
               <Card chart>
                 <CardHeader color="success">
                   <ChartistGraph
                     className="ct-chart"
                     data={occupancyStatsChart(this.state.occupancyStatsData).data}
                     type="Line"
-                    options={occupancyStatsChart.options}
-                    listener={occupancyStatsChart.animation}
+                    options={occupancyStatsChart().options}
+                    listener={occupancyStatsChart().animation}
                   />
                 </CardHeader>
                 <CardBody>
-                  <h4 className={classes.cardTitle}>Occupancy Statistics</h4>
+                  <h4 className={classes.cardTitle}>Chair Usage Statistics</h4>
                   <p className={classes.cardCategory}>
                     <span className={classes.successText}>
                       <ArrowUpward className={classes.upArrowCardCategory} /> 55%
                     </span>{" "}
-                    Most popular days of the week
+                    Amount of chairs used across the week
                   </p>
                 </CardBody>
                 <CardFooter chart>
@@ -206,7 +188,7 @@ class TableList extends React.Component {
                 </CardFooter>
               </Card>
             </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
+            <GridItem xs={12} sm={12} md={6}>
               <Card chart>
                 <CardHeader color="warning">
                   <ChartistGraph
@@ -219,38 +201,14 @@ class TableList extends React.Component {
                   />
                 </CardHeader>
                 <CardBody>
-                  <h4 className={classes.cardTitle}>Space Usage</h4>
+                  <h4 className={classes.cardTitle}>Table Usage</h4>
                   <p className={classes.cardCategory}>
-                    Whether people are standing or sitting
+                    Which tables have been used most over the last week
                   </p>
                 </CardBody>
                 <CardFooter chart>
                   <div className={classes.stats}>
                     <AccessTime /> updated 4 minutes ago
-                  </div>
-                </CardFooter>
-              </Card>
-            </GridItem>
-            <GridItem xs={12} sm={12} md={4}>
-              <Card chart>
-                <CardHeader color="danger">
-                  <ChartistGraph
-                    className="ct-chart"
-                    data={roomUsageChart(this.state.roomUsageData).data}
-                    type="Line"
-                    options={roomUsageChart().options}
-                    listener={roomUsageChart().animation}
-                  />
-                </CardHeader>
-                <CardBody>
-                  <h4 className={classes.cardTitle}>Room Usage</h4>
-                  <p className={classes.cardCategory}>
-                    Most popular times of the day
-                  </p>
-                </CardBody>
-                <CardFooter chart>
-                  <div className={classes.stats}>
-                    <AccessTime /> campaign sent 2 days ago
                   </div>
                 </CardFooter>
               </Card>
