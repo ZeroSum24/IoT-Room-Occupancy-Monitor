@@ -32,8 +32,10 @@ def filter_sort_data(documents, last_timestamp, sensor_name):
         if data_datetime >= last_timestamp:
             if data_datetime > largest_timestamp:
                 largest_timestamp = data_datetime
-            data.append(doc)
+            data.append((doc, data_datetime))
     last_read_timestamps[sensor_name] = largest_timestamp
+    data = sorted(data, key=lambda x: x[1])
+    data = [x[0] for x in data]
     return data
 
 
@@ -57,7 +59,8 @@ def get_firebase_data(db, name):
     if device == "chair":
         chair_calculations.chair_analysis(name, data)
     elif device == "table":
-        table_calculations.table_analysis(name, data)
+        table_data = table_calculations.table_analysis(name, data)
+        table_calculations.set_tables(table_data)
     else: # device == door
         door_calculations.table_analysis(name, data)
 
