@@ -4,6 +4,8 @@ import time
 from firebase_admin import credentials, db
 from firebase_admin import firestore
 
+from chair_calculations import chair_analysis
+
 last_read_timestamps = {'SonicWaves-C-001': 0, 'SonicWaves-C-002':0, 'SonicWaves-C-003':0,
                         'SonicWaves-T-001': 0, 'SonicWaves-T-002':0, 'SonicWaves-D-001': 0}
 
@@ -30,8 +32,8 @@ def get_firebase_data(db, name):
     else:
         print("Did not recognize name of change")
         return
-    docs = ref.get().to_dict()
-    filter_sort_data(docs, last_read_timestamps[name])
+    docs = ref.get()
+    return filter_sort_data(docs, last_read_timestamps[name])
 
 
 def setFirebaseData():
@@ -56,9 +58,20 @@ def calculate_chair_position(timestamp):
 
 def chair_snapshot(chairs, changes, readTime):
     print("Chair Triggered!")
+    current_used_chairs = 0
+    chair_history = {}
     for doc in changes:
         print('In Snapshot {}'.format(doc.document.id))
-        get_firebase_data(db_pointer, doc.document.id)
+        chair_data = get_firebase_data(db_pointer, doc.document.id)
+        current_flag, chair_usage = chair_analysis(chair_data)
+        if current_flag:
+            current_used_chairs+=1
+        else not current_flag:
+            current_used_chairs-=1
+        chair_history["chair_id"] = chair_usage #TODO add in chair id
+
+    return (current_used_chairs, chair_history)
+    # TODO call data_visual to update the values there
 
 
 def table_snapshot(tables, changes, readTime):
@@ -68,7 +81,7 @@ def table_snapshot(tables, changes, readTime):
 
 
 def door_snapshot(doors, changes, readTime):
-    print("Chair Triggered!")
+    print("Door Triggered!")
     person_count = 0
     for doc in doors:
         print('{}'.format(doc.id))
