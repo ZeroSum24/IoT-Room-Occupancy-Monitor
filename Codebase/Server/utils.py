@@ -13,3 +13,7 @@ def calculate_time_diff(timestamp_one, timestamp_two):
     dateTimeTwo = parse_datetime(timestamp_two)
 
     return (abs(dateTimeOne-dateTimeTwo))
+
+def calculate_hour_bucket(datetime_obj):
+    hour = datetime_obj.hour
+    return str(hour) + '-' + str(hour+1)
