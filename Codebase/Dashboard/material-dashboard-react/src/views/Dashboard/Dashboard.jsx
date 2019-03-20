@@ -66,7 +66,7 @@ class Dashboard extends React.Component {
         this.setState({
           roomOccupancyContents: (doc.data()['occupants'].toString() + " "),
           chairsFreeContents: (doc.data()['chairs'].toString()+"/3"),
-         });
+        });
       });
 
       this.props.firebase.db.collection("data-visual").doc("history_info").get().then(doc => {
@@ -221,7 +221,7 @@ class Dashboard extends React.Component {
                 <CardBody>
                   <h4 className={classes.cardTitle}>Space Usage</h4>
                   <p className={classes.cardCategory}>
-                    Whether people are standing or sitting
+                    Whether people are standing or sitting in week
                   </p>
                 </CardBody>
                 <CardFooter chart>

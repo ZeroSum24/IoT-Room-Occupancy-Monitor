@@ -15,7 +15,7 @@ var delays2 = 80,
 // // // Daily Sales
 // #############################
 
-function occupancyStatsChart(seriesIn) {
+function chairUsageChart(seriesIn) {
   return {
     data: {
       labels: ["M", "T", "W", "T", "F", "S", "S"],
@@ -26,7 +26,7 @@ function occupancyStatsChart(seriesIn) {
         tension: 0
       }),
       low: 0,
-      high: 80, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+      high: 5, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
       chartPadding: {
         top: 0,
         right: 0,
@@ -71,12 +71,12 @@ function occupancyStatsChart(seriesIn) {
 // // // Email Subscriptions
 // #############################
 
-function spaceUsageChart(seriesIn) {
+function tableUsageChart(seriesIn) {
   return {
     data: {
       labels: [
-        "Stand",
-        "Sit",
+        "Table One",
+        "Table Two",
       ],
       series: seriesIn,
     },
@@ -85,7 +85,7 @@ function spaceUsageChart(seriesIn) {
         showGrid: false
       },
       low: 0,
-      high: 80,
+      high: 5,
       chartPadding: {
         top: 0,
         right: 5,
@@ -124,63 +124,7 @@ function spaceUsageChart(seriesIn) {
   };
 };
 
-// ##############################
-// // // Completed Tasks
-// #############################
-
-function roomUsageChart(seriesIn) {
-  return {
-    data: {
-      labels: ["12am", "3pm", "6pm", "9pm", "12pm", "3am", "6am", "9am"],
-      series: seriesIn,
-    },
-    options: {
-      lineSmooth: Chartist.Interpolation.cardinal({
-        tension: 0
-      }),
-      low: 0,
-      high: 80, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-      chartPadding: {
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0
-      }
-    },
-    animation: {
-      draw: function(data) {
-        if (data.type === "line" || data.type === "area") {
-          data.element.animate({
-            d: {
-              begin: 600,
-              dur: 700,
-              from: data.path
-                .clone()
-                .scale(1, 0)
-                .translate(0, data.chartRect.height())
-                .stringify(),
-              to: data.path.clone().stringify(),
-              easing: Chartist.Svg.Easing.easeOutQuint
-            }
-          });
-        } else if (data.type === "point") {
-          data.element.animate({
-            opacity: {
-              begin: (data.index + 1) * delays,
-              dur: durations,
-              from: 0,
-              to: 1,
-              easing: "ease"
-            }
-          });
-        }
-      }
-    }
-  }
-};
-
 module.exports = {
-  occupancyStatsChart,
-  spaceUsageChart,
-  roomUsageChart
+  chairUsageChart,
+  tableUsageChart
 };
