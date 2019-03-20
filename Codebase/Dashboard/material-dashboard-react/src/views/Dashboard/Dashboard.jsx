@@ -186,8 +186,8 @@ class Dashboard extends React.Component {
                     className="ct-chart"
                     data={occupancyStatsChart(this.state.occupancyStatsData).data}
                     type="Line"
-                    options={occupancyStatsChart.options}
-                    listener={occupancyStatsChart.animation}
+                    options={occupancyStatsChart().options}
+                    listener={occupancyStatsChart().animation}
                   />
                 </CardHeader>
                 <CardBody>

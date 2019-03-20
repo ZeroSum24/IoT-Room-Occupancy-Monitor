@@ -3,15 +3,9 @@ import firebase_admin
 import time
 from firebase_admin import credentials, db
 from firebase_admin import firestore
-import datetime
-import chair_calculations
-import door_calculations
-import table_calculations
 
-from utils import parse_datetime
-
-last_read_timestamps = {'SonicWaves-C-001': datetime.datetime(year=datetime.MINYEAR, month=1, day=1), 'SonicWaves-C-002':datetime.datetime(year=datetime.MINYEAR, month=1, day=1), 'SonicWaves-C-003':datetime.datetime(year=datetime.MINYEAR, month=1, day=1),
-                        'SonicWaves-T-001': datetime.datetime(year=datetime.MINYEAR, month=1, day=1), 'SonicWaves-T-002':datetime.datetime(year=datetime.MINYEAR, month=1, day=1), 'SonicWaves-D-001':datetime.datetime(year=datetime.MINYEAR, month=1, day=1)}
+last_read_timestamps = {'SonicWaves-C-001': 0, 'SonicWaves-C-002':0, 'SonicWaves-C-003':0,
+                        'SonicWaves-T-001': 0, 'SonicWaves-T-002':0, 'SonicWaves-D-001': 0}
 
 # Used for global access to firebase client
 db_pointer = None
@@ -40,16 +34,12 @@ def filter_sort_data(documents, last_timestamp, sensor_name):
 
 
 def get_firebase_data(db, name):
-    device = "None"
     if '-C-' in name:
-        ref = db_pointer.collection('chair_data').document(name).collection('detections')
-        device = "chair"
+        ref = db.collection('chair_data').document(name)
     elif '-T-' in name:
-        ref = db_pointer.collection('table_data').document(name).collection('detections')
-        device = "table"
+        ref = db.collection('table_data').document(name)
     elif '-D-' in name:
-        ref = db_pointer.collection('door_data').document(name).collection('detections')
-        device = "door"
+        ref = db.collection('door_data').document(name)
     else:
         print("Did not recognize name of change")
         return
@@ -100,8 +90,18 @@ def table_snapshot(tables, changes, readTime):
 
 def door_snapshot(doors, changes, readTime):
     print("Chair Triggered!")
+    person_count = 0
     for doc in doors:
         print('{}'.format(doc.id))
+        # make a count of the latest people in the room
+        # TODO need to pull the values in data_visual and update them with this new count
+        door_data = get_firebase_data(db_pointer, doc.document.id)
+        if door_data['activated']:
+            person_count+=1
+        else not door_data['activated']:
+            person_count-=1
+
+def make_timestamp_pairs():
 
 
 def update_averages(value_dictionary, weeks=True):
@@ -117,7 +117,7 @@ def update_averages(value_dictionary, weeks=True):
         collection_names.append('24-0')
     for i in collection_names:
         for document_name in ['average_chair_count', 'average_missing_chairs', 'average_table_count', 'total_occupancy']:
-            collection = db_pointer.collection('data-visual').document('average_week').collection(i).document(
+            collection = realtime_db.collection('data-visual').document('average_week').collection(i).document(
                 document_name)
             values = collection.get().to_dict()
             average_count = values[document_name]

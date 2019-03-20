@@ -3,7 +3,7 @@
 def table_analysis(table_id, readingsList):
     registered_chairs = {'chair1': 0, 'chair2': 0, 'chair3': 0}
     final_reading = readingsList[len(readingsList)-1]
-    
+
 
     for reading in readingsList:
         
@@ -15,7 +15,7 @@ def table_analysis(table_id, readingsList):
     return current_chairs, historical_chairs
 
 def set_tables(chair_dict):
-    
+    pass
         
 
 
