@@ -37,9 +37,8 @@ import { withFirebase } from '../../firebase';
 
 
 import {
-  occupancyStatsChart,
-  spaceUsageChart,
-  roomUsageChart
+  chairUsageChart,
+  tableUsageChart,
 } from "../../variables/tableCharts.jsx";
 
 import dashboardStyle from "../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
@@ -50,41 +49,43 @@ class TableList extends React.Component {
     super(props);
 
     this.state = {
-      roomOccupancyContents: "1 ",
-      chairsFreeContents: "49/50",
-      mostPopularTimeContents: "Table 5 - 12AM",
-      totalOccupancyContents: "+234",
-      roomUsageData: [[23, 75, 45, 30, 28, 24, 20, 19]],
-      spaceUsageData: [[54, 43]],
-      occupancyStatsData: [[12, 17, 7, 17, 23, 18, 38]],
+      chairsFreeContents: "1 ",
+      missingChairs: "1/3",
+      mostPopularTable: "Table 5 - 12AM",
+      chair_plural: "Chair",
+      chairUsageData: [[12, 17, 7, 17, 23, 18, 38]],
+      tableUsageData: [[54, 43]],
     };
   }
 
   componentDidMount() {
-      // this.props.firebase.db.collection("data-visual").doc("current_occupancy").get().then(doc => {
-      //   console.log(doc.id, " => ", doc.data());
-      //   this.setState({
-      //     roomOccupancyContents: (doc.data()['occupants'].toString() + " "),
-      //     chairsFreeContents: (doc.data()['chairs'].toString()+"/3"),
-      //    });
-      // });
+      this.props.firebase.db.collection("data-visual").doc("current_occupancy").get().then(doc => {
+        console.log(doc.id, " => ", doc.data());
+        let chairName = "Chair";
+        if (doc.data()['chairs'] > 1 || doc.data()['chairs'] === 0) {
+          chairName = "Chairs"
+        }
+        this.setState({
+          chairsFreeContents: (doc.data()['chairs'].toString() + " "),
+          missingChairs: (doc.data()['missing_chairs'].toString()+"/3"),
+          chair_plural: chairName,
+         });
+      });
       //
-      // this.props.firebase.db.collection("data-visual").doc("history_info").get().then(doc => {
-      //   console.log(doc.id, " => ", doc.data());
-      //   this.setState({
-      //     mostPopularTimeContents: doc.data()['most_popular_time'].toString(),
-      //     totalOccupancyContents: ("+" + doc.data()['total_occupancy'].toString()),
-      //    });
-      // });
-      //
-      // this.props.firebase.db.collection("data-visual").doc("dashboard_charts").get().then(doc => {
-      //   console.log(doc.id, " => ", doc.data());
-      //   this.setState({
-      //     roomUsageData: [doc.data()['room_usage']],
-      //     spaceUsageData: [doc.data()['space_usage']],
-      //     occupancyStatsData: [doc.data()['occupancy_stats']],
-      //    });
-      // });
+      this.props.firebase.db.collection("data-visual").doc("history_info").get().then(doc => {
+        console.log(doc.id, " => ", doc.data());
+        this.setState({
+          mostPopularTable: doc.data()['most_popular_table'].toString(),
+         });
+      });
+
+      this.props.firebase.db.collection("data-visual").doc("dashboard_charts").get().then(doc => {
+        console.log(doc.id, " => ", doc.data());
+        this.setState({
+          chairUsageData: [doc.data()['chair_stats']],
+          tableUsageData: [doc.data()['table_stats']],
+         });
+      });
     }
 
   handleChange = (event, value) => {
@@ -108,7 +109,7 @@ class TableList extends React.Component {
                   </CardIcon>
                   <p className={classes.cardCategory}>Current Chairs Free</p>
                   <h3 className={classes.cardTitle}>
-                    {this.state.roomOccupancyContents}<small>Chair</small>
+                    {this.state.chairsFreeContents}<small>{this.state.chair_plural}</small>
                   </h3>
                 </CardHeader>
                 <CardFooter stats>
@@ -131,7 +132,7 @@ class TableList extends React.Component {
                   </CardIcon>
                   <p className={classes.cardCategory}>Missing Chairs</p>
                   <h3 className={classes.cardTitle}>
-                  {this.state.chairsFreeContents}</h3>
+                  {this.state.missingChairs}</h3>
                 </CardHeader>
                 <CardFooter stats>
                   <div className={classes.stats}>
@@ -149,7 +150,7 @@ class TableList extends React.Component {
                       </CardIcon>
                       <p className={classes.cardCategory}>Most Popular Table</p>
                       <h3 className={classes.cardTitle}>
-                      {this.state.mostPopularTimeContents}</h3>
+                      {this.state.mostPopularTable}</h3>
                     </CardHeader>
                     <CardFooter stats>
                       <div className={classes.stats}>
@@ -166,10 +167,10 @@ class TableList extends React.Component {
                 <CardHeader color="success">
                   <ChartistGraph
                     className="ct-chart"
-                    data={occupancyStatsChart(this.state.occupancyStatsData).data}
+                    data={chairUsageChart(this.state.chairUsageData).data}
                     type="Line"
-                    options={occupancyStatsChart().options}
-                    listener={occupancyStatsChart().animation}
+                    options={chairUsageChart().options}
+                    listener={chairUsageChart().animation}
                   />
                 </CardHeader>
                 <CardBody>
@@ -193,11 +194,11 @@ class TableList extends React.Component {
                 <CardHeader color="warning">
                   <ChartistGraph
                     className="ct-chart"
-                    data={spaceUsageChart(this.state.spaceUsageData).data}
+                    data={tableUsageChart(this.state.tableUsageData).data}
                     type="Bar"
-                    options={spaceUsageChart().options}
-                    responsiveOptions={spaceUsageChart().responsiveOptions}
-                    listener={spaceUsageChart().animation}
+                    options={tableUsageChart().options}
+                    responsiveOptions={tableUsageChart().responsiveOptions}
+                    listener={tableUsageChart().animation}
                   />
                 </CardHeader>
                 <CardBody>
