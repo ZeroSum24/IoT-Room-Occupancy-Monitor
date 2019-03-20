@@ -79,7 +79,7 @@ def chair_snapshot(chairs, changes, readTime):
         current_flag, chair_usage = chair_analysis(chair_data)
         if current_flag:
             current_used_chairs+=1
-        else not current_flag:
+        else:
             current_used_chairs-=1
         chair_history["chair_id"] = chair_usage #TODO add in chair id
 
@@ -103,7 +103,7 @@ def door_snapshot(doors, changes, readTime):
         door_data = get_firebase_data(db_pointer, doc.document.id)
         if door_data['activated']:
             person_count+=1
-        else not door_data['activated']:
+        else:
             person_count-=1
 
 def make_timestamp_pairs():
