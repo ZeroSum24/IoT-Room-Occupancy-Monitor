@@ -57,128 +57,122 @@ import sonicwaves.android.iot_app.utils.Utils;
 import sonicwaves.android.iot_app.viewmodels.SequentialViewModel;
 import sonicwaves.android.iot_app.viewmodels.objects.Reading;
 
-public class GatherDataActivity extends AppCompatActivity implements GatherDataDevicesAdapter.OnItemClickListener{
-	private static final int REQUEST_ACCESS_COARSE_LOCATION = 1022; // random number
+public class GatherDataActivity extends AppCompatActivity implements GatherDataDevicesAdapter.OnItemClickListener {
+    private static final int REQUEST_ACCESS_COARSE_LOCATION = 1022; // random number
 
     private List<DiscoveredBluetoothDevice> mDevices;
     private SequentialViewModel viewModel = new SequentialViewModel();
     private ApplicationData app;
-	private Map<DiscoveredBluetoothDevice, List<Reading>> deviceReadings;
-//    private LifecycleRegistry lifecycleRegistry;
+    private Map<DiscoveredBluetoothDevice, List<Reading>> deviceReadings;
+    //    private LifecycleRegistry lifecycleRegistry;
     private final static String TAG = "GatherDataActivity";
     private int currentDeviceIndex = 0;
 
-    @BindView(R.id.state_scanning) View mScanningView;
-	@BindView(R.id.no_devices)View mEmptyView;
-	@BindView(R.id.no_location_permission) View mNoLocationPermissionView;
-	@BindView(R.id.action_grant_location_permission) Button mGrantPermissionButton;
-	@BindView(R.id.action_permission_settings) Button mPermissionSettingsButton;
-	@BindView(R.id.no_location)	View mNoLocationView;
-	@BindView(R.id.bluetooth_off) View mNoBluetoothView;
-	@BindView(R.id.gatherDataButton) Button gatherDataButton;
+    @BindView(R.id.state_scanning)
+    View mScanningView;
+    @BindView(R.id.no_devices)
+    View mEmptyView;
+    @BindView(R.id.no_location_permission)
+    View mNoLocationPermissionView;
+    @BindView(R.id.action_grant_location_permission)
+    Button mGrantPermissionButton;
+    @BindView(R.id.action_permission_settings)
+    Button mPermissionSettingsButton;
+    @BindView(R.id.no_location)
+    View mNoLocationView;
+    @BindView(R.id.bluetooth_off)
+    View mNoBluetoothView;
+    @BindView(R.id.gatherDataButton)
+    Button gatherDataButton;
 
 
-	@Override
-	protected void onCreate(@Nullable final Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_scanner);
-		ButterKnife.bind(this);
+    @Override
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_scanner);
+        ButterKnife.bind(this);
 
-		final Toolbar toolbar = findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
-		getSupportActionBar().setTitle(R.string.gatherDataActivity);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.gatherDataActivity);
 
         // Get data from the Scanner Activity
         app = (ApplicationData) getApplicationContext();
         mDevices = app.getDevices();
 
-		// Configure the recycler view
-		final RecyclerView recyclerView = findViewById(R.id.recycler_view_ble_devices);
-		recyclerView.setLayoutManager(new LinearLayoutManager(this));
-		recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-		((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-		final GatherDataDevicesAdapter adapter = new GatherDataDevicesAdapter(this, mDevices);
-		adapter.setOnItemClickListener(this);
-		recyclerView.setAdapter(adapter);
+        // Configure the recycler view
+        final RecyclerView recyclerView = findViewById(R.id.recycler_view_ble_devices);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        final GatherDataDevicesAdapter adapter = new GatherDataDevicesAdapter(this, mDevices);
+        adapter.setOnItemClickListener(this);
+        recyclerView.setAdapter(adapter);
 
-		// set lifecycle registry up
-//        lifecycleRegistry = new LifecycleRegistry(this);
-//        lifecycleRegistry.markState(Lifecycle.State.CREATED);
 
-//		app.setFirebaseHolder(viewModel.getFirebaseInfo(this, mDevices));
-		viewModel.iterateThroughDevices(this, mDevices.get(currentDeviceIndex));
+        viewModel.iterateThroughDevices(this, mDevices.get(currentDeviceIndex));
 
-		// update ui based on connection state
-		viewModel.getIsConnectedMut().observe(this, connected -> {
+        // update ui based on connection state
+        viewModel.getIsConnectedMut().observe(this, connected -> {
             //update the values in the recycler view, representing the connection state
             int position = viewModel.getCurrentDeviceIndex();
-		    adapter.notifyItemChanged(position, connected);
-		    Log.e(TAG, "Device status: " + String.valueOf(connected));
-//
-//		    if (!connected) {
-//				currentDeviceIndex++;
-//				viewModel.iterateThroughDevices(this, mDevices.get(currentDeviceIndex));
-//			}
-		});
-		// initialise gather data button functionality
+            adapter.notifyItemChanged(position, connected);
+            Log.e(TAG, "Device status: " + String.valueOf(connected));
+
+        });
+        // initialise gather data button functionality
         initSendToFirebaseButton();
 
-	}
+    }
 
-	//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        lifecycleRegistry.markState(Lifecycle.State.STARTED);
-//    }
-//
-//    @NonNull
-//    @Override
-//    public LifecycleRegistry getLifecycle() {
-//        return lifecycleRegistry;
-//    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        viewModel.disconnect();
+    }
 
-	@Override
-	public void onItemClick(@NonNull final DiscoveredBluetoothDevice device) {
-		final Intent controlBlinkIntent = new Intent(this, BlinkyActivity.class);
-		controlBlinkIntent.putExtra(BlinkyActivity.EXTRA_DEVICE, device);
-		startActivity(controlBlinkIntent);
-	}
+    @Override
+    public void onItemClick(@NonNull final DiscoveredBluetoothDevice device) {
+        final Intent controlBlinkIntent = new Intent(this, BlinkyActivity.class);
+        controlBlinkIntent.putExtra(BlinkyActivity.EXTRA_DEVICE, device);
+        startActivity(controlBlinkIntent);
+    }
 
-	@OnClick(R.id.action_enable_location)
-	public void onEnableLocationClicked() {
-		final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-		startActivity(intent);
-	}
+    @OnClick(R.id.action_enable_location)
+    public void onEnableLocationClicked() {
+        final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+    }
 
-	@OnClick(R.id.action_enable_bluetooth)
-	public void onEnableBluetoothClicked() {
-		final Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-		startActivity(enableIntent);
-	}
+    @OnClick(R.id.action_enable_bluetooth)
+    public void onEnableBluetoothClicked() {
+        final Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        startActivity(enableIntent);
+    }
 
-	@OnClick(R.id.action_grant_location_permission)
-	public void onGrantLocationPermissionClicked() {
-		Utils.markLocationPermissionRequested(this);
-		ActivityCompat.requestPermissions(
-				this,
-				new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
-				REQUEST_ACCESS_COARSE_LOCATION);
-	}
+    @OnClick(R.id.action_grant_location_permission)
+    public void onGrantLocationPermissionClicked() {
+        Utils.markLocationPermissionRequested(this);
+        ActivityCompat.requestPermissions(
+                this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                REQUEST_ACCESS_COARSE_LOCATION);
+    }
 
-	@OnClick(R.id.action_permission_settings)
-	public void onPermissionSettingsClicked() {
-		final Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-		intent.setData(Uri.fromParts("package", getPackageName(), null));
-		startActivity(intent);
-	}
+    @OnClick(R.id.action_permission_settings)
+    public void onPermissionSettingsClicked() {
+        final Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.fromParts("package", getPackageName(), null));
+        startActivity(intent);
+    }
 
     /**
      * Method shows an alert dialog to confirm if the user wishes to upload to firebase
      */
-	private void initSendToFirebaseButton() {
+    private void initSendToFirebaseButton() {
 
-		gatherDataButton.setText(R.string.gatherDataConnect);
-		gatherDataButton.setVisibility(View.VISIBLE);
+        gatherDataButton.setText(R.string.gatherDataConnect);
+        gatherDataButton.setVisibility(View.VISIBLE);
 
         gatherDataButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -219,7 +213,7 @@ public class GatherDataActivity extends AppCompatActivity implements GatherDataD
             toastText = "Nothing to upload";
         }
 
-        Toast toast = Toast.makeText(getApplicationContext(),toastText,
+        Toast toast = Toast.makeText(getApplicationContext(), toastText,
                 Toast.LENGTH_SHORT);
         toast.show();
     }

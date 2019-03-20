@@ -23,6 +23,7 @@
 package sonicwaves.android.iot_app.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Icon;
 import android.text.TextUtils;
 import android.util.Log;
@@ -75,7 +76,7 @@ public class GatherDataDevicesAdapter extends RecyclerView.Adapter<GatherDataDev
 			mDevices = devices;
 			result.dispatchUpdatesTo(this);
 		});
-	}
+    }
 
 	public GatherDataDevicesAdapter(@NonNull final GatherDataActivity activity,
                                     @NonNull final List<DiscoveredBluetoothDevice> mDevices) {

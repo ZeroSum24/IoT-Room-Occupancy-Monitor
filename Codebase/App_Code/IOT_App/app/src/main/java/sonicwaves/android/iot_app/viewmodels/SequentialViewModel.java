@@ -419,4 +419,7 @@ public class SequentialViewModel {
         return timestampOut;
     }
 
+    public void disconnect() {
+        mViewModel.disconnect();
+    }
 }
