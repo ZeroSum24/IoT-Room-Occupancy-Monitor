@@ -83,7 +83,8 @@ public class Reading {
 
             Log.e(TAG, "iterLen: " + String.valueOf(iterLen) + " chairID: " + chairID + " rssiVal: " + rssiVal);
 
-            data.put(chairID, rssiVal);
+            data.put("chair_id", chairID);
+            data.put("rssi_val", rssiVal);
 
         }
 
