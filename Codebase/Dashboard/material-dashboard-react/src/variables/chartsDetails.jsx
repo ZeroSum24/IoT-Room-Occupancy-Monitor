@@ -25,14 +25,15 @@ function occupancyStatsChart(seriesIn) {
       lineSmooth: Chartist.Interpolation.cardinal({
         tension: 0
       }),
-      low: 100,
-      high: 400, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+      low: 0,
+      high: 80, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
       chartPadding: {
         top: 0,
         right: 0,
         bottom: 0,
         left: 0
-      }
+      },
+      height:300,
     },
     // for animation
     animation: {
@@ -92,7 +93,8 @@ function spaceUsageChart(seriesIn) {
         bottom: 0,
         left: 0
       },
-      horizontalBars: true
+      horizontalBars: true,
+      height:300,
     },
     responsiveOptions: [
       [
@@ -146,7 +148,8 @@ function roomUsageChart(seriesIn) {
         right: 0,
         bottom: 0,
         left: 0
-      }
+      },
+      height:300,
     },
     animation: {
       draw: function(data) {
