@@ -52,7 +52,7 @@ class TableList extends React.Component {
     this.state = {
       roomOccupancyContents: "1 ",
       chairsFreeContents: "49/50",
-      mostPopularTimeContents: "Table 5 @ 12AM",
+      mostPopularTimeContents: "Table 5 - 12AM",
       totalOccupancyContents: "+234",
       roomUsageData: [[23, 75, 45, 30, 28, 24, 20, 19]],
       spaceUsageData: [[54, 43]],
