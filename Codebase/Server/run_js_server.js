@@ -73,7 +73,14 @@ function door_callback(snapshot, device_name) {
               updated_door_readings[change.doc.id] = change.doc.data()
           }
       });
-  // callback_function()
+  var out_array = utils.filter_sort_data(updated_door_readings, last_read_timestamps[device_name])
+  updated_door_readings = out_array[0];
+  last_read_timestamps[device_name] = out_array[1];
+  console.log("DOOR TEST", updated_door_readings)
+  console.log("DOOR TIMESTAMPS", last_read_timestamps[device_name])
+  net_movement = door_cal.door_analysis(updated_door_readings);
+
+  calculate_current_occupancy(net_movement);
 }
 
 function table_callback(snapshot, device_name) {
@@ -86,6 +93,52 @@ function table_callback(snapshot, device_name) {
           }
       });
   // callback_function()
+}
+
+function calculate_current_occupancy(net_movement) {
+  var occupancy = 0;
+  var cur_occ_ref = db.collection('data-visual').doc('current_occupancy')
+  var getDoc = cur_occ_ref.get()
+  .then(doc => {
+    if (!doc.exists) {
+      console.log('No such document!');
+    } else {
+      console.log("cur occupancy val", doc.data().occupants)
+      occupancy = doc.data().occupants + net_movement;
+    }
+  })
+  .then( () => {
+      cur_occ_ref.set({occupants: occupancy}, {merge: true});
+      // update day history file here
+      // if net positive then update the total occupancy
+      update_total_occupancy(net_movement)
+    }
+  )
+  .catch(err => {
+    console.log('Error getting document', err);
+  });
+}
+
+function update_total_occupancy(net_movement) {
+  var total_occupants = 0
+  var cur_occ_ref = db.collection('data-visual').doc('history_info')
+  var getDoc = cur_occ_ref.get()
+  .then(doc => {
+    if (!doc.exists) {
+      console.log('No such document!');
+    } else {
+      total_occupants = doc.data().total_occupancy + net_movement;
+    }
+  })
+  .then( () => {
+      if (net_movment > 0) { 
+        cur_occ_ref.set({total_occupancy: occupancy}, {merge: true});
+      }
+    }
+  )
+  .catch(err => {
+    console.log('Error getting document', err);
+  });
 }
 
 function calculate_current_chairs() {
