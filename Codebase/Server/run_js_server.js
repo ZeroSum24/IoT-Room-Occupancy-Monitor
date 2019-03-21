@@ -46,9 +46,17 @@ function chair_callback(snapshot, device_name) {
       });
   // filter and sort the data
   var out_array = utils.filter_sort_data(updated_chair_readings, last_read_timestamps[device_name])
-  // updated_chair_readings = out_array[0]
-  // last_read_timestamps[device_name] = out_array[1]
+  updated_chair_readings = out_array[0]
+  last_read_timestamps[device_name] = out_array[1]
+  var [hist_chairs, current_flag] = chair_cal.chair_analysis(updated_chair_readings)
 
+  // update the chair flags in data-visual
+  var cityRef = db.collection('data-visual').doc('current_occupancy');
+  send_dict = {}; send_dict[device_name] = out_array[0];
+  var setWithOptions = cityRef.set(send_dict, {merge: true});
+
+  //update the information in data-visual, historical and otherwise
+  
   // callback_function(snapshot)
 }
 
@@ -76,7 +84,19 @@ function table_callback(snapshot, device_name) {
   // callback_function()
 }
 
-function getDataVisual() {
+function getDataVisual(device_name) {
+  var cityRef = db.collection('data-visual').doc('current_occupancy')
+  var getDoc = cityRef.get()
+    .then(doc => {
+      if (!doc.exists) {
+        console.log('No such document!');
+      } else {
+        console.log('Document data:', doc.data());
+      }
+    })
+    .catch(err => {
+      console.log('Error getting document', err);
+    });
 
 }
 
