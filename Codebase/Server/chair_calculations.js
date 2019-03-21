@@ -1,5 +1,9 @@
 // from utils import calculate_time_diff
 
+module.export = {
+  chair_analysis,
+}
+
 // takes in chair id and a list of detections (which is a dictionary with each field value as the key)
 // assumes the readings list is ordered into true/false pairs based on the timestamp
 function chair_analysis(readingsList) {
@@ -21,8 +25,8 @@ function chair_analysis(readingsList) {
 
             // remove the used readings
             readingsList.splice(i-1, 2) // starting at index i, remove two elements
-        i++;
         }
+        i++;
     }
 
     // if the last item does not have a pair and it is activated then it is currently_used

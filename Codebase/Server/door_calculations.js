@@ -1,3 +1,7 @@
+module.export = {
+  door_analysis,
+}
+
 function door_analysis(readingsList) {
     var net_movement = 0
 
