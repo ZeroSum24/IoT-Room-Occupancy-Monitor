@@ -1,6 +1,6 @@
 // from utils import calculate_time_diff
 
-module.export = {
+module.exports = {
   chair_analysis,
 }
 
