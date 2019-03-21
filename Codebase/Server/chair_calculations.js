@@ -6,7 +6,7 @@ module.exports = {
 
 // takes in chair id and a list of detections (which is a dictionary with each field value as the key)
 // assumes the readings list is ordered into true/false pairs based on the timestamp
-function chair_analysis(readingsDict) {
+function chair_analysis(readingsList) {
 
     var currently_used = false
     var templateDict = {initialTimestamp: "", finalTimestamp: "", duration: 0}
@@ -14,35 +14,30 @@ function chair_analysis(readingsDict) {
     var i = 0
 
     console.log("here")
-    while(i < (Object.keys(readingsDict).length)-1){
+    while(i < readingsList.length-1){
         console.log("here2")
 
-        if (readingsDict[i]['activated'] && !readingsDict[i+1]['activated']) {
-            templateDict["initialTimestamp"] = readingsDict[i]['timestamp']
-            templateDict["finalTimestamp"] = readingsDict[i+1]['timestamp']
+        if (readingsList[i]['activated'] && !readingsList[i+1]['activated']) {
+            templateDict["initialTimestamp"] = readingsList[i]['timestamp']
+            templateDict["finalTimestamp"] = readingsList[i+1]['timestamp']
 
             //TODO
-            templateDict["duration"] = utils.calculate_time_diff(readingsDict[i]['timestamp'], readingsDict[i+1]['timestamp'])
+            templateDict["duration"] = utils.calculate_time_diff(readingsList[i]['timestamp'], readingsList[i+1]['timestamp'])
             chair_usage.push(templateDict)
 
             // remove the used readings
-            delete readingsDict[i]
-            delete readingsDict[i+1]
+            readingsList.splice(i-1, 2)
         }
         i++;
     }
 
-    console.log("CALC LIST", readingsDict)
-
-    var amnt_vals = (Object.keys(readingsDict).length)
+    console.log("CALC LIST", readingsList)
 
     // if the last item does not have a pair and it is activated then it is currently_used
-    if (amnt_vals >= 1) {
-        if (readingsDict[amnt_vals-1]['activated'] != undefined) {
-          if (readingsDict[amnt_vals-1]['activated']) {
-              currently_used = true
-          }
-      }
+    if (readingsList.length >= 1) {
+        if (readingsList[readingsList.length-1]['activated']) {
+            currently_used = true
+        }
     }
 
     console.log("cal out", currently_used, chair_usage)
