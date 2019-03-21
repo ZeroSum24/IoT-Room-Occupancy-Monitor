@@ -399,9 +399,9 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                     readCharacteristic(mDistanceOneCharacteristic).with(mDistanceOneCallback).enqueue();
                     enableNotifications(mDistanceOneCharacteristic).enqueue();
 
-                    setNotificationCallback(mDistanceTwoCharacteristic).with(mDistanceTwoCallback);
-                    readCharacteristic(mDistanceTwoCharacteristic).with(mDistanceTwoCallback).enqueue();
-                    enableNotifications(mDistanceTwoCharacteristic).enqueue();
+//                    setNotificationCallback(mDistanceTwoCharacteristic).with(mDistanceTwoCallback);
+//                    readCharacteristic(mDistanceTwoCharacteristic).with(mDistanceTwoCallback).enqueue();
+//                    enableNotifications(mDistanceTwoCharacteristic).enqueue();
 
 //                    setNotificationCallback(mSetTimeCharacteristic).with(mSetTimeCallback);
 //                    readCharacteristic(mSetTimeCharacteristic).with(mSetTimeCallback).enqueue();
@@ -417,7 +417,7 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                     final BluetoothGattService service = gatt.getService(SW_UUID_SERVICE);
                     if (service != null) {
                         mDistanceOneCharacteristic = service.getCharacteristic(SW_UUID_DISTONE_CHAR);
-                        mDistanceTwoCharacteristic = service.getCharacteristic(SW_UUID_DISTTWO_CHAR);
+//                        mDistanceTwoCharacteristic = service.getCharacteristic(SW_UUID_DISTTWO_CHAR);
 //                        mSetTimeCharacteristic = service.getCharacteristic(SW_UUID_SETTIME_CHAR);
 //                        mCalibratedCharacteristic = service.getCharacteristic(SW_UUID_CALIBRATED_CHAR);
                     }
@@ -430,7 +430,7 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
                 @Override
                 protected void onDeviceDisconnected() {
                     mDistanceOneCharacteristic = null;
-                    mDistanceTwoCharacteristic = null;
+//                    mDistanceTwoCharacteristic = null;
 //                    mSetTimeCharacteristic = null;
 //                    mCalibratedCharacteristic = null;
                 }
