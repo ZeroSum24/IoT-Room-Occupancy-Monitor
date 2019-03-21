@@ -13,6 +13,7 @@ var table_cal = require('./table_calculations')
 
 let last_read_timestamps = {'SonicWaves-C-001': 0, 'SonicWaves-C-002':0, 'SonicWaves-C-003':0,
                             'SonicWaves-T-001': 0, 'SonicWaves-T-002':0, 'SonicWaves-D-001': 0}
+let chair_devices = ['SonicWaves-C-001', 'SonicWaves-C-002','SonicWaves-C-003']
 
 // inititalise the js server
 admin.initializeApp({
@@ -58,6 +59,7 @@ function chair_callback(snapshot, device_name) {
   var setWithOptions = chairRef.set(send_dict, {merge: true});
 
   //update the information in data-visual, historical and otherwise
+  calculate_current_chairs() // update the current chairs count
 
   // callback_function(snapshot)
 }
@@ -86,19 +88,33 @@ function table_callback(snapshot, device_name) {
   // callback_function()
 }
 
-function getDataVisual(device_name) {
-  var cityRef = db.collection('data-visual').doc('current_occupancy')
-  var getDoc = cityRef.get()
+function calculate_current_chairs() {
+  var chair_count = 0;
+  var cur_occ_ref = db.collection('data-visual').doc('current_occupancy')
+  var getDoc = cur_occ_ref.get()
     .then(doc => {
       if (!doc.exists) {
         console.log('No such document!');
       } else {
         console.log('Document data:', doc.data());
+        console.log("cur chair val", doc.id, chair_count, chair_devices.includes(doc.id))
+        if (chair_devices.includes(doc.id)) {
+          chair_count++;
+        }
+        console.log("cur chair val post", doc.id, chair_count, chair_devices.includes(doc.id))
       }
     })
+    .then( () => {
+      console.log("HEREHHH", chair_count);
+      cur_occ_ref.set({chairs: chair_count}, {merge: true})
+      // update day history file here
+      }
+    )
     .catch(err => {
       console.log('Error getting document', err);
     });
+}
+function getDataVisual(device_name) {
 
 }
 
