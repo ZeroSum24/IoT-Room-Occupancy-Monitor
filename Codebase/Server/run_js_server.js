@@ -51,12 +51,12 @@ function chair_callback(snapshot, device_name) {
   var [hist_chairs, current_flag] = chair_cal.chair_analysis(updated_chair_readings)
 
   // update the chair flags in data-visual
-  var cityRef = db.collection('data-visual').doc('current_occupancy');
+  var chairRef = db.collection('data-visual').doc('current_occupancy');
   send_dict = {}; send_dict[device_name] = out_array[0];
-  var setWithOptions = cityRef.set(send_dict, {merge: true});
+  var setWithOptions = chairRef.set(send_dict, {merge: true});
 
   //update the information in data-visual, historical and otherwise
-  
+
   // callback_function(snapshot)
 }
 
