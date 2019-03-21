@@ -13,9 +13,10 @@ function chair_analysis(readingsList) {
     var chair_usage = []
     var i = 0
 
-    console.log("here")
+    console.log("CHAIR ANALYSIS readings", readingsList)
     while(i < readingsList.length-1){
-        console.log("here2")
+        console.log("After iteration", i);
+        console.log("Readings", readingsList);
 
         if (readingsList[i]['activated'] && !readingsList[i+1]['activated']) {
             templateDict["initialTimestamp"] = readingsList[i]['timestamp']
@@ -26,7 +27,7 @@ function chair_analysis(readingsList) {
             chair_usage.push(templateDict)
 
             // remove the used readings
-            readingsList.splice(i-1, 2)
+            readingsList.splice(i, 2)
         }
         i++;
     }
