@@ -7,22 +7,23 @@ function filter_sort_data(readingsList, last_timestamp) {
     data = []
 
     // set the largest timestamp if still default
-    if (largest_timestamp == 0) {
-      largest_timestamp = new Date(year=datetime.MINYEAR, month=1, day=1);
+    if (last_timestamp == 0) {
+      last_timestamp = new Date(year=0, month=1, day=1);
     }
+    var timestamp; var largest_timestamp;
 
-    var timestamp;
     // iterate over the indexes of the dictionary
-    for (index in Object.entries(readingsList)) {
-      var values = readingsList[index]
-      timestamp = values['timestamp']
+    for (index in readingsList) {
+      var reading = readingsList[index]
+      console.log("reading", reading)
+      timestamp = reading['timestamp']
 
       readingDate = parse_timestamp(timestamp)
       if (readingDate >= last_timestamp) {
           if (readingDate > largest_timestamp) {
               largest_timestamp = readingDate;
             }
-          data.push([doc, readingDate]);
+          data.push([reading, readingDate]);
         }
       }
     data = array.sort(function(a,b) {
