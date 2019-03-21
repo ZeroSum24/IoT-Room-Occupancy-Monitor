@@ -10,7 +10,7 @@ function filter_sort_data(readingsList, last_timestamp) {
     if (last_timestamp == 0) {
       last_timestamp = new Date(year=0, month=1, day=1);
     }
-    var timestamp; 
+    var timestamp;
     var largest_timestamp = new Date(year=0, month=1, day=1);
 
     // iterate over the indexes of the dictionary
@@ -27,16 +27,17 @@ function filter_sort_data(readingsList, last_timestamp) {
         }
       }
     data.sort(function(a,b) {
-      return new Date(b[1].date) - new Date(a[1].date);
+      return a[1] - b[1];
     })
+
     // only return the first element of each 2d array
+    output_dict = {}
     for (var i = 0; i < data.length; i++) {
-      data[i] = data[i][0]
+      output_dict[i] = data[i][0]
     }
-    console.log("Working")
-    console.log([data, largest_timestamp])
-    console.log(data)
-    return [data, largest_timestamp]
+    console.log("filter working")
+    console.log([output_dict, largest_timestamp])
+    return [output_dict, largest_timestamp]
   }
 
 // parses a string into a datetime object
