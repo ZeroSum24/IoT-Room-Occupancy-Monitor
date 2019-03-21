@@ -13,7 +13,7 @@ function chair_analysis(readingsList) {
     var chair_usage = []
     var i = 0
 
-    while(i < len(readingsList)-1){
+    while(i < readingsList.length-1){
 
         if (readingsList[i]['activated'] && !readingsList[i+1]['activated']) {
             templateDict["initialTimestamp"] = readingsList[i]['timestamp']
