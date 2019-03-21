@@ -105,6 +105,9 @@ function calculate_current_occupancy(net_movement) {
     } else {
       console.log("cur occupancy val", doc.data().occupants)
       occupancy = doc.data().occupants + net_movement;
+      if (occupancy < 0) {
+        occupancy = 0;
+      }
     }
   })
   .then( () => {
@@ -131,8 +134,8 @@ function update_total_occupancy(net_movement) {
     }
   })
   .then( () => {
-      if (net_movment > 0) { 
-        cur_occ_ref.set({total_occupancy: occupancy}, {merge: true});
+      if (net_movement > 0) {
+        cur_occ_ref.set({total_occupancy: total_occupants}, {merge: true});
       }
     }
   )

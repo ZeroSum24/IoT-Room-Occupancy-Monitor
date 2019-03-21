@@ -57,13 +57,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-<<<<<<< HEAD
-  ],
-  "devDependencies": {
-    "eslint-config-prettier": "4.0.0",
-    "eslint-plugin-prettier": "3.0.1"
-  }
-=======
   ]
->>>>>>> Server
 }

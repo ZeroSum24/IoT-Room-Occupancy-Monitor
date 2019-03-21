@@ -5,10 +5,10 @@ module.exports = {
 function door_analysis(readingsList) {
     var net_movement = 0;
     for(var i = 0; i < readingsList.length; i++) {
-        if (readingsList[i]['entered']) {
+        if (readingsList[i]['activated'] == 1) {
             net_movement += 1
-        }
-        else {
+            console.log("HERE2")
+        } else {
             net_movement -= 1
         }
     }

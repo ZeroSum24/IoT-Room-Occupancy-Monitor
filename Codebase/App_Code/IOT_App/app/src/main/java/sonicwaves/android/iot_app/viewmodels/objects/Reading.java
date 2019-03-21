@@ -35,10 +35,10 @@ public class Reading {
         this.sensor = sensor;
         this.activated = null;
         this.currentDate = new Date();
+        this.app_timestamp = formatDate(this.currentDate);
 
         if (initialDeviceTime != null) {
             this.initialDeviceTime = initialDeviceTime;
-            this.app_timestamp = formatDate(this.currentDate);
             this.sensor_timestamp = formatDate(sensorTimestamp(activated));
         } else {
             this.doorStr = parseDoor(activated);
@@ -113,6 +113,7 @@ public class Reading {
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
             // Add a new document with a generated ID
+            Log.e(TAG, deviceName);
             db.collection(DOOR_DATA).document(deviceName)
                     .collection("detections")
                     .document(this.getAppTimestamp())

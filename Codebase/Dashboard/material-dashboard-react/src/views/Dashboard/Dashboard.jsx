@@ -65,7 +65,7 @@ class Dashboard extends React.Component {
         console.log(doc.id, " => ", doc.data());
         this.setState({
           roomOccupancyContents: (doc.data()['occupants'].toString() + " "),
-          chairsFreeContents: (doc.data()['chairs'].toString()+"/3"),
+          chairsFreeContents: ((3-doc.data()['chairs']).toString()+"/3"),
         });
       });
 
