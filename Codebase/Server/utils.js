@@ -10,12 +10,12 @@ function filter_sort_data(readingsList, last_timestamp) {
     if (last_timestamp == 0) {
       last_timestamp = new Date(year=0, month=1, day=1);
     }
-    var timestamp; var largest_timestamp;
+    var timestamp; 
+    var largest_timestamp = new Date(year=0, month=1, day=1);
 
     // iterate over the indexes of the dictionary
     for (index in readingsList) {
       var reading = readingsList[index]
-      console.log("reading", reading)
       timestamp = reading['timestamp']
 
       readingDate = parse_timestamp(timestamp)
@@ -26,12 +26,11 @@ function filter_sort_data(readingsList, last_timestamp) {
           data.push([reading, readingDate]);
         }
       }
-    data = array.sort(function(a,b) {
+    data.sort(function(a,b) {
       return new Date(b[1].date) - new Date(a[1].date);
     })
-
     // only return the first element of each 2d array
-    for (var i = 1; i <= data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
       data[i] = data[i][0]
     }
     console.log("Working")
