@@ -48,6 +48,8 @@ function chair_callback(snapshot, device_name) {
   var out_array = utils.filter_sort_data(updated_chair_readings, last_read_timestamps[device_name])
   updated_chair_readings = out_array[0]
   last_read_timestamps[device_name] = out_array[1]
+  console.log("test", updated_chair_readings)
+  console.log("test2", last_read_timestamps[device_name])
   var [hist_chairs, current_flag] = chair_cal.chair_analysis(updated_chair_readings)
 
   // update the chair flags in data-visual
