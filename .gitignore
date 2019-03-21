@@ -1,3 +1,8 @@
+# Mbed stuffs
+*.mbed
+*.pyc
+BUILD/
+
 # Prerequisites
 *.d
 
