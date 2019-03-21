@@ -4,8 +4,10 @@ const admin = require('firebase-admin');
 var serviceAccount = require('./iot-app-3386d-firebase-adminsdk-notbj-6b009a7f9d.json');
 
 //our imports
-// var chair_cal = require('./chair_calculations')
 var utils = require('./utils')
+var chair_cal = require('./chair_calculations')
+var door_cal = require('./door_calculations')
+var table_cal = require('./table_calculations')
 //
 
 
