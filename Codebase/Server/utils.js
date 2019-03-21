@@ -32,13 +32,13 @@ function filter_sort_data(readingsList, last_timestamp) {
     })
 
     // only return the first element of each 2d array
-    output_dict = {}
+    output_array = []
     for (var i = 0; i < data.length; i++) {
-      output_dict[i] = data[i][0]
+      output_array.push(data[i][0])
     }
     console.log("filter working")
-    console.log([output_dict, largest_timestamp])
-    return [output_dict, largest_timestamp]
+    console.log([output_array, largest_timestamp])
+    return [output_array, largest_timestamp]
   }
 
 // parses a string into a datetime object
