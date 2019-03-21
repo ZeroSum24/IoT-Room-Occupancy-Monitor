@@ -22,6 +22,8 @@ function chair_analysis(readingsList) {
             // remove the used readings
             readingsList.splice(i-1, 2) // starting at index i, remove two elements
         i++;
+        }
+    }
 
     // if the last item does not have a pair and it is activated then it is currently_used
     if (readingsList.length >= 1) {
