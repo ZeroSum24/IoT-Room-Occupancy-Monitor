@@ -50,11 +50,11 @@ function chair_callback(snapshot, device_name) {
   last_read_timestamps[device_name] = out_array[1]
   console.log("test", updated_chair_readings)
   console.log("test2", last_read_timestamps[device_name])
-  var [hist_chairs, current_flag] = chair_cal.chair_analysis(updated_chair_readings)
+  var [current_flag, hist_chairs] = chair_cal.chair_analysis(updated_chair_readings)
 
   // update the chair flags in data-visual
   var chairRef = db.collection('data-visual').doc('current_occupancy');
-  send_dict = {}; send_dict[device_name] = out_array[0];
+  send_dict = {}; send_dict[device_name] = current_flag;
   var setWithOptions = chairRef.set(send_dict, {merge: true});
 
   //update the information in data-visual, historical and otherwise
