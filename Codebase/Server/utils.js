@@ -1,6 +1,7 @@
 
 module.exports = {
   filter_sort_data,
+  calculate_time_diff,
 }
 
 function filter_sort_data(readingsList, last_timestamp) {
@@ -61,8 +62,10 @@ function parse_timestamp(datetime_str) {
     return (new Date(year, month, day, hour, minute, second, milli));
   }
 
-sortArrayOfObjects = (arr, key) => {
-  return arr.sort((a, b) => {
-      return a[key] - b[key];
-  });
-};
+// calculates the difference in time between two given string date stamps
+function calculate_time_diff(timestamp_one, timestamp_two) {
+    var dateTimeOne = parse_timestamp(timestamp_one)
+    var dateTimeTwo = parse_timestamp(timestamp_two)
+
+    return (Math.abs(dateTimeOne-dateTimeTwo));
+  }
