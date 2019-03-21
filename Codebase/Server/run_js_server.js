@@ -150,16 +150,17 @@ function calculate_current_chairs() {
         console.log('No such document!');
       } else {
         console.log('Document data:', doc.data());
-        console.log("cur chair val", doc.id, chair_count, chair_devices.includes(doc.id))
-        if (chair_devices.includes(doc.id)) {
-          chair_count++;
+        for (field in doc.data()) {
+          // for the chair fields, if they are true, update the chair count
+          if (chair_devices.includes(field) && doc.data()[field]) {
+            chair_count++;
+          }
         }
-        console.log("cur chair val post", doc.id, chair_count, chair_devices.includes(doc.id))
       }
     })
     .then( () => {
-      console.log("HEREHHH", chair_count);
       cur_occ_ref.set({chairs: chair_count}, {merge: true})
+      updateHistoricalChairsWeeks(chair_count)
       // update day history file here
       }
     )
@@ -167,6 +168,36 @@ function calculate_current_chairs() {
       console.log('Error getting document', err);
     });
 }
+
+function updateHistoricalChairsWeeks(cur_chair_count) {
+  var average_chair_count = 0;
+  var num_updates = 0;
+  var hist_cur_chairs_ref = db.collection('data-visual').doc('average_week')
+                              .collection(utils.getCurrentDay()).doc('average_chair_count')
+  var getDoc = hist_cur_chairs_ref.get()
+    .then(doc => {
+      if (!doc.exists) {
+        console.log('No such document!');
+      } else {
+        console.log('Document data:', doc.data());
+        average_chair_count = doc.data()['average_chair_count']
+        num_updates = doc.data()['num_updates']
+        var total_chairs = average_chair_count * num_updates;
+        num_updates++;
+        average_chair_count = Math.floor((total_chairs + cur_chair_count) / num_updates);
+        }
+      }
+    )
+    .then( () => {
+      hist_cur_chairs_ref.set({average_chair_count: average_chair_count,
+        num_updates: num_updates}, {merge: true})
+      }
+    )
+    .catch(err => {
+      console.log('Error getting document', err);
+    });
+}
+
 function getDataVisual(device_name) {
 
 }

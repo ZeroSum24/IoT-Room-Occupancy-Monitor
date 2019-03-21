@@ -2,6 +2,7 @@
 module.exports = {
   filter_sort_data,
   calculate_time_diff,
+  getCurrentDay,
 }
 
 function filter_sort_data(readingsList, last_timestamp) {
@@ -69,3 +70,9 @@ function calculate_time_diff(timestamp_one, timestamp_two) {
 
     return (Math.abs(dateTimeOne-dateTimeTwo));
   }
+
+function getCurrentDay() {
+  var days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+  var day = days[ now.getDay() ];
+
+}
