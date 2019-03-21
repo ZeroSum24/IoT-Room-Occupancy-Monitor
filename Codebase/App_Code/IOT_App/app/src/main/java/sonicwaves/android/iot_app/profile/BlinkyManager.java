@@ -314,13 +314,13 @@ public class BlinkyManager extends BleManager<BlinkyManagerCallbacks> {
 //                    readCharacteristic(mPressureTwoCharacteristic).with(mPressureTwoCallback).enqueue();
 //                    enableNotifications(mPressureTwoCharacteristic).enqueue();
 
-                    setNotificationCallback(mSetTimeCharacteristic).with(mSetTimeCallback);
-                    readCharacteristic(mSetTimeCharacteristic).with(mSetTimeCallback).enqueue();
-                    enableNotifications(mSetTimeCharacteristic).enqueue();
-
-                    setNotificationCallback(mCalibratedCharacteristic).with(mCalibratedCallback);
-                    readCharacteristic(mCalibratedCharacteristic).with(mCalibratedCallback).enqueue();
-                    enableNotifications(mCalibratedCharacteristic).enqueue();
+//                    setNotificationCallback(mSetTimeCharacteristic).with(mSetTimeCallback);
+//                    readCharacteristic(mSetTimeCharacteristic).with(mSetTimeCallback).enqueue();
+//                    enableNotifications(mSetTimeCharacteristic).enqueue();
+//
+//                    setNotificationCallback(mCalibratedCharacteristic).with(mCalibratedCallback);
+//                    readCharacteristic(mCalibratedCharacteristic).with(mCalibratedCallback).enqueue();
+//                    enableNotifications(mCalibratedCharacteristic).enqueue();
                 }
 
                 @Override

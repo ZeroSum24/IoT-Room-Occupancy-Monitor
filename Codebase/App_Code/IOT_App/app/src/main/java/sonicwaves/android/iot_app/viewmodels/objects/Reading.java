@@ -23,6 +23,7 @@ public class Reading {
     private String app_timestamp;
     private String sensor;
     private Date initialDeviceTime;
+    private String doorStr;
 
     private static final String CHAIR_DATA = "chair_data";
     private static final String DOOR_DATA = "door_data";
@@ -34,9 +35,14 @@ public class Reading {
         this.sensor = sensor;
         this.activated = null;
         this.currentDate = new Date();
-        this.initialDeviceTime = initialDeviceTime;
-        this.app_timestamp = formatDate(this.currentDate);
-        this.sensor_timestamp = formatDate(sensorTimestamp(activated));
+
+        if (initialDeviceTime != null) {
+            this.initialDeviceTime = initialDeviceTime;
+            this.app_timestamp = formatDate(this.currentDate);
+            this.sensor_timestamp = formatDate(sensorTimestamp(activated));
+        } else {
+            this.doorStr = parseDoor(activated);
+        }
 
         Log.e("Reading", toString());
         Log.e("Reading", activated);
@@ -59,9 +65,10 @@ public class Reading {
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.DOOR)) {
 
-            this.activated = statusValue(activated);
+//            this.activated =
+// (activated);
             data.put("sensor_name", this.sensor);
-            data.put("activated", this.activated);
+            data.put("activated", this.doorStr);
 
         } else if (deviceClass.getDeviceClass().equals(deviceClass.TABLE)) {
             //Iterate over all the sensor ids for the chairs
@@ -184,6 +191,12 @@ public class Reading {
         return String.valueOf(sensor) + " " + String.valueOf(activated) + " " + String.valueOf(app_timestamp) + String.valueOf(sensor_timestamp);
     }
 
+    private String parseDoor(String activated) {
+
+        String test = activated.substring(6,7);
+        Log.e(TAG, test);
+        return test;
+    }
 
     private String formatDate(Date date) {
 

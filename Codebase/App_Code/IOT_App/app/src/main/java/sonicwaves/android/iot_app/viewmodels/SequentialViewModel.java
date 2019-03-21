@@ -368,13 +368,13 @@ public class SequentialViewModel {
 
             mViewModel.getmDistOne().observe(lifecycleOwner,
                     tripped -> {
-                        initTimestamp = parseInitTimestampString(tripped, initTimestamp, currentDate);
+//                        initTimestamp = parseInitTimestampString(tripped, initTimestamp, currentDate);
                         Reading reading = (new Reading(device, DIST_ONE, tripped, initTimestamp));});
-
-            mViewModel.getmDistTwo().observe(lifecycleOwner,
-                    tripped -> {
-                        initTimestamp = parseInitTimestampString(tripped, initTimestamp, currentDate);
-                        Reading reading = (new Reading(device, DIST_TWO, tripped, initTimestamp));});
+//
+//            mViewModel.getmDistTwo().observe(lifecycleOwner,
+//                    tripped -> {
+//                        initTimestamp = parseInitTimestampString(tripped, initTimestamp, currentDate);
+//                        Reading reading = (new Reading(device, DIST_TWO, tripped, initTimestamp));});
         }
 
     }
