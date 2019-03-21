@@ -160,7 +160,7 @@ function calculate_current_chairs() {
     })
     .then( () => {
       cur_occ_ref.set({chairs: chair_count}, {merge: true})
-      updateHistoricalChairsWeeks(chair_count)
+//      updateHistoricalChairsWeeks(chair_count)
       // update day history file here
       }
     )
