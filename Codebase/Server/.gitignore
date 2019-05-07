@@ -105,6 +105,18 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+node_env/bin/
+node_env/etc/
+node_env/include/
+node_env/lib/
+node_env/local/
+node_env/share/
+node_env/src/
+
+server_env/bin/
+server_env/include/
+server_env/lib/
+server_env/share/
 
 # Spyder project settings
 .spyderproject

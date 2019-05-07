@@ -1,0 +1,6 @@
+dashboard_env/bin/
+dashboard_env/include/
+dashboard_env/lib/
+dashboard_env/local/
+dashboard_env/share/
+dashboard_env/src/
