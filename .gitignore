@@ -57,3 +57,5 @@ server_env/lib
 server_env/share
 
 node_modules
+
+iot-*.json
