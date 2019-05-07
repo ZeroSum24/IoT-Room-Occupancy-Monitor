@@ -35,3 +35,25 @@ BUILD/
 *.exe
 *.out
 *.app
+
+# Environments
+dashboard_env/bin
+dashboard_env/include
+dashboard_env/lib
+dashboard_env/local
+dashboard_env/share
+dashboard_env/src
+
+node_env/bin
+node_env/include
+node_env/lib
+node_env/local
+node_env/share
+node_env/src
+
+server_env/bin
+server_env/include
+server_env/lib
+server_env/share
+
+node_modules
