@@ -9,8 +9,7 @@
 // SonicWaves-[C|T|D]-001
 ScanService* scanService;
 char DEVICE_NAME[] = "SonicWaves-T-001";
-string safe_device_name("SonicWaves-T-001\0");
-const uint8_t DEVICE_NAME_LENGTH = 16;
+static const uint8_t DEVICE_NAME_LENGTH = 16;
 static uint8_t chair_ids[10] = {0};
 static const uint16_t uuid16_list[] = {0xFFFF};
 
@@ -118,7 +117,6 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params)
 /*
  * Callback issued whenever a device is discovered
  */
-// Byte 5 is where name of device starts
 string printDevice(const uint8_t* int_p)
 {
     char* first_chars = new char[DEVICE_NAME_LENGTH + 1];  

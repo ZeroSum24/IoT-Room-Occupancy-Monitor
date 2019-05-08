@@ -1,5 +1,4 @@
 #include "mbed.h"
-#include "bluetooth.h"
 
 void initTime()
 {

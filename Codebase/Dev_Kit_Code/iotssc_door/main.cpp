@@ -3,14 +3,16 @@
 #include "bluetooth.h"
 #include "distance.h"
 
+#define Serial pc(USBTX, USBRX)
+
 #define rangeInner_addr (0x56)
 #define rangeOuter_addr (0x60)
 #define rangeInner_XSHUT   p18
 #define rangeOuter_XSHUT   p19
 #define VL53L0_I2C_SDA   p30 
 #define VL53L0_I2C_SCL   p7  
- 
-Serial pc(USBTX, USBRX);
+
+
 static DevI2C devI2c(VL53L0_I2C_SDA, VL53L0_I2C_SCL); 
 static bool connected = false;
 static uint8_t movementReadings[100] = {0};

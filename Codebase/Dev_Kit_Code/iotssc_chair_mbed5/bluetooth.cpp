@@ -7,15 +7,11 @@
 #include "bluetooth.h"
 #include "main.h"
 
-// SonicWaves-[C|T|D]-001
+// Naming Convention: SonicWaves-[C|T|D]-001
 
 PressureService* pressureService;
-char DEVICE_NAME[] = "SonicWaves-C-002";
-string safe_device_name("SonicWaves-C-002\0");
-const uint8_t DEVICE_NAME_LENGTH = 16;
-
-
-static const uint16_t uuid16_list[]        = {0xFFFF};
+const static char DEVICE_NAME[] = "SonicWaves-C-002";
+static const uint16_t uuid16_list[] = {0xFFFF}; // Custom UUID, FFFF is reserved for development
 
 
 const int THRESHOLD_DETECT = 500;
@@ -52,7 +48,6 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params)
 
     ble.gap().onDisconnection(disconnectionCallback);
     ble.gap().onConnection(connectionCallback);
-    //ble.gattServer().onDataWritten(writeCharCallback);
 
     vector<uint16_t> pressureArr(2);
     pressureService = new PressureService(ble, pressureArr);

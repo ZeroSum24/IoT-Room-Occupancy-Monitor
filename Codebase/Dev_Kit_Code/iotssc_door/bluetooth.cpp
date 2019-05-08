@@ -1,9 +1,10 @@
 #include "mbed.h"
 #include "main.h"
 #include "bluetooth.h"
+
 DistanceService *distanceService;
-const static char DEVICE_NAME[]        = "SonicWaves-D-001"; // change this
-static const uint16_t uuid16_list[]        = {0xFFFF}; //Custom UUID, FFFF is reserved for development
+const static char DEVICE_NAME[] = "SonicWaves-D-001"; // change this
+static const uint16_t uuid16_list[] = {0xFFFF}; //Custom UUID, FFFF is reserved for development
 
 void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *)
 {

@@ -32,7 +32,7 @@ uint8_t get_movement(uint32_t distanceInner, uint32_t distanceOuter) {
     else if (currentOuter && lastInner && !currentInner)
     {
         lastOuter = false;
-        lastInner = false
+        lastInner = false;
         return 2; // Exit
     }
     

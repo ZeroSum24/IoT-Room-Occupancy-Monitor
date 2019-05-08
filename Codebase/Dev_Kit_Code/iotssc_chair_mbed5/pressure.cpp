@@ -1,12 +1,6 @@
-// #include <events/mbed_events.h>
-// #include "mbed.h"
-// #include "ble/BLE.h"
-// #include "ble/Gap.h"
-// #include "ble/services/HeartRateService.h"
-// #include "bluetooth.h"
 #include "FSR.h"
 #include "pressure.h"
-// To connect use screen /dev/ttyACM0 9600
+
 #define Serial pc(USBTX, USBRX);
 
 FSR fsr(p2, 8.4);

@@ -2,7 +2,6 @@
 #include "mbed.h"
 #include "ble/BLE.h"
 #include <utility>
-#include <queue>
 #include "time.h"
 #include "bluetooth.h"
 #include "pressure.h"
@@ -72,8 +71,6 @@ void sendData()
         numReadings = 0;  
     }
 }
-
-void wakeUp() {}
 
 int main()
 {
